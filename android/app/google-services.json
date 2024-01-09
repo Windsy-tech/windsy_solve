@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "676221233129",
+    "firebase_url": "https://windsy-solve.firebaseio.com",
+    "project_id": "windsy-solve",
+    "storage_bucket": "windsy-solve.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676221233129:android:033ea8b89aa73ad7eb8d78",
+        "android_client_info": {
+          "package_name": "com.example.solve_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676221233129-f9glll6kug6hl1ltq4tvtk4b7c9maddo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPCCGjpFBqqW-krBaKfdCwcBy2COyP33c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676221233129-f9glll6kug6hl1ltq4tvtk4b7c9maddo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676221233129:android:5abbb749474b2925eb8d78",
+        "android_client_info": {
+          "package_name": "com.windsy.windsy_solve"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676221233129-f9glll6kug6hl1ltq4tvtk4b7c9maddo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPCCGjpFBqqW-krBaKfdCwcBy2COyP33c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676221233129-f9glll6kug6hl1ltq4tvtk4b7c9maddo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
