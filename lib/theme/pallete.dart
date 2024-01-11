@@ -6,6 +6,7 @@ class Pallete {
   static const greyColor = Color.fromRGBO(26, 39, 45, 1); // secondary color
   static const drawerColor = Color.fromRGBO(18, 18, 18, 1);
   static const whiteColor = Colors.white;
+  static const lightWhiteColor = Color.fromRGBO(255, 255, 255, 0.5);
   static var redColor = Colors.red.shade500;
   static var blueColor = Colors.blue.shade300;
 
@@ -19,9 +20,26 @@ class Pallete {
       iconTheme: IconThemeData(
         color: whiteColor,
       ),
+      titleTextStyle: TextStyle(
+        color: whiteColor,
+      ),
     ),
     drawerTheme: const DrawerThemeData(
       backgroundColor: drawerColor,
+    ),
+    listTileTheme: const ListTileThemeData(
+      iconColor: whiteColor,
+      textColor: whiteColor,
+    ),
+    //rounded textfield theme data for dark mode
+    inputDecorationTheme: const InputDecorationTheme(
+      fillColor: greyColor,
+      filled: true,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
     ),
     primaryColor: redColor,
     colorScheme: ColorScheme.fromSwatch(
@@ -38,6 +56,20 @@ class Pallete {
       elevation: 0,
       iconTheme: IconThemeData(
         color: blackColor,
+      ),
+    ),
+    listTileTheme: const ListTileThemeData(
+      iconColor: blackColor,
+      textColor: blackColor,
+    ),
+    //rounded textfield theme data for light mode
+    inputDecorationTheme: const InputDecorationTheme(
+      fillColor: lightWhiteColor,
+      filled: true,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
       ),
     ),
     drawerTheme: const DrawerThemeData(
