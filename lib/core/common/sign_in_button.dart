@@ -10,16 +10,25 @@ class SignInButton extends ConsumerWidget {
   const SignInButton(this.email, this.password, {super.key});
 
   void signInWithEmailAndPassword(
-      WidgetRef ref, String? email, String? password) {
+    WidgetRef ref,
+    String? email,
+    String? password,
+    BuildContext context,
+  ) {
     ref
-        .read(authControllerProvider)
-        .signInWithEmailAndPassword(email, password);
+        .watch(authControllerProvider.notifier)
+        .signInWithEmailAndPassword(email, password, context);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
-      onPressed: () => signInWithEmailAndPassword(ref, email, password),
+      onPressed: () => signInWithEmailAndPassword(
+        ref,
+        'ma.mu@windsy.de',
+        '123456',
+        context,
+      ),
       style: ElevatedButton.styleFrom(
           backgroundColor: Pallete.greyColor,
           minimumSize: const Size(double.infinity, 50)),

@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:windsy_solve/core/constants/constants.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:windsy_solve/core/constants/firebase_constants.dart';
+import 'package:windsy_solve/core/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
+import 'package:windsy_solve/core/type_defs.dart';
 import 'package:windsy_solve/models/user_model.dart';
-import 'package:windsy_solve/utils/date_time_utils.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepository(
@@ -28,36 +29,36 @@ class AuthRepository {
   CollectionReference get _users =>
       _firestore.collection(FirebaseConstants.usersCollection);
 
-  void signInWithEmailAndPassword(String? email, String? password) async {
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  FutureEither<UserModel> signInWithEmailAndPassword(
+      String? email, String? password) async {
     try {
-      print(email);
-      print(password);
       final UserCredential userCredential =
           await _auth.signInWithEmailAndPassword(
         email: email!,
         password: password!,
       );
-      print(userCredential.user!.uid);
 
-      UserModel userModel = UserModel(
-        uid: userCredential.user!.uid,
-        displayName: userCredential.user!.displayName!,
-        companyName: '',
-        companyId: '',
-        email: email,
-        phoneNumber: '',
-        photoUrl: Constants.profileAvatarDefault,
-        role: 'user',
-        expertise: [],
-        lastLoginDate: DateTimeUtils.getFormattedDate(DateTime.now()),
-        lastLoginTime: DateTimeUtils.getFormattedTime(DateTime.now()),
-        isActive: true,
-        isBlocked: false,
-      );
+      UserModel userModel;
+      userModel = await getUserData(userCredential.user!.uid).first;
 
-      await _users.doc(userCredential.user!.uid).set(userModel.toMap());
+      return right(userModel);
+    } on FirebaseException catch (e) {
+      throw e.message!;
     } catch (e) {
-      print(e);
+      return left(Failure(message: e.toString()));
     }
+  }
+
+  Stream<UserModel> getUserData(String uid) {
+    return _users
+        .doc(uid)
+        .snapshots()
+        .map((user) => UserModel.fromMap(user.data()! as Map<String, dynamic>));
+  }
+
+  void signOut() async {
+    await _auth.signOut();
   }
 }

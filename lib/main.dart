@@ -1,7 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:windsy_solve/features/auth/screens/login_screen.dart';
+import 'package:routemaster/routemaster.dart';
+import 'package:windsy_solve/core/common/error_text.dart';
+import 'package:windsy_solve/core/common/loader.dart';
+import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
+import 'package:windsy_solve/models/user_model.dart';
+import 'package:windsy_solve/router.dart';
 import 'package:windsy_solve/theme/pallete.dart';
 import 'firebase_options.dart';
 
@@ -17,16 +23,48 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  UserModel? userModel;
+
+  void getUserData(WidgetRef ref, User data) async {
+    userModel = await ref
+        .watch(authControllerProvider.notifier)
+        .getUserData(data.uid)
+        .first;
+
+    ref.read(userProvider.notifier).update((state) => userModel);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Solve',
-      theme: Pallete.darkModeAppTheme,
-      home: const LoginScreen(),
-    );
+    return ref.watch(authStateChangesProvider).when(
+          data: (user) => MaterialApp.router(
+            routerDelegate: RoutemasterDelegate(
+              routesBuilder: (context) {
+                if (user != null) {
+                  getUserData(ref, user);
+                  return loggedInRoute;
+                } else {
+                  return loggedOutRoute;
+                }
+              },
+            ),
+            routeInformationParser: const RoutemasterParser(),
+            title: 'Solve',
+            theme: Pallete.darkModeAppTheme,
+          ),
+          loading: () => const Loader(),
+          error: (error, stackTrace) => ErrorText(
+            error: error.toString(),
+          ),
+        );
   }
 }

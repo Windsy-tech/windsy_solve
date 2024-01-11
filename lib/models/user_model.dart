@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class UserModel {
@@ -7,7 +6,8 @@ class UserModel {
   final String companyName;
   final String companyId;
   final String email;
-  final String phoneNumber;
+  final String countryCode;
+  final int phoneNumber;
   final String photoUrl;
   final String role;
   final List<String> expertise;
@@ -15,13 +15,13 @@ class UserModel {
   final String lastLoginTime;
   final bool isActive;
   final bool isBlocked;
-
   UserModel({
     required this.uid,
     required this.displayName,
     required this.companyName,
     required this.companyId,
     required this.email,
+    required this.countryCode,
     required this.phoneNumber,
     required this.photoUrl,
     required this.role,
@@ -35,11 +35,11 @@ class UserModel {
   UserModel copyWith({
     String? uid,
     String? displayName,
-    String? lastName,
     String? companyName,
     String? companyId,
     String? email,
-    String? phoneNumber,
+    String? countryCode,
+    int? phoneNumber,
     String? photoUrl,
     String? role,
     List<String>? expertise,
@@ -54,6 +54,7 @@ class UserModel {
       companyName: companyName ?? this.companyName,
       companyId: companyId ?? this.companyId,
       email: email ?? this.email,
+      countryCode: countryCode ?? this.countryCode,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photoUrl: photoUrl ?? this.photoUrl,
       role: role ?? this.role,
@@ -72,6 +73,7 @@ class UserModel {
       'companyName': companyName,
       'companyId': companyId,
       'email': email,
+      'countryCode': countryCode,
       'phoneNumber': phoneNumber,
       'photoUrl': photoUrl,
       'role': role,
@@ -90,10 +92,11 @@ class UserModel {
       companyName: map['companyName'] ?? '',
       companyId: map['companyId'] ?? '',
       email: map['email'] ?? '',
-      phoneNumber: map['phoneNumber'] ?? '',
+      countryCode: map['countryCode'] ?? '',
+      phoneNumber: map['phoneNumber'] ?? 0,
       photoUrl: map['photoUrl'] ?? '',
       role: map['role'] ?? '',
-      expertise: List<String>.from((map['expertise'] as List<String>)),
+      expertise: List<String>.from(map['expertise']),
       lastLoginDate: map['lastLoginDate'] ?? '',
       lastLoginTime: map['lastLoginTime'] ?? '',
       isActive: map['isActive'] ?? false,
@@ -103,7 +106,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, displayName: $displayName, companyName: $companyName, companyId: $companyId, email: $email, phoneNumber: $phoneNumber, photoUrl: $photoUrl, role: $role, expertise: $expertise, lastLoginDate: $lastLoginDate, lastLoginTime: $lastLoginTime, isActive: $isActive, isBlocked: $isBlocked)';
+    return 'UserModel(uid: $uid, displayName: $displayName, companyName: $companyName, companyId: $companyId, email: $email, countryCode: $countryCode, phoneNumber: $phoneNumber, photoUrl: $photoUrl, role: $role, expertise: $expertise, lastLoginDate: $lastLoginDate, lastLoginTime: $lastLoginTime, isActive: $isActive, isBlocked: $isBlocked)';
   }
 
   @override
@@ -115,6 +118,7 @@ class UserModel {
         other.companyName == companyName &&
         other.companyId == companyId &&
         other.email == email &&
+        other.countryCode == countryCode &&
         other.phoneNumber == phoneNumber &&
         other.photoUrl == photoUrl &&
         other.role == role &&
@@ -132,6 +136,7 @@ class UserModel {
         companyName.hashCode ^
         companyId.hashCode ^
         email.hashCode ^
+        countryCode.hashCode ^
         phoneNumber.hashCode ^
         photoUrl.hashCode ^
         role.hashCode ^

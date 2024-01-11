@@ -35,18 +35,30 @@ class _SignInFormState extends State<SignInForm> {
     return Form(
       autovalidateMode: AutovalidateMode.always,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
+          const Text("Email Address"),
+          const SizedBox(height: 5),
           TextFormField(
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             //validator: validateEmail,
-            autofocus: true,
+            decoration: const InputDecoration(
+              hintText: 'Enter your email',
+            ),
           ),
+          const SizedBox(height: 10),
+          const Text("Password"),
+          const SizedBox(height: 5),
           TextFormField(
             controller: passwordController,
             obscureText: true,
             textInputAction: TextInputAction.done,
+            decoration: const InputDecoration(
+              hintText: 'Enter your password',
+            ),
           ),
           const SizedBox(
             height: 20,

@@ -1,42 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
+import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/auth/screens/login_screen_widgets.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(authControllerProvider);
+
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const Text(
-                "Solve",
-                style: TextStyle(
-                  fontSize: 24,
+      body: isLoading
+          ? const Loader()
+          : SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Image.asset(
+                        Constants.logoPath,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const SignInForm(),
+                  ],
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Expanded(
-                child: Image.asset(
-                  Constants.logoPath,
-                  height: 40,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Expanded(
-                child: SignInForm(),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
