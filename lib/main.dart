@@ -59,7 +59,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             ),
             routeInformationParser: const RoutemasterParser(),
             title: 'Solve',
-            theme: Pallete.darkModeAppTheme,
+            theme: Pallete.lightModeAppTheme,
           ),
           loading: () => const Loader(),
           error: (error, stackTrace) => ErrorText(

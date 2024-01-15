@@ -22,7 +22,7 @@ class LoginScreen extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Image.asset(
-                        Constants.logoPath,
+                        Constants.pLogoPath,
                       ),
                     ),
                     const SizedBox(

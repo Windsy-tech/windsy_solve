@@ -47,7 +47,7 @@ class AuthController extends StateNotifier<bool> {
     state = false;
 
     user.fold(
-        (error) => showSnackbar(context, error.message),
+        (error) => showSnackBar(context, error.message),
         (userModel) =>
             _ref.read(userProvider.notifier).update((state) => userModel));
   }

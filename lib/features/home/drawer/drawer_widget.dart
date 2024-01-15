@@ -12,8 +12,18 @@ class DrawerWidget extends ConsumerWidget {
     ref.read(authControllerProvider.notifier).signOut();
   }
 
-  void navigateToReportNC(BuildContext context) {
-    Routemaster.of(context).push(Constants.reportNC);
+  void navigateToReportNCPage(BuildContext context) {
+    Routemaster.of(context).push(Constants.rReportNC);
+    Scaffold.of(context).closeDrawer();
+  }
+
+  void navigateToSettingsPage(BuildContext context) {
+    Routemaster.of(context).push(Constants.rSettings);
+    Scaffold.of(context).closeDrawer();
+  }
+
+  void navigateToUserProfile(BuildContext context, String uid) {
+    Routemaster.of(context).push('/user-profile/$uid');
   }
 
   @override
@@ -21,54 +31,57 @@ class DrawerWidget extends ConsumerWidget {
     final user = ref.watch(userProvider)!;
 
     return Drawer(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-              leading: CircleAvatar(
-                radius: 14,
-                backgroundImage: user.photoUrl != ''
-                    ? NetworkImage(user.photoUrl)
-                    : Image.asset(
-                        Constants.profileAvatarDefault,
-                        fit: BoxFit.cover,
-                      ).image,
-                backgroundColor: Pallete.greyColor,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                onTap: () => navigateToUserProfile(context, user.uid),
+                leading: CircleAvatar(
+                  radius: 14,
+                  backgroundImage: user.photoUrl != ''
+                      ? NetworkImage(user.photoUrl)
+                      : Image.asset(
+                          Constants.pProfileAvatarDefault,
+                          fit: BoxFit.cover,
+                        ).image,
+                  backgroundColor: Pallete.greyColor,
+                ),
+                title: Text(user.email),
               ),
-              onTap: () {},
-              title: Text(user.email),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  ListTile(
-                    onTap: () => navigateToReportNC(context),
-                    leading: const Icon(Icons.report),
-                    title: const Text("Report NC"),
-                  ),
-                  const ListTile(
-                    leading: Icon(Icons.construction),
-                    title: Text("Perform Inspection"),
-                  ),
-                  const ListTile(
-                    leading: Icon(Icons.wysiwyg),
-                    title: Text("Reports Dashboard"),
-                  ),
-                  const ListTile(
-                    leading: Icon(Icons.settings),
-                    title: Text("Settings"),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    ListTile(
+                      onTap: () => navigateToReportNCPage(context),
+                      leading: const Icon(Icons.report),
+                      title: const Text("Report NC"),
+                    ),
+                    const ListTile(
+                      leading: Icon(Icons.construction),
+                      title: Text("Perform Inspection"),
+                    ),
+                    const ListTile(
+                      leading: Icon(Icons.wysiwyg),
+                      title: Text("Reports Dashboard"),
+                    ),
+                    ListTile(
+                      onTap: () => navigateToSettingsPage(context),
+                      leading: const Icon(Icons.settings),
+                      title: const Text("Settings"),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            ListTile(
-              onTap: () => signout(ref),
-              leading: const Icon(Icons.logout),
-              title: const Text("Sign Out"),
-            ),
-          ],
+              ListTile(
+                onTap: () => signout(ref),
+                leading: const Icon(Icons.logout),
+                title: const Text("Sign Out"),
+              ),
+            ],
+          ),
         ),
       ),
     );

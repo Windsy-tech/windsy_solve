@@ -12,7 +12,6 @@ class Pallete {
 
   // Themes
   static var darkModeAppTheme = ThemeData.dark().copyWith(
-    useMaterial3: true,
     scaffoldBackgroundColor: blackColor,
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(
@@ -32,23 +31,32 @@ class Pallete {
       textColor: whiteColor,
     ),
     //rounded textfield theme data for dark mode
-    inputDecorationTheme: const InputDecorationTheme(
-      fillColor: greyColor,
+    inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
+      fillColor: greyColor,
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue),
+        borderRadius: BorderRadius.circular(10),
       ),
+      border: InputBorder.none,
+      contentPadding: const EdgeInsets.all(18),
     ),
     primaryColor: redColor,
     colorScheme: ColorScheme.fromSwatch(
       backgroundColor: drawerColor,
     ), // will be used as alternative background color
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: greyColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
+    ),
   );
 
   static var lightModeAppTheme = ThemeData.light().copyWith(
-    useMaterial3: true,
     scaffoldBackgroundColor: whiteColor,
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(
@@ -57,25 +65,41 @@ class Pallete {
       iconTheme: IconThemeData(
         color: blackColor,
       ),
+      titleTextStyle: TextStyle(
+        color: blackColor,
+      ),
     ),
+
     listTileTheme: const ListTileThemeData(
       iconColor: blackColor,
       textColor: blackColor,
     ),
     //rounded textfield theme data for light mode
-    inputDecorationTheme: const InputDecorationTheme(
-      fillColor: lightWhiteColor,
+    inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
+      fillColor: lightWhiteColor,
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue),
+        borderRadius: BorderRadius.circular(10),
       ),
+      border: InputBorder.none,
+      contentPadding: const EdgeInsets.all(18),
     ),
     drawerTheme: const DrawerThemeData(
       backgroundColor: whiteColor,
     ),
     primaryColor: redColor,
-    colorScheme: ColorScheme.fromSwatch(backgroundColor: whiteColor),
+    colorScheme: ColorScheme.fromSwatch(
+      backgroundColor: whiteColor,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: greyColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
+    ),
   );
 }
