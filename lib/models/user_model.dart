@@ -15,6 +15,7 @@ class UserModel {
   final String lastLoginTime;
   final bool isActive;
   final bool isBlocked;
+  
   UserModel({
     required this.uid,
     required this.displayName,

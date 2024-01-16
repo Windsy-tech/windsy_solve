@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:windsy_solve/theme/pallete.dart';
 
 class HomeNavigationButton extends StatelessWidget {
   final String title;

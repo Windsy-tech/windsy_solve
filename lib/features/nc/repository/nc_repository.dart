@@ -1,5 +1,4 @@
 // Non-Conformity Repository
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,7 @@ import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/type_defs.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/user_model.dart';
+import 'package:windsy_solve/models/windfarm_model.dart';
 
 final ncRepositoryProvider = Provider<NCRepository>((ref) {
   return NCRepository(firestore: ref.watch(firestoreProvider));
@@ -21,6 +21,8 @@ class NCRepository {
 
   CollectionReference get _ncs => _firestore.collection('ncs');
   CollectionReference get _users => _firestore.collection('users');
+  CollectionReference get _windFarms => _firestore.collection('windfarms');
+  CollectionReference get _companies => _firestore.collection('companies');
 
   FutureVoid createNC(NCModel ncModel) async {
     try {
@@ -104,5 +106,27 @@ class NCRepository {
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
+  }
+
+  Stream<List<WindFarmModel>> getWindFarms(String companyName, String query) {
+    return _companies
+        .doc(companyName.toLowerCase())
+        .collection('turbines')
+        .where(
+          'windFarm',
+          isGreaterThanOrEqualTo: query.isEmpty ? 0 : query,
+          isLessThan: query.isEmpty
+              ? null
+              : query.substring(0, query.length - 1) +
+                  String.fromCharCode(
+                    query.codeUnitAt(query.length - 1) + 1,
+                  ),
+        )
+        .snapshots()
+        .map(
+          (event) => event.docs
+              .map((e) => WindFarmModel.fromMap(e.data()))
+              .toList(),
+        );
   }
 }

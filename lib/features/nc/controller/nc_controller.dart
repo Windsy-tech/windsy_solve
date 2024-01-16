@@ -8,6 +8,7 @@ import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/repository/nc_repository.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/user_model.dart';
+import 'package:windsy_solve/models/windfarm_model.dart';
 import 'package:windsy_solve/utils/snack_bar.dart';
 
 final ncControllerProvider = StateNotifierProvider<NCController, bool>((ref) {
@@ -26,6 +27,10 @@ final getUserNCProvider = StreamProvider.family((ref, String uid) {
 
 final searchMembersProvider = StreamProvider.family((ref, String query) {
   return ref.watch(ncControllerProvider.notifier).searchMembers(query);
+});
+
+final getWindFarmsProvider = StreamProvider.family((ref, String query) {
+  return ref.watch(ncControllerProvider.notifier).getWindFarms(query);
 });
 
 class NCController extends StateNotifier<bool> {
@@ -67,5 +72,12 @@ class NCController extends StateNotifier<bool> {
       (l) => showSnackBar(context, l.message),
       (r) => Routemaster.of(context).pop(),
     );
+  }
+
+  Stream<List<WindFarmModel>> getWindFarms(String query) {
+    final user = _ref.read(userProvider);
+    final companyName = user!.companyName;
+    print(companyName);
+    return _ncRepository.getWindFarms(companyName, query);
   }
 }

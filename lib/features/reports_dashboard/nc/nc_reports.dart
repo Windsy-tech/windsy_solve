@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/features/settings/user_profile/controller/user_profile_controller.dart';
 
 class NCReports extends ConsumerWidget {
   const NCReports({Key? key}) : super(key: key);

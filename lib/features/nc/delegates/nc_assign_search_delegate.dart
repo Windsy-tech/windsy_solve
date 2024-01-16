@@ -3,15 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
+import 'package:windsy_solve/utils/text_utils.dart';
 
 class NCAssignSearchDelegate extends SearchDelegate {
   final WidgetRef ref;
-  //onAssign with assingnedTo sent back
+  final Set<String> assignedTo;
   final Function(Set<String>) onAssign;
 
-  NCAssignSearchDelegate(this.ref, this.onAssign);
+  NCAssignSearchDelegate({
+    required this.ref,
+    required this.assignedTo,
+    required this.onAssign,
+  });
 
-  Set<String> assignedTo = {};
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -44,12 +48,13 @@ class NCAssignSearchDelegate extends SearchDelegate {
       assignedTo.add(uid);
       onAssign(assignedTo);
     }
-    print(assignedTo);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return ref.watch(searchMembersProvider(query)).when(
+    return ref
+        .watch(searchMembersProvider(TextUtils.capitalizeFirstLetter(query)))
+        .when(
           data: (users) => ListView.builder(
             itemCount: users.length,
             itemBuilder: (BuildContext context, int index) {
@@ -69,7 +74,14 @@ class NCAssignSearchDelegate extends SearchDelegate {
                     Text(user.displayName),
                   ],
                 ),
-                onChanged: (value) => addAssignedTo(user.uid),
+                onChanged: (value) {
+                  if (assignedTo.contains(user.uid)) {
+                    assignedTo.remove(user.uid);
+                    onAssign(assignedTo);
+                  } else {
+                    addAssignedTo(user.uid);
+                  }
+                },
               );
             },
           ),

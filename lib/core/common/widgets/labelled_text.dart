@@ -19,6 +19,7 @@ class LabelledText extends StatelessWidget {
               fontSize: 12,
             ),
           ),
+          const SizedBox(height: 4),
           Text(
             text,
             style: const TextStyle(

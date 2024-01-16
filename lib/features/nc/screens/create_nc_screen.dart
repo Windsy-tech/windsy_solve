@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/features/nc/screens/nc_assign.dart';
-import 'package:windsy_solve/features/settings/user_profile/controller/user_profile_controller.dart';
+import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
+import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
 import 'package:windsy_solve/models/nc_model.dart';
+import 'package:windsy_solve/models/windfarm_model.dart';
 
 class ReportNC extends ConsumerStatefulWidget {
   const ReportNC({Key? key}) : super(key: key);
@@ -23,6 +23,7 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
   String status = 'Open';
   String severity = 'Low';
   List<String> assignedTo = [];
+  WindFarmModel windFarm = WindFarmModel();
 
   void createNC() async {
     final user = ref.read(userProvider);
@@ -35,10 +36,10 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
             status: status,
             severity: severities.indexOf(severity),
             category: '',
-            windFarm: '',
-            turbineNo: '',
-            platform: '',
-            oem: '',
+            windFarm: windFarm.windFarm!,
+            turbineNo: windFarm.turbineNo!,
+            platform: windFarm.platform!,
+            oem: windFarm.oem!,
             createdBy: user!.uid,
             assignedTo: assignedTo,
             createdAt: DateTime.now(),
@@ -51,87 +52,110 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
   }
 
   @override
+  void dispose() {
+    titleController.dispose();
+    problemDescriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Report NC'),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Title"),
-              const SizedBox(height: 4),
-              const TextField(
-                maxLength: 50,
-              ),
-              const SizedBox(height: 8),
-              const Text("Problem Description"),
-              const SizedBox(height: 4),
-              const TextField(
-                maxLines: 4,
-              ),
-              const SizedBox(height: 8),
-              ListTile(
-                leading: const Text(
-                  'Status',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text("Title"),
+                const SizedBox(height: 4),
+                const TextField(
+                  maxLength: 50,
+                ),
+                const SizedBox(height: 8),
+                const Text("Problem Description"),
+                const SizedBox(height: 4),
+                const TextField(
+                  maxLines: 4,
+                ),
+                const SizedBox(height: 8),
+                ListTile(
+                  leading: const Text(
+                    'Status',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.all(0),
+                  trailing: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: status,
+                      items: statuses
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      onChanged: (value) => setState(() => status = value!),
+                    ),
                   ),
                 ),
-                contentPadding: const EdgeInsets.all(0),
-                trailing: DropdownButton(
-                  value: status,
-                  items: statuses
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e),
-                          ))
-                      .toList(),
-                  onChanged: (value) => setState(() => status = value!),
-                ),
-              ),
-              const SizedBox(height: 8),
-              ListTile(
-                contentPadding: const EdgeInsets.all(0),
-                leading: const Text(
-                  'Severity',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
+                const SizedBox(height: 8),
+                ListTile(
+                  contentPadding: const EdgeInsets.all(0),
+                  leading: const Text(
+                    'Severity',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  trailing: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: severity,
+                      items: severities
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      onChanged: (value) => setState(() => severity = value!),
+                    ),
                   ),
                 ),
-                trailing: DropdownButton(
-                  value: severity,
-                  items: severities
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e),
-                          ))
-                      .toList(),
-                  onChanged: (value) => setState(() => severity = value!),
-                ),
-              ),
-              const SizedBox(height: 8),
-              /* const Text('Wind Farm'),
-              const SizedBox(height: 4),
-              const SizedBox(height: 8), */
-              const SizedBox(height: 8),
-              NCAssign(
+                const SizedBox(height: 8),
+                /* const Text('Wind Farm'),
+                const SizedBox(height: 4),
+                const SizedBox(height: 8), */
+                const SizedBox(height: 8),
+                NCAssign(
                   ref: ref,
                   onAssign: (assignedTo) {
                     setState(() {
                       this.assignedTo = assignedTo.toList();
                     });
-                  }),
-              ElevatedButton(
-                onPressed: () => createNC(),
-                child: const Text('Create NC'),
-              ),
-            ],
+                  },
+                ),
+                const SizedBox(height: 8),
+                NCWindFarm(
+                  onSelected: (windFarm) {
+                    setState(() {
+                      this.windFarm = windFarm;
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () => createNC(),
+                  child: const Text('Create NC'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +7,6 @@ import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/settings/user_profile/controller/user_profile_controller.dart';
-import 'package:windsy_solve/theme/pallete.dart';
 import 'package:windsy_solve/utils/image_utils.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -94,7 +92,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: ref.watch(getUserDataProvider(widget.uid)).when(
                 data: (user) => isLoading
                     ? const Loader()
@@ -102,7 +100,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           //Profile Image
-
                           SizedBox(
                             width: double.infinity,
                             child: GestureDetector(

@@ -38,7 +38,10 @@ class Pallete {
         borderSide: const BorderSide(color: Colors.blue),
         borderRadius: BorderRadius.circular(10),
       ),
-      border: InputBorder.none,
+      border: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue),
+        borderRadius: BorderRadius.circular(10),
+      ),
       contentPadding: const EdgeInsets.all(18),
     ),
     primaryColor: redColor,
@@ -69,7 +72,6 @@ class Pallete {
         color: blackColor,
       ),
     ),
-
     listTileTheme: const ListTileThemeData(
       iconColor: blackColor,
       textColor: blackColor,
@@ -82,7 +84,10 @@ class Pallete {
         borderSide: const BorderSide(color: Colors.blue),
         borderRadius: BorderRadius.circular(10),
       ),
-      border: InputBorder.none,
+      border: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue),
+        borderRadius: BorderRadius.circular(10),
+      ),
       contentPadding: const EdgeInsets.all(18),
     ),
     drawerTheme: const DrawerThemeData(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
-import 'package:windsy_solve/features/nc/screens/nc_assign_search_delegate.dart';
+import 'package:windsy_solve/features/nc/delegates/nc_assign_search_delegate.dart';
 
 class NCAssign extends ConsumerStatefulWidget {
   final WidgetRef ref;
@@ -18,16 +18,16 @@ class NCAssign extends ConsumerStatefulWidget {
 }
 
 class _CreateConsumerNCAssignState extends ConsumerState<NCAssign> {
-  List<String> assignedTo = [];
+  Set<String> assignedTo = {};
 
   void showSearchDelegate() {
     showSearch(
       context: context,
       delegate: NCAssignSearchDelegate(
-        ref,
-        (assignedTo) {
+        ref: ref,
+        assignedTo: assignedTo,
+        onAssign: (assignedTo) {
           setState(() {
-            this.assignedTo = assignedTo.toList();
             widget.onAssign(assignedTo);
           });
         },
@@ -56,7 +56,7 @@ class _CreateConsumerNCAssignState extends ConsumerState<NCAssign> {
           ],
         ),
         const SizedBox(height: 4),
-        assignedTo.isEmpty
+        assignedTo.toList().isEmpty
             ? const SizedBox()
             : Container(
                 width: double.infinity,
@@ -67,7 +67,7 @@ class _CreateConsumerNCAssignState extends ConsumerState<NCAssign> {
                 child: Wrap(
                   alignment: WrapAlignment.start,
                   children: [
-                    ...assignedTo.map((e) {
+                    ...assignedTo.toList().map((e) {
                       return ref.watch(getUserDataProvider(e)).when(
                             data: (user) => Padding(
                               padding: const EdgeInsets.all(4.0),
