@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
+import 'package:windsy_solve/features/nc/screens/nc_add_actions_taken_screen.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
 import 'package:windsy_solve/models/nc_model.dart';
@@ -27,6 +29,7 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
 
   void createNC() async {
     final user = ref.read(userProvider);
+    print(user!.uid);
     ref.read(ncControllerProvider.notifier).createNC(
           context,
           NCModel(
@@ -148,6 +151,26 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
                       this.windFarm = windFarm;
                     });
                   },
+                ),
+                const SizedBox(height: 8),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Actions Taken'),
+                        IconButton(
+                          onPressed: () {
+                            Routemaster.of(context).push(
+                              'add-action-taken',
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                  ],
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(

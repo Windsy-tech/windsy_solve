@@ -26,9 +26,15 @@ class NCRepository {
 
   FutureVoid createNC(NCModel ncModel) async {
     try {
-      final newId = await _createNewNCId();
-      ncModel.copyWith(id: newId.toString());
-      return right(_ncs.doc(ncModel.id).set(ncModel.toMap()));
+      //final newId = await _createNewNCId();
+      //ncModel.copyWith(id: newId.toString());
+      return right(
+        _companies
+            .doc('windsy')
+            .collection('ncs')
+            .doc('1001')
+            .set(ncModel.toMap()),
+      );
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -51,27 +57,32 @@ class NCRepository {
   }
 
   //get stream of all ncs created by user
-  Stream<List<NCModel>> getNCsCreatedByUser(String uid) {
-    return _ncs
-        .where('createdBy', isEqualTo: uid)
-        .snapshots()
-        .map((ncs) => ncs.docs
-            .map((nc) => NCModel.fromMap(
-                  nc.data()! as Map<String, dynamic>,
-                ))
-            .toList());
+  Future<List<NCModel>> getNCsCreatedByUser(String uid) {
+    return _companies
+        .doc('windsy')
+        .collection('ncs')
+        .where('createdBy', isEqualTo: 'mPO5hxtctRWsO8LVkWVnLIBYcBm1')
+        .get()
+        .then((value) {
+      return value.docs
+          .map((nc) => NCModel.fromMap(
+                nc.data(),
+              ))
+          .toList();
+    });
   }
 
   //get all ncs assigned to user
-  Stream<List<NCModel>> getNCsAssignedToUser(String uid) {
-    return _ncs
-        .where('assignedTo', arrayContains: uid)
-        .snapshots()
-        .map((ncs) => ncs.docs
-            .map((nc) => NCModel.fromMap(
-                  nc.data()! as Map<String, dynamic>,
-                ))
-            .toList());
+  Future<List<NCModel>> getNCsAssignedToUser(String uid) {
+    return _ncs.where('assignedTo', arrayContains: uid).get().then((value) {
+      return value.docs
+          .map(
+            (nc) => NCModel.fromMap(
+              nc.data() as Map<String, dynamic>,
+            ),
+          )
+          .toList();
+    });
   }
 
   Stream<List<UserModel>> searchMembers(String query) {
@@ -124,9 +135,8 @@ class NCRepository {
         )
         .snapshots()
         .map(
-          (event) => event.docs
-              .map((e) => WindFarmModel.fromMap(e.data()))
-              .toList(),
+          (event) =>
+              event.docs.map((e) => WindFarmModel.fromMap(e.data())).toList(),
         );
   }
 }

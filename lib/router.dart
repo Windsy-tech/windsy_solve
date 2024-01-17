@@ -3,6 +3,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/auth/screens/login_screen.dart';
 import 'package:windsy_solve/features/home/screens/home_screen.dart';
 import 'package:windsy_solve/features/nc/screens/create_nc_screen.dart';
+import 'package:windsy_solve/features/nc/screens/nc_add_actions_taken_screen.dart';
 import 'package:windsy_solve/features/reports_dashboard/nc/nc_reports.dart';
 import 'package:windsy_solve/features/settings/screens/settings_screen.dart';
 import 'package:windsy_solve/features/settings/user_profile/screens/edit_profile_screen.dart';
@@ -26,5 +27,6 @@ final loggedInRoute = RouteMap(routes: {
         ),
       ),
   '/report-nc': (_) => const MaterialPage(child: ReportNC()),
+  '/report-nc/add-action-taken': (_) => const MaterialPage(child: AddNCActionTaken()),
   '/reports-nc': (_) => const MaterialPage(child: NCReports()),
 });

@@ -11,3 +11,17 @@ class DateTimeUtils {
     return '${getFormattedDate(dateTime)} ${getFormattedTime(dateTime)}';
   }
 }
+
+extension DateTimeExtension on DateTime {
+  String toDateString() {
+    return '$day/$month/$year';
+  }
+
+  String toTimeString() {
+    return '$hour:$minute';
+  }
+
+  String toDateTimeString() {
+    return '${toDateString()} ${toTimeString()}';
+  }
+}

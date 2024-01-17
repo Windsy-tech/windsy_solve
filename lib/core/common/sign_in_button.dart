@@ -30,8 +30,9 @@ class SignInButton extends ConsumerWidget {
         context,
       ),
       style: ElevatedButton.styleFrom(
-          backgroundColor: Pallete.greyColor,
-          minimumSize: const Size(double.infinity, 50)),
+        backgroundColor: Pallete.greyColor,
+        minimumSize: const Size(double.infinity, 50),
+      ),
       child: const Text(
         'Sign In',
         style: TextStyle(

@@ -21,7 +21,7 @@ final ncControllerProvider = StateNotifierProvider<NCController, bool>((ref) {
   );
 });
 
-final getUserNCProvider = StreamProvider.family((ref, String uid) {
+final getUserNCProvider = FutureProvider.family((ref, String uid) {
   return ref.read(ncControllerProvider.notifier).getNCsCreatedByUser(uid);
 });
 
@@ -58,7 +58,7 @@ class NCController extends StateNotifier<bool> {
   }
 
   //get stream of all ncs created by user
-  Stream<List<NCModel>> getNCsCreatedByUser(String uid) {
+  Future<List<NCModel>> getNCsCreatedByUser(String uid) {
     return _ncRepository.getNCsCreatedByUser(uid);
   }
 

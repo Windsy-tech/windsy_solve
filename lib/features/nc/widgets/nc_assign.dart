@@ -48,7 +48,7 @@ class _CreateConsumerNCAssignState extends ConsumerState<NCAssign> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Assign To'),
+            const Text('Reporting Team'),
             IconButton(
               onPressed: () => showSearchDelegate(),
               icon: const Icon(Icons.search),

@@ -8,18 +8,19 @@ class NCReports extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider)!;
+    final user = ref.read(userProvider)!;
+    print("User: ${user.uid} Email: ${user.email}");
     return Scaffold(
       appBar: AppBar(
         title: const Text("NC Reports"),
       ),
       body: ref.watch(getUserNCProvider(user.uid)).when(
-            data: (data) => ListView.builder(
-              itemCount: data.length,
+            data: (ncs) => ListView.builder(
+              itemCount: ncs.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(data[index].title),
-                  subtitle: Text(data[index].title),
+                  title: Text(ncs[index].title),
+                  subtitle: Text(ncs[index].windFarm),
                 );
               },
             ),
