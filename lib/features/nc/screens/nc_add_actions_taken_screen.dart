@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windsy_solve/features/nc/controller/nc_actions_controller.dart';
+import 'package:windsy_solve/models/nc_actions_model.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
-import 'package:windsy_solve/utils/snack_bar.dart';
 
-class AddNCActionTaken extends StatefulWidget {
-  const AddNCActionTaken({Key? key}) : super(key: key);
+class AddNCActionTaken extends ConsumerStatefulWidget {
+  final String ncId;
+  const AddNCActionTaken({super.key, required this.ncId});
 
   @override
-  State<AddNCActionTaken> createState() => _AddNCActionTakenState();
+  ConsumerState<AddNCActionTaken> createState() => _AddNCActionTakenState();
 }
 
-class _AddNCActionTakenState extends State<AddNCActionTaken> {
-  DateTime pickedDateTime = DateTime.now();
+class _AddNCActionTakenState extends ConsumerState<AddNCActionTaken> {
+  final _actionsController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
+  late DateTime pickedDateTime;
+
+  @override
+  void initState() {
+    super.initState();
+    pickedDateTime = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    _actionsController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   void showDateTimePicker() {
     showDatePicker(
@@ -28,10 +46,39 @@ class _AddNCActionTakenState extends State<AddNCActionTaken> {
     });
   }
 
+  void addActionTaken(String ncId) {
+    ref.read(ncActionsControllerProvider).addAction(
+          context,
+          ncId,
+          NCActionsModel(
+            id: '',
+            action: '',
+            description: '',
+            dueDate: '',
+            status: '',
+            createdBy: '',
+            createdAt: '',
+            completedBy: '',
+            completedAt: '',
+            assignedTo: [],
+            comments: [],
+          ),
+        );
+  }
+
+  void addAction() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Action')),
+      appBar: AppBar(
+        title: const Text('Add Action'),
+        actions: [
+          IconButton(
+            onPressed: () => addActionTaken(widget.ncId),
+            icon: const Icon(Icons.add),
+          )
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(12.0),

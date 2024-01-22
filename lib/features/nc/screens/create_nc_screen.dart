@@ -3,21 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/features/nc/screens/nc_add_actions_taken_screen.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
 
-class ReportNC extends ConsumerStatefulWidget {
-  const ReportNC({Key? key}) : super(key: key);
+class ReportNCScreen extends ConsumerStatefulWidget {
+  const ReportNCScreen({Key? key}) : super(key: key);
   static const routeName = '/non-conformity';
 
   @override
-  ConsumerState<ReportNC> createState() => _CreateConsumerReportNCState();
+  ConsumerState<ReportNCScreen> createState() =>
+      _CreateConsumerReportNCScreenState();
 }
 
-class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
+class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
   final titleController = TextEditingController();
   final problemDescriptionController = TextEditingController();
   List<String> severities = ['Low', 'Medium', 'High'];
@@ -29,9 +29,9 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
 
   void createNC() async {
     final user = ref.read(userProvider);
-    print(user!.uid);
     ref.read(ncControllerProvider.notifier).createNC(
           context,
+          user!.companyId,
           NCModel(
             id: '',
             title: titleController.text,
@@ -43,11 +43,11 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
             turbineNo: windFarm.turbineNo!,
             platform: windFarm.platform!,
             oem: windFarm.oem!,
-            createdBy: user!.uid,
+            createdBy: user.uid,
             assignedTo: assignedTo,
             createdAt: DateTime.now(),
             updatedAt: DateTime.now(),
-            closedAt: DateTime(0),
+            closedAt: DateTime.now(),
             closedBy: '',
             closedReason: '',
           ),
@@ -65,7 +65,7 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Report NC'),
+        title: const Text('Report Non Conformity'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -83,7 +83,15 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
                 const Text("Problem Description"),
                 const SizedBox(height: 4),
                 const TextField(
-                  maxLines: 4,
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 8),
+                NCWindFarm(
+                  onSelected: (windFarm) {
+                    setState(() {
+                      this.windFarm = windFarm;
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
                 ListTile(
@@ -145,15 +153,8 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
                   },
                 ),
                 const SizedBox(height: 8),
-                NCWindFarm(
-                  onSelected: (windFarm) {
-                    setState(() {
-                      this.windFarm = windFarm;
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                Column(
+
+                /* Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,7 +172,7 @@ class _CreateConsumerReportNCState extends ConsumerState<ReportNC> {
                     ),
                     const SizedBox(height: 4),
                   ],
-                ),
+                ), */
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () => createNC(),

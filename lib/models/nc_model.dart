@@ -104,25 +104,30 @@ class NCModel {
   }
 
   factory NCModel.fromMap(Map<String, dynamic> map) {
-    return NCModel(
-      id: map['id'] ?? '',
-      title: map['title'] ?? '',
-      problemDescription: map['problemDescription'] ?? '',
-      status: map['status'] ?? '',
-      severity: map['severity'] ?? 0,
-      category: map['category'] ?? '',
-      windFarm: map['windFarm'] ?? '',
-      turbineNo: map['turbineNo'] ?? '',
-      platform: map['platform'] ?? '',
-      oem: map['oem'] ?? '',
-      createdBy: map['createdBy'] ?? '',
-      assignedTo: List<String>.from((map['assignedTo'])),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt']),
-      closedAt: DateTime.fromMillisecondsSinceEpoch(map['closedAt']),
-      closedBy: map['closedBy'] ?? '',
-      closedReason: map['closedReason'] ?? '',
-    );
+    try {
+      return NCModel(
+        id: map['id'] ?? '',
+        title: map['title'] ?? '',
+        problemDescription: map['problemDescription'] ?? '',
+        status: map['status'] ?? '',
+        severity: map['severity'] ?? 0,
+        category: map['category'] ?? '',
+        windFarm: map['windFarm'] ?? '',
+        turbineNo: map['turbineNo'] ?? '',
+        platform: map['platform'] ?? '',
+        oem: map['oem'] ?? '',
+        createdBy: map['createdBy'] ?? '',
+        assignedTo: List<String>.from(map['assignedTo']),
+        createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+        updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt']),
+        closedAt: DateTime.fromMillisecondsSinceEpoch(map['closedAt']),
+        closedBy: map['closedBy'] ?? '',
+        closedReason: map['closedReason'] ?? '',
+      );
+    } catch (e) {
+      print("Error creating NCModel: $e");
+      rethrow; // Rethrow the exception to propagate it further
+    }
   }
 
   @override

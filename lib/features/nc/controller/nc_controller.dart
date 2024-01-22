@@ -21,8 +21,8 @@ final ncControllerProvider = StateNotifierProvider<NCController, bool>((ref) {
   );
 });
 
-final getUserNCProvider = FutureProvider.family((ref, String uid) {
-  return ref.read(ncControllerProvider.notifier).getNCsCreatedByUser(uid);
+final getUserNCProvider = FutureProvider<List<NCModel>>((ref) async {
+  return await ref.watch(ncControllerProvider.notifier)._getNCsCreatedByUser();
 });
 
 final searchMembersProvider = StreamProvider.family((ref, String query) {
@@ -47,19 +47,23 @@ class NCController extends StateNotifier<bool> {
         _storageRepository = storageRepository,
         super(false);
 
-  void createNC(BuildContext context, NCModel ncModel) async {
+  void createNC(BuildContext context, String companyId, NCModel ncModel) async {
     state = true;
-    final res = await _ncRepository.createNC(ncModel);
+    final res = await _ncRepository.createNC(companyId, ncModel);
     state = false;
     res.fold((l) => showSnackBar(context, l.message), (r) {
-      showSnackBar(context, 'NC created successfully!');
+      showSnackBar(context, 'NC-$r created successfully!');
       Routemaster.of(context).pop();
     });
   }
 
   //get stream of all ncs created by user
-  Future<List<NCModel>> getNCsCreatedByUser(String uid) {
-    return _ncRepository.getNCsCreatedByUser(uid);
+  Future<List<NCModel>> _getNCsCreatedByUser() async {
+    final user = _ref.read(userProvider)!;
+    final data =
+        await _ncRepository.getNCsCreatedByUser(user.companyId, user.uid);
+    print("Controller: $data");
+    return data;
   }
 
   Stream<List<UserModel>> searchMembers(String query) {

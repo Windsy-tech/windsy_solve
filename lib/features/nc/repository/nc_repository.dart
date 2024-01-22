@@ -24,17 +24,26 @@ class NCRepository {
   CollectionReference get _windFarms => _firestore.collection('windfarms');
   CollectionReference get _companies => _firestore.collection('companies');
 
-  FutureVoid createNC(NCModel ncModel) async {
+  FutureEither<int> createNC(String companyId, NCModel ncModel) async {
     try {
-      //final newId = await _createNewNCId();
-      //ncModel.copyWith(id: newId.toString());
-      return right(
-        _companies
-            .doc('windsy')
+      final getLatestId = await _createNewNCId(companyId);
+      var newId = getLatestId;
+
+      // Update ncModel with the new ID
+      ncModel = ncModel.copyWith(id: newId.toString());
+
+      print(companyId);
+      print(ncModel.toString());
+
+      if (newId != "") {
+        await _companies
+            .doc(companyId)
             .collection('ncs')
-            .doc('1001')
-            .set(ncModel.toMap()),
-      );
+            .doc(newId.toString())
+            .set(ncModel.toMap());
+      }
+
+      return right(newId);
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -42,34 +51,45 @@ class NCRepository {
     }
   }
 
-  FutureEither<int> _createNewNCId() async {
+  Future<int> _createNewNCId(String companyId) async {
     try {
-      _ncs.orderBy('id', descending: true).snapshots().map((event) {
-        print(event.docs);
-      }).toList();
-      print("HERE");
-      return right(100);
+      final querySnapshot = await _companies
+          .doc(companyId)
+          .collection('ncs')
+          .orderBy('id', descending: true)
+          .limit(1) // Limit the result to one document
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final oldId = int.parse(querySnapshot.docs.first.data()['id']);
+        print(oldId);
+        return oldId + 1;
+      } else {
+        // If no documents are found, start with ID 1
+        return 1;
+      }
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
-      return left(Failure(message: e.toString()));
+      throw e.toString();
     }
   }
 
   //get stream of all ncs created by user
-  Future<List<NCModel>> getNCsCreatedByUser(String uid) {
-    return _companies
-        .doc('windsy')
-        .collection('ncs')
-        .where('createdBy', isEqualTo: 'mPO5hxtctRWsO8LVkWVnLIBYcBm1')
-        .get()
-        .then((value) {
+  Future<List<NCModel>> getNCsCreatedByUser(
+    String companyId,
+    String uid,
+  ) async {
+    final data =
+        await _companies.doc('windsy').collection('ncs').get().then((value) {
       return value.docs
           .map((nc) => NCModel.fromMap(
                 nc.data(),
               ))
           .toList();
     });
+    print("data: $data");
+    return data;
   }
 
   //get all ncs assigned to user
