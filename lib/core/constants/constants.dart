@@ -6,6 +6,7 @@ class Constants {
   static const pProfileAvatarDefault = 'assets/default/user_avatar.png';
 
   //Routes
+  static const String rHome = '/';
   static const String rReportNC = '/report-nc';
   static const String rSettings = '/settings';
   static const String rReportsNC = '/reports-nc';

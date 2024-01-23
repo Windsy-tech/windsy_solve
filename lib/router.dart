@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:windsy_solve/core/common/page_not_found.dart';
 import 'package:windsy_solve/features/auth/screens/login_screen.dart';
 import 'package:windsy_solve/features/home/screens/home_screen.dart';
 import 'package:windsy_solve/features/nc/screens/create_nc_screen.dart';
@@ -14,25 +15,27 @@ final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: LoginScreen()),
 });
 
-final loggedInRoute = RouteMap(routes: {
-  '/': (_) => const MaterialPage(child: HomeScreen()),
-  '/settings': (_) => const MaterialPage(child: Settings()),
-  '/user-profile/:uid': (routeData) => MaterialPage(
-        child: UserProfileScreen(
-          uid: routeData.pathParameters['uid']!,
+final loggedInRoute = RouteMap(
+  routes: {
+    '/': (_) => const MaterialPage(child: HomeScreen()),
+    '/settings': (_) => const MaterialPage(child: Settings()),
+    '/user-profile/:uid': (routeData) => MaterialPage(
+          child: UserProfileScreen(
+            uid: routeData.pathParameters['uid']!,
+          ),
         ),
-      ),
-  '/edit-profile/:uid': (routeData) => MaterialPage(
-        child: EditProfileScreen(
-          uid: routeData.pathParameters['uid']!,
+    '/edit-profile/:uid': (routeData) => MaterialPage(
+          child: EditProfileScreen(
+            uid: routeData.pathParameters['uid']!,
+          ),
         ),
-      ),
-  '/report-nc': (_) => const MaterialPage(child: ReportNCScreen()),
-  '/report-nc/:id/': (_) => const MaterialPage(child: NCEditScreen()),
-  '/report-nc//add-action-taken': (routeData) => MaterialPage(
-        child: AddNCActionTaken(
-          ncId: routeData.pathParameters['id']!,
+    '/report-nc': (_) => const MaterialPage(child: ReportNCScreen()),
+    '/non-conformity/:id/': (_) => const MaterialPage(child: NCEditScreen()),
+    '/report-nc/add-action-taken': (routeData) => MaterialPage(
+          child: AddNCActionTaken(
+            ncId: routeData.pathParameters['id']!,
+          ),
         ),
-      ),
-  '/reports-nc': (_) => const MaterialPage(child: NCReports()),
-});
+    '/reports-nc': (_) => const MaterialPage(child: NCReports()),
+  },
+);

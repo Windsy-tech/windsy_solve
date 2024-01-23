@@ -3,7 +3,7 @@ import 'package:windsy_solve/core/common/sign_in_button.dart';
 
 //stateful widget for sign in form
 class SignInForm extends StatefulWidget {
-  const SignInForm({Key? key}) : super(key: key);
+  const SignInForm({super.key});
 
   @override
   State<SignInForm> createState() => _SignInFormState();

@@ -32,10 +32,7 @@ class NCRepository {
       // Update ncModel with the new ID
       ncModel = ncModel.copyWith(id: newId.toString());
 
-      print(companyId);
-      print(ncModel.toString());
-
-      if (newId != "") {
+      if (newId != 0) {
         await _companies
             .doc(companyId)
             .collection('ncs')
@@ -62,16 +59,26 @@ class NCRepository {
 
       if (querySnapshot.docs.isNotEmpty) {
         final oldId = int.parse(querySnapshot.docs.first.data()['id']);
-        print(oldId);
         return oldId + 1;
       } else {
         // If no documents are found, start with ID 1
-        return 1;
+        return 1001;
       }
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
-      throw e.toString();
+      return 0;
+    }
+  }
+
+  FutureEither deleteNC(String companyId, String ncId) async {
+    try {
+      await _companies.doc(companyId).collection('ncs').doc(ncId).delete();
+      return right('NC-$ncId deleted successfully!');
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
     }
   }
 
@@ -88,7 +95,6 @@ class NCRepository {
               ))
           .toList();
     });
-    print("data: $data");
     return data;
   }
 

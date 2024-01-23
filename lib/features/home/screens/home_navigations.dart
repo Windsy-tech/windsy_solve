@@ -4,7 +4,7 @@ import "package:windsy_solve/core/common/widgets/home_navigation_button.dart";
 import "package:windsy_solve/core/constants/constants.dart";
 
 class HomeNavigations extends StatelessWidget {
-  const HomeNavigations({Key? key}) : super(key: key);
+  const HomeNavigations({super.key});
 
   void navigateToNCReportsPage(BuildContext context) {
     Routemaster.of(context).push(Constants.rReportsNC);

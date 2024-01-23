@@ -51,10 +51,26 @@ class NCController extends StateNotifier<bool> {
     state = true;
     final res = await _ncRepository.createNC(companyId, ncModel);
     state = false;
-    res.fold((l) => showSnackBar(context, l.message), (r) {
-      showSnackBar(context, 'NC-$r created successfully!');
-      Routemaster.of(context).pop();
-    });
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) {
+        showSnackBar(context, 'NC-$r created successfully!');
+        Routemaster.of(context).pop();
+      },
+    );
+  }
+
+  void deleteNC(BuildContext context, String companyId, String ncId) async {
+    state = true;
+    final res = await _ncRepository.deleteNC(companyId, ncId);
+    state = false;
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) {
+        showSnackBar(context, r);
+        Routemaster.of(context).pop();
+      },
+    );
   }
 
   //get stream of all ncs created by user
@@ -62,7 +78,6 @@ class NCController extends StateNotifier<bool> {
     final user = _ref.read(userProvider)!;
     final data =
         await _ncRepository.getNCsCreatedByUser(user.companyId, user.uid);
-    print("Controller: $data");
     return data;
   }
 
