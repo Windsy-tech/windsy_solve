@@ -21,8 +21,8 @@ final ncControllerProvider = StateNotifierProvider<NCController, bool>((ref) {
   );
 });
 
-final getUserNCProvider = FutureProvider<List<NCModel>>((ref) async {
-  return await ref.watch(ncControllerProvider.notifier)._getNCsCreatedByUser();
+final getUserNCProvider = StreamProvider<List<NCModel>>((ref) {
+  return ref.watch(ncControllerProvider.notifier)._getNCsCreatedByUser();
 });
 
 final searchMembersProvider = StreamProvider.family((ref, String query) {
@@ -74,10 +74,9 @@ class NCController extends StateNotifier<bool> {
   }
 
   //get stream of all ncs created by user
-  Future<List<NCModel>> _getNCsCreatedByUser() async {
+  Stream<List<NCModel>> _getNCsCreatedByUser() {
     final user = _ref.read(userProvider)!;
-    final data =
-        await _ncRepository.getNCsCreatedByUser(user.companyId, user.uid);
+    final data = _ncRepository.getNCsCreatedByUser(user.companyId, user.uid);
     return data;
   }
 

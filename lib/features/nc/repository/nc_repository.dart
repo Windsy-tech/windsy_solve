@@ -83,19 +83,17 @@ class NCRepository {
   }
 
   //get stream of all ncs created by user
-  Future<List<NCModel>> getNCsCreatedByUser(
+  Stream<List<NCModel>> getNCsCreatedByUser(
     String companyId,
     String uid,
-  ) async {
-    final data =
-        await _companies.doc('windsy').collection('ncs').get().then((value) {
-      return value.docs
-          .map((nc) => NCModel.fromMap(
-                nc.data(),
-              ))
-          .toList();
+  ) {
+    return _companies.doc('windsy').collection('ncs').snapshots().map((event) {
+      List<NCModel> ncs = [];
+      for (var nc in event.docs) {
+        ncs.add(NCModel.fromMap(nc.data()));
+      }
+      return ncs;
     });
-    return data;
   }
 
   //get all ncs assigned to user
