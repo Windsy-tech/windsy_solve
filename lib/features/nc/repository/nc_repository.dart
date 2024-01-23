@@ -82,14 +82,48 @@ class NCRepository {
     }
   }
 
+  FutureEither closeNC(String companyId, String userId, String ncId) async {
+    try {
+      await _companies.doc(companyId).collection('ncs').doc(ncId).update({
+        'status': 'Closed',
+        'closedAt': DateTime.now().millisecondsSinceEpoch,
+        'closedBy': userId,
+      });
+      return right('NC-$ncId closed successfully!');
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  Stream<NCModel> getNCbyId(String companyId, String ncId) {
+    return _companies
+        .doc(companyId)
+        .collection('ncs')
+        .doc(ncId)
+        .snapshots()
+        .map((event) {
+      return NCModel.fromMap(event.data() as Map<String, dynamic>);
+    });
+  }
+
   //get stream of all ncs created by user
   Stream<List<NCModel>> getNCsCreatedByUser(
     String companyId,
     String uid,
   ) {
-    return _companies.doc('windsy').collection('ncs').snapshots().map((event) {
+    return _companies
+        .doc(companyId)
+        .collection('ncs')
+        .where(
+          'createdBy',
+          isEqualTo: uid,
+        )
+        .snapshots()
+        .map((data) {
       List<NCModel> ncs = [];
-      for (var nc in event.docs) {
+      for (var nc in data.docs) {
         ncs.add(NCModel.fromMap(nc.data()));
       }
       return ncs;

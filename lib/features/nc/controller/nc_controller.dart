@@ -25,6 +25,10 @@ final getUserNCProvider = StreamProvider<List<NCModel>>((ref) {
   return ref.watch(ncControllerProvider.notifier)._getNCsCreatedByUser();
 });
 
+final getNCbyIdProvider = StreamProvider.family((ref, String ncId) {
+  return ref.watch(ncControllerProvider.notifier).getNCbyId(ncId);
+});
+
 final searchMembersProvider = StreamProvider.family((ref, String query) {
   return ref.watch(ncControllerProvider.notifier).searchMembers(query);
 });
@@ -73,6 +77,25 @@ class NCController extends StateNotifier<bool> {
     );
   }
 
+  void closeNC(BuildContext context, String companyId, String ncId) async {
+    state = true;
+    final user = _ref.read(userProvider)!;
+    final res = await _ncRepository.closeNC(companyId, user.uid, ncId);
+    state = false;
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) {
+        showSnackBar(context, r);
+      },
+    );
+  }
+
+  //get stream of nc by id
+  Stream<NCModel> getNCbyId(String ncId) {
+    final user = _ref.read(userProvider)!;
+    return _ncRepository.getNCbyId(user.companyId, ncId);
+  }
+
   //get stream of all ncs created by user
   Stream<List<NCModel>> _getNCsCreatedByUser() {
     final user = _ref.read(userProvider)!;
@@ -98,4 +121,7 @@ class NCController extends StateNotifier<bool> {
     print(companyName);
     return _ncRepository.getWindFarms(companyName, query);
   }
+
+  void updateNC(
+      BuildContext context, String companyId, String ncId, NCModel ncModel) {}
 }

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
@@ -34,12 +35,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   void save() {
     ref.read(userProfileControllerProvider.notifier).editUserProfile(
-        context: context,
-        name: nameController.text,
-        phoneNumber: phoneController.text,
-        photoUrl: '',
-        profileFile: profileFile,
-        profileWebFile: null);
+          context: context,
+          name: nameController.text,
+          phoneNumber: phoneController.text,
+          photoUrl: '',
+          profileFile: profileFile,
+          profileWebFile: null,
+        );
   }
 
   @override
@@ -145,9 +147,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           ),
                         ],
                       ),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => const Center(
-                  child: Text('Error'),
+                loading: () => const Loader(),
+                error: (error, stack) => ErrorText(
+                  error: error.toString(),
                 ),
               ),
         ),

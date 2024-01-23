@@ -22,6 +22,7 @@ class ReportListTile extends ConsumerWidget {
     WidgetRef ref,
     String companyId,
     String ncId,
+    String status,
   ) {
     return showMenu(
       context: context,
@@ -34,8 +35,18 @@ class ReportListTile extends ConsumerWidget {
       ),
       items: [
         const PopupMenuItem(
-          child: Text("Edit"),
+          child: Text("Archive"),
         ),
+        if (status == "Open") ...[
+          PopupMenuItem(
+            onTap: () => ref.read(ncControllerProvider.notifier).closeNC(
+                  context,
+                  companyId,
+                  ncId,
+                ),
+            child: const Text("Mark as closed"),
+          ),
+        ],
         PopupMenuItem(
           onTap: () => ref.read(ncControllerProvider.notifier).deleteNC(
                 context,
@@ -145,8 +156,14 @@ class ReportListTile extends ConsumerWidget {
         trailing: GestureDetector(
           onTapDown: (TapDownDetails details) {
             final user = ref.read(userProvider)!;
-            _showPopupMenu(context, details.globalPosition, ref, user.companyId,
-                ncData.id);
+            _showPopupMenu(
+              context,
+              details.globalPosition,
+              ref,
+              user.companyId,
+              ncData.id,
+              ncData.status,
+            );
           },
           child: const Icon(
             Icons.more_vert_outlined,

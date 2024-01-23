@@ -87,6 +87,7 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
                 ),
                 const SizedBox(height: 8),
                 NCWindFarm(
+                  '',
                   onSelected: (windFarm) {
                     setState(() {
                       this.windFarm = windFarm;
