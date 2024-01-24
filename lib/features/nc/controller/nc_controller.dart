@@ -25,10 +25,6 @@ final getUserNCProvider = StreamProvider<List<NCModel>>((ref) {
   return ref.watch(ncControllerProvider.notifier)._getNCsCreatedByUser();
 });
 
-final getNCbyIdProvider = StreamProvider.family((ref, String ncId) {
-  return ref.watch(ncControllerProvider.notifier).getNCbyId(ncId);
-});
-
 final searchMembersProvider = StreamProvider.family((ref, String query) {
   return ref.watch(ncControllerProvider.notifier).searchMembers(query);
 });
@@ -91,9 +87,9 @@ class NCController extends StateNotifier<bool> {
   }
 
   //get stream of nc by id
-  Stream<NCModel> getNCbyId(String ncId) {
-    final user = _ref.read(userProvider)!;
-    return _ncRepository.getNCbyId(user.companyId, ncId);
+  Future<NCModel> getNCbyId(String ncId) async {
+    //final user = _ref.read(userProvider)!;
+    return await _ncRepository.getNCbyId('windsy', ncId);
   }
 
   //get stream of all ncs created by user

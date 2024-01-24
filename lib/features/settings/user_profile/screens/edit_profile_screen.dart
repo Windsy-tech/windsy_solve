@@ -129,7 +129,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           const SizedBox(height: 4),
                           TextField(
                             controller: nameController,
-                            decoration: const InputDecoration(hintText: "Name"),
+                            decoration: const InputDecoration(
+                              hintText: "Name",
+                            ),
                           ),
 
                           const SizedBox(height: 20),

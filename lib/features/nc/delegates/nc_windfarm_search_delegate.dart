@@ -12,8 +12,11 @@ class NCWindFarmSearchDelegate extends SearchDelegate {
   final WindFarmModel windFarm;
   final Function(WindFarmModel) onSelected;
 
-  NCWindFarmSearchDelegate(
-      {required this.ref, required this.windFarm, required this.onSelected});
+  NCWindFarmSearchDelegate({
+    required this.ref,
+    required this.windFarm,
+    required this.onSelected,
+  });
 
   @override
   List<Widget>? buildActions(BuildContext context) {

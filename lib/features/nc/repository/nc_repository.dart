@@ -97,14 +97,16 @@ class NCRepository {
     }
   }
 
-  Stream<NCModel> getNCbyId(String companyId, String ncId) {
-    return _companies
+  Future<NCModel> getNCbyId(String companyId, String ncId) async {
+    return await _companies
         .doc(companyId)
         .collection('ncs')
         .doc(ncId)
-        .snapshots()
-        .map((event) {
-      return NCModel.fromMap(event.data() as Map<String, dynamic>);
+        .get()
+        .then((value) {
+      return NCModel.fromMap(
+        value.data() as Map<String, dynamic>,
+      );
     });
   }
 
