@@ -11,9 +11,7 @@ import 'package:windsy_solve/models/windfarm_model.dart';
 
 class NCEditScreen extends ConsumerStatefulWidget {
   final String ncId;
-  const NCEditScreen(this.ncId, {Key? key}) : super(key: key);
-  static const routeName = '/non-conformity';
-
+  const NCEditScreen(this.ncId, {super.key});
   @override
   ConsumerState<NCEditScreen> createState() =>
       _CreateConsumerNCEditScreenState();
@@ -24,14 +22,23 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
   final problemDescriptionController = TextEditingController();
   List<String> severities = ['Low', 'Medium', 'High'];
   List<String> statuses = ['Open', 'Closed'];
-  String? severity;
-  String? status;
-  WindFarmModel? windFarmModel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  String severity = '';
+  String status = '';
+  NCModel ncModel = NCModel(
+    id: '',
+    title: '',
+    problemDescription: '',
+    severity: 0,
+    status: '',
+    windFarm: "",
+    assignedTo: [],
+    category: '',
+    createdAt: DateTime.now(),
+    closedAt: DateTime.now(),
+    turbineNo: '',
+    createdBy: '',
+    updatedAt: DateTime.now(),
+  );
 
   @override
   void dispose() {
@@ -40,111 +47,156 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
     super.dispose();
   }
 
-  void updateNC() {}
-
   @override
-  Widget build(BuildContext buildContext) {
-    return ref
-        .read(ncControllerProvider.notifier)
-        .getNCbyId(widget.ncId)
-        .then((nc) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Non-Conformity: ${nc.id}"),
-          leading: IconButton(
-            onPressed: () {
-              Routemaster.of(context).push(Constants.rReportsNC);
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
-          actions: [
-            IconButton(
-              onPressed: updateNC,
-              icon: const Icon(Icons.save_as_outlined),
-            )
-          ],
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text("Title"),
-                  const SizedBox(height: 4),
-                  TextField(
-                    controller: titleController.text == ''
-                        ? TextEditingController(text: nc.title)
-                        : titleController,
-                    maxLength: 50,
-                    //onChanged: (value) {},
+  Widget build(BuildContext context) {
+    return ref.watch(getNCbyIdProvider(widget.ncId)).when(
+          data: (nc) {
+            print("rebuilding...");
+            if (ncModel.id == "") {
+              print("Assinging Data");
+              ncModel = nc;
+              print(ncModel.id);
+              titleController.text = ncModel.title;
+              problemDescriptionController.text = ncModel.problemDescription;
+              status = ncModel.status;
+              severity = severities[ncModel.severity];
+            }
+
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Non-Conformity: NC-${nc.id}'),
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.save),
                   ),
-                  const SizedBox(height: 8),
-                  const Text("Problem Description"),
-                  const SizedBox(height: 4),
-                  TextField(
-                    controller: problemDescriptionController,
-                    maxLines: 3,
-                    onChanged: (value) {},
-                  ),
-                  const SizedBox(height: 8),
-                  ListTile(
-                    contentPadding: const EdgeInsets.all(0),
-                    leading: const Text('Severity'),
-                    trailing: DropdownButton<String>(
-                      value: severities[nc.severity],
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          severity = newValue;
-                        });
-                      },
-                      items: severities
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value.toString()),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  ListTile(
-                    contentPadding: const EdgeInsets.all(0),
-                    leading: const Text('Status'),
-                    trailing: DropdownButton<String>(
-                      value: nc.status,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          status = newValue;
-                        });
-                      },
-                      items: statuses
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value.toString(),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  /* NCWindFarm(
-                          nc.windFarm,
-                          onSelected: (windFarm) {
-                            setState(() {
-                              windFarmModel = windFarm;
-                            });
-                          },
-                        ), */
                 ],
               ),
-            ),
-          ),
-        ),
-      );
-    }) as Widget;
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text("Title"),
+                      const SizedBox(height: 4),
+                      TextField(
+                        controller: titleController,
+                        maxLength: 50,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text("Problem Description"),
+                      const SizedBox(height: 4),
+                      TextField(
+                        controller: problemDescriptionController,
+                        maxLines: 3,
+                      ),
+                      const SizedBox(height: 8),
+/*                   NCWindFarm(
+                    '',
+                    onSelected: (windFarm) {
+                      setState(() {
+                        this.windFarm = windFarm;
+                      });
+                    },
+                  ), */
+                      const SizedBox(height: 8),
+                      ListTile(
+                        leading: const Text(
+                          'Status',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.all(0),
+                        trailing: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            value: status,
+                            items: statuses
+                                .map((e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                status = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      ListTile(
+                        contentPadding: const EdgeInsets.all(0),
+                        leading: const Text(
+                          'Severity',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        trailing: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            value: severity,
+                            items: severities
+                                .map((e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e),
+                                    ))
+                                .toList(),
+                            onChanged: (value) => severity = value!,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      /* const Text('Wind Farm'),
+                const SizedBox(height: 4),
+                const SizedBox(height: 8), */
+                      const SizedBox(height: 8),
+/*                   NCAssign(
+                    ref: ref,
+                    onAssign: (assignedTo) {
+                      setState(() {
+                        this.assignedTo = assignedTo.toList();
+                      });
+                    },
+                  ), */
+                      const SizedBox(height: 8),
+
+                      /* Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Actions Taken'),
+                        IconButton(
+                          onPressed: () {
+                            Routemaster.of(context).push(
+                              'add-action-taken',
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                ), */
+/*                   const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () => createNC(),
+                    child: const Text('Create NC'),
+                  ), */
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+          error: (e, s) => ErrorText(error: e.toString()),
+          loading: () => const Loader(),
+        );
   }
 }
