@@ -25,8 +25,8 @@ class SignInButton extends ConsumerWidget {
     return ElevatedButton(
       onPressed: () => signInWithEmailAndPassword(
         ref,
-        'felix.wernicke@windsy.de',
-        'windsy',
+        'ma.mu@windsy.de',
+        '123456',
         context,
       ),
       style: ElevatedButton.styleFrom(
