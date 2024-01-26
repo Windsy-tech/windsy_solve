@@ -42,9 +42,10 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
             turbineNo: windFarm.turbineNo!,
             platform: windFarm.platform!,
             oem: windFarm.oem!,
-            createdBy: user.uid,
             assignedTo: assignedTo,
+            createdBy: user.uid,
             createdAt: DateTime.now(),
+            updatedBy: user.uid,
             updatedAt: DateTime.now(),
             closedAt: DateTime.now(),
             closedBy: '',
@@ -86,7 +87,7 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
                 ),
                 const SizedBox(height: 8),
                 NCWindFarm(
-                  '',
+                  null,
                   onSelected: (windFarm) {
                     setState(() {
                       this.windFarm = windFarm;

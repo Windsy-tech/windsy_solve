@@ -25,7 +25,8 @@ final getUserNCProvider = StreamProvider<List<NCModel>>((ref) {
   return ref.watch(ncControllerProvider.notifier)._getNCsCreatedByUser();
 });
 
-final getNCbyIdProvider = FutureProvider.family((ref, String ncId) async {
+final getNCbyIdProvider =
+    FutureProvider.autoDispose.family((ref, String ncId) async {
   final ncController = ref.watch(ncControllerProvider.notifier);
   return ncController.getNCbyId(ncId);
 });
@@ -91,6 +92,20 @@ class NCController extends StateNotifier<bool> {
     );
   }
 
+  void updateNC(BuildContext context, NCModel nc) async {
+    state = true;
+    final user = _ref.read(userProvider)!;
+    final res = await _ncRepository.updateNC(user.companyId, user.uid, nc);
+    state = false;
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) {
+        showSnackBar(context, r);
+        Routemaster.of(context).pop();
+      },
+    );
+  }
+
   //get stream of nc by id
   Future<NCModel> getNCbyId(String ncId) async {
     //final user = _ref.read(userProvider)!;
@@ -129,7 +144,4 @@ class NCController extends StateNotifier<bool> {
     print(companyName);
     return _ncRepository.getWindFarms(companyName, query);
   }
-
-  void updateNC(
-      BuildContext context, String companyId, String ncId, NCModel ncModel) {}
 }

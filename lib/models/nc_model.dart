@@ -13,12 +13,13 @@ class NCModel {
   final String turbineNo;
   final String? platform;
   final String? oem;
-  final String createdBy;
   final List<String>? assignedTo;
+  final String createdBy;
   final DateTime createdAt;
+  final String updatedBy;
   final DateTime updatedAt;
-  final DateTime closedAt;
   final String? closedBy;
+  final DateTime? closedAt;
   final String? closedReason;
 
   NCModel({
@@ -32,12 +33,13 @@ class NCModel {
     required this.turbineNo,
     this.platform,
     this.oem,
-    required this.createdBy,
     this.assignedTo,
+    required this.createdBy,
     required this.createdAt,
+    required this.updatedBy,
     required this.updatedAt,
-    required this.closedAt,
     this.closedBy,
+    this.closedAt,
     this.closedReason,
   });
 
@@ -52,12 +54,13 @@ class NCModel {
     String? turbineNo,
     String? platform,
     String? oem,
-    String? createdBy,
     List<String>? assignedTo,
+    String? createdBy,
     DateTime? createdAt,
+    String? updatedBy,
     DateTime? updatedAt,
-    DateTime? closedAt,
     String? closedBy,
+    DateTime? closedAt,
     String? closedReason,
   }) {
     return NCModel(
@@ -74,6 +77,7 @@ class NCModel {
       createdBy: createdBy ?? this.createdBy,
       assignedTo: assignedTo ?? this.assignedTo,
       createdAt: createdAt ?? this.createdAt,
+      updatedBy: updatedBy ?? this.updatedBy,
       updatedAt: updatedAt ?? this.updatedAt,
       closedAt: closedAt ?? this.closedAt,
       closedBy: closedBy ?? this.closedBy,
@@ -93,12 +97,13 @@ class NCModel {
       'turbineNo': turbineNo,
       'platform': platform,
       'oem': oem,
-      'createdBy': createdBy,
       'assignedTo': assignedTo,
+      'createdBy': createdBy,
       'createdAt': createdAt.millisecondsSinceEpoch,
+      'updatedBy': updatedBy,
       'updatedAt': updatedAt.millisecondsSinceEpoch,
-      'closedAt': closedAt.millisecondsSinceEpoch,
       'closedBy': closedBy,
+      'closedAt': closedAt?.millisecondsSinceEpoch,
       'closedReason': closedReason,
     };
   }
@@ -116,23 +121,24 @@ class NCModel {
         turbineNo: map['turbineNo'] ?? '',
         platform: map['platform'] ?? '',
         oem: map['oem'] ?? '',
-        createdBy: map['createdBy'] ?? '',
         assignedTo: List<String>.from(map['assignedTo']),
+        createdBy: map['createdBy'] ?? '',
         createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+        updatedBy: map['updatedBy'] ?? '',
         updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt']),
-        closedAt: DateTime.fromMillisecondsSinceEpoch(map['closedAt']),
         closedBy: map['closedBy'] ?? '',
+        closedAt: DateTime.fromMillisecondsSinceEpoch(map['closedAt']),
         closedReason: map['closedReason'] ?? '',
       );
     } catch (e) {
-      print("Error creating NCModel: $e");
+      //print("Error creating NCModel: $e");
       rethrow; // Rethrow the exception to propagate it further
     }
   }
 
   @override
   String toString() {
-    return 'NCModel(id: $id, title: $title, problemDescription: $problemDescription, status: $status, severity: $severity, category: $category, windFarm: $windFarm, turbineNo: $turbineNo, platform: $platform, oem: $oem, createdBy: $createdBy, assignedTo: $assignedTo, createdAt: $createdAt, updatedAt: $updatedAt, closedAt: $closedAt, closedBy: $closedBy, closedReason: $closedReason)';
+    return 'NCModel(id: $id, title: $title, problemDescription: $problemDescription, status: $status, severity: $severity, category: $category, windFarm: $windFarm, turbineNo: $turbineNo, platform: $platform, oem: $oem, createdBy: $createdBy, assignedTo: $assignedTo, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt, closedAt: $closedAt, closedBy: $closedBy, closedReason: $closedReason)';
   }
 
   @override
@@ -149,12 +155,13 @@ class NCModel {
         other.turbineNo == turbineNo &&
         other.platform == platform &&
         other.oem == oem &&
-        other.createdBy == createdBy &&
         listEquals(other.assignedTo, assignedTo) &&
+        other.createdBy == createdBy &&
         other.createdAt == createdAt &&
+        other.updatedBy == updatedBy &&
         other.updatedAt == updatedAt &&
-        other.closedAt == closedAt &&
         other.closedBy == closedBy &&
+        other.closedAt == closedAt &&
         other.closedReason == closedReason;
   }
 
@@ -170,12 +177,13 @@ class NCModel {
         turbineNo.hashCode ^
         platform.hashCode ^
         oem.hashCode ^
-        createdBy.hashCode ^
         assignedTo.hashCode ^
+        createdBy.hashCode ^
         createdAt.hashCode ^
+        updatedBy.hashCode ^
         updatedAt.hashCode ^
-        closedAt.hashCode ^
         closedBy.hashCode ^
+        closedAt.hashCode ^
         closedReason.hashCode;
   }
 }

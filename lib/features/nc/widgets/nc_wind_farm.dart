@@ -5,7 +5,7 @@ import 'package:windsy_solve/models/windfarm_model.dart';
 import 'package:windsy_solve/utils/text_utils.dart';
 
 class NCWindFarm extends ConsumerStatefulWidget {
-  final String initialValue;
+  final WindFarmModel? initialValue;
   final Function(WindFarmModel) onSelected;
 
   const NCWindFarm(this.initialValue, {super.key, required this.onSelected});
@@ -21,7 +21,9 @@ class _CreateConsumerNCWindFarmState extends ConsumerState<NCWindFarm> {
   @override
   void initState() {
     super.initState();
-    windFarm = WindFarmModel(windFarm: widget.initialValue);
+    if (widget.initialValue != null) {
+      windFarm = widget.initialValue!;
+    }
   }
 
   void showSearchDelegate() {
@@ -79,7 +81,7 @@ class _CreateConsumerNCWindFarmState extends ConsumerState<NCWindFarm> {
                     ),
                     CustomListTileWindFarm(
                       title: "OEM",
-                      data: windFarm.oem!,
+                      data: TextUtils.capitalizeFirstLetter(windFarm.oem!),
                     ),
                   ],
                 ),
@@ -109,13 +111,13 @@ class CustomListTileWindFarm extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 14,
             ),
           ),
           Text(
             data,
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 14,
             ),
           ),
         ],

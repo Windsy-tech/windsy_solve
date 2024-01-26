@@ -4,7 +4,9 @@ import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
+import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
+import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
@@ -24,6 +26,7 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
   List<String> statuses = ['Open', 'Closed'];
   String severity = '';
   String status = '';
+  List<String> assignedTo = [];
   NCModel ncModel = NCModel(
     id: '',
     title: '',
@@ -37,7 +40,15 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
     closedAt: DateTime.now(),
     turbineNo: '',
     createdBy: '',
+    updatedBy: '',
     updatedAt: DateTime.now(),
+  );
+
+  WindFarmModel windFarm = WindFarmModel(
+    windFarm: '',
+    platform: '',
+    oem: '',
+    turbineNo: '',
   );
 
   @override
@@ -45,6 +56,33 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
     titleController.dispose();
     problemDescriptionController.dispose();
     super.dispose();
+  }
+
+  void updateNC() async {
+    final user = ref.read(userProvider)!;
+    ref.read(ncControllerProvider.notifier).updateNC(
+          context,
+          NCModel(
+            id: ncModel.id,
+            title: titleController.text,
+            problemDescription: problemDescriptionController.text,
+            status: status,
+            severity: severities.indexOf(severity),
+            category: '',
+            windFarm: windFarm.windFarm!,
+            turbineNo: windFarm.turbineNo!,
+            platform: windFarm.platform!,
+            oem: windFarm.oem,
+            assignedTo: assignedTo,
+            createdBy: ncModel.createdBy,
+            createdAt: ncModel.createdAt,
+            updatedBy: user.uid,
+            updatedAt: DateTime.now(),
+            closedBy: ncModel.closedBy,
+            closedAt: ncModel.closedAt,
+            closedReason: ncModel.closedReason,
+          ),
+        );
   }
 
   @override
@@ -60,6 +98,13 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
               problemDescriptionController.text = ncModel.problemDescription;
               status = ncModel.status;
               severity = severities[ncModel.severity];
+              assignedTo = ncModel.assignedTo!;
+              windFarm = WindFarmModel(
+                windFarm: ncModel.windFarm,
+                platform: ncModel.platform,
+                oem: ncModel.oem,
+                turbineNo: ncModel.turbineNo,
+              );
             }
 
             return Scaffold(
@@ -67,7 +112,7 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                 title: Text('Non-Conformity: NC-${nc.id}'),
                 actions: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: updateNC,
                     icon: const Icon(Icons.save),
                   ),
                 ],
@@ -92,14 +137,14 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                         maxLines: 3,
                       ),
                       const SizedBox(height: 8),
-/*                   NCWindFarm(
-                    '',
-                    onSelected: (windFarm) {
-                      setState(() {
-                        this.windFarm = windFarm;
-                      });
-                    },
-                  ), */
+                      NCWindFarm(
+                        windFarm,
+                        onSelected: (windFarm) {
+                          setState(() {
+                            this.windFarm = windFarm;
+                          });
+                        },
+                      ),
                       const SizedBox(height: 8),
                       ListTile(
                         leading: const Text(
@@ -151,18 +196,14 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      /* const Text('Wind Farm'),
-                const SizedBox(height: 4),
-                const SizedBox(height: 8), */
-                      const SizedBox(height: 8),
-/*                   NCAssign(
-                    ref: ref,
-                    onAssign: (assignedTo) {
-                      setState(() {
-                        this.assignedTo = assignedTo.toList();
-                      });
-                    },
-                  ), */
+                      NCAssign(
+                        ref: ref,
+                        onAssign: (assignedTo) {
+                          setState(() {
+                            this.assignedTo.addAll(assignedTo.toList());
+                          });
+                        },
+                      ),
                       const SizedBox(height: 8),
 
                       /* Column(

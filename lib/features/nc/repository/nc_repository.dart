@@ -71,6 +71,26 @@ class NCRepository {
     }
   }
 
+  //Update NC data by id
+  FutureEither updateNC(
+    String companyId,
+    String userId,
+    NCModel ncModel,
+  ) async {
+    try {
+      await _companies
+          .doc(companyId)
+          .collection('ncs')
+          .doc(ncModel.id)
+          .update(ncModel.toMap());
+      return right('NC-${ncModel.id} updated successfully!');
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
   FutureEither deleteNC(String companyId, String ncId) async {
     try {
       await _companies.doc(companyId).collection('ncs').doc(ncId).delete();

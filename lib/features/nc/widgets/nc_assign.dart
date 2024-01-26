@@ -8,10 +8,10 @@ class NCAssign extends ConsumerStatefulWidget {
   final Function(Set<String>) onAssign;
 
   const NCAssign({
-    Key? key,
+    super.key,
     required this.ref,
     required this.onAssign,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<NCAssign> createState() => _CreateConsumerNCAssignState();
@@ -26,9 +26,9 @@ class _CreateConsumerNCAssignState extends ConsumerState<NCAssign> {
       delegate: NCAssignSearchDelegate(
         ref: ref,
         assignedTo: assignedTo,
-        onAssign: (assignedTo) {
+        onAssign: (assigned) {
           setState(() {
-            widget.onAssign(assignedTo);
+            widget.onAssign(assigned);
           });
         },
       ),

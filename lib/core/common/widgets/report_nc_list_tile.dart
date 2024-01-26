@@ -6,14 +6,14 @@ import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
 import 'package:windsy_solve/utils/text_utils.dart';
 
-class ReportListTile extends ConsumerWidget {
-  const ReportListTile({
+class ReportNCListTile extends ConsumerWidget {
+  const ReportNCListTile({
     super.key,
-    required this.ncData,
+    required this.nc,
     required this.onTap,
   });
 
-  final NCModel ncData;
+  final NCModel nc;
   final VoidCallback onTap;
 
   _showPopupMenu(
@@ -79,7 +79,7 @@ class ReportListTile extends ConsumerWidget {
         ),
         titleAlignment: ListTileTitleAlignment.top,
         title: Text(
-          'NC #${ncData.id}',
+          'NC #${nc.id}',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -91,18 +91,18 @@ class ReportListTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                ncData.status,
+                nc.status,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: ncData.status == 'Open' ? Colors.green : Colors.red,
+                  color: nc.status == 'Open' ? Colors.green : Colors.red,
                 ),
               ),
               const SizedBox(
                 height: 6,
               ),
               Text(
-                ncData.title,
+                nc.title,
                 style: const TextStyle(
                   color: Colors.black54,
                   fontSize: 14,
@@ -121,7 +121,7 @@ class ReportListTile extends ConsumerWidget {
                     width: 6,
                   ),
                   Text(
-                    TextUtils.capitalizeFirstLetter(ncData.windFarm),
+                    TextUtils.capitalizeFirstLetter(nc.windFarm),
                     style: const TextStyle(
                       color: Colors.black54,
                       fontSize: 12,
@@ -142,7 +142,7 @@ class ReportListTile extends ConsumerWidget {
                     width: 6,
                   ),
                   Text(
-                    ncData.createdAt.toDateString(),
+                    nc.createdAt.toDateString(),
                     style: const TextStyle(
                       color: Colors.black54,
                       fontSize: 12,
@@ -161,8 +161,8 @@ class ReportListTile extends ConsumerWidget {
               details.globalPosition,
               ref,
               user.companyId,
-              ncData.id,
-              ncData.status,
+              nc.id,
+              nc.status,
             );
           },
           child: const Icon(
