@@ -17,7 +17,7 @@ class HomeNavigations extends ConsumerWidget {
   }
 
   void navigateToInspectionReportsPage(BuildContext context) {
-    Routemaster.of(context).push(Constants.rReportsNC);
+    Routemaster.of(context).push(Constants.rReportsInspection);
   }
 
   void navigateToSafetyReportsPage(BuildContext context) {
@@ -66,7 +66,7 @@ class HomeNavigations extends ConsumerWidget {
                 title: "Inspection",
                 icon: Constants.iInspectionReports,
                 count: inspectionCount.value ?? 0,
-                onTap: () => navigateToNCReportsPage(context),
+                onTap: () => navigateToInspectionReportsPage(context),
               ),
               const SizedBox(
                 width: 8,
