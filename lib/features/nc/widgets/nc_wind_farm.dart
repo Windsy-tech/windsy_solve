@@ -4,6 +4,8 @@ import 'package:windsy_solve/features/nc/delegates/nc_windfarm_search_delegate.d
 import 'package:windsy_solve/models/windfarm_model.dart';
 import 'package:windsy_solve/utils/text_utils.dart';
 
+import '../../../core/common/widgets/wind_farm_listtile.dart';
+
 class NCWindFarm extends ConsumerStatefulWidget {
   final WindFarmModel? initialValue;
   final Function(WindFarmModel) onSelected;
@@ -87,41 +89,6 @@ class _CreateConsumerNCWindFarmState extends ConsumerState<NCWindFarm> {
                 ),
               ),
       ],
-    );
-  }
-}
-
-class CustomListTileWindFarm extends StatelessWidget {
-  const CustomListTileWindFarm({
-    super.key,
-    required this.title,
-    required this.data,
-  });
-
-  final String title;
-  final String data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-            ),
-          ),
-          Text(
-            data,
-            style: const TextStyle(
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
