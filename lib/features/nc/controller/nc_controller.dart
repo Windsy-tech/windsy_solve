@@ -53,6 +53,7 @@ class NCController extends StateNotifier<bool> {
         _storageRepository = storageRepository,
         super(false);
 
+  //create new nc
   void createNC(BuildContext context, String companyId, NCModel ncModel) async {
     state = true;
     final res = await _ncRepository.createNC(companyId, ncModel);
@@ -66,6 +67,7 @@ class NCController extends StateNotifier<bool> {
     );
   }
 
+  //delete nc
   void deleteNC(BuildContext context, String companyId, String ncId) async {
     state = true;
     final res = await _ncRepository.deleteNC(companyId, ncId);
@@ -79,6 +81,7 @@ class NCController extends StateNotifier<bool> {
     );
   }
 
+  //close nc
   void closeNC(BuildContext context, String companyId, String ncId) async {
     state = true;
     final user = _ref.read(userProvider)!;
@@ -92,6 +95,7 @@ class NCController extends StateNotifier<bool> {
     );
   }
 
+  //update nc
   void updateNC(BuildContext context, NCModel nc) async {
     state = true;
     final user = _ref.read(userProvider)!;
@@ -126,10 +130,12 @@ class NCController extends StateNotifier<bool> {
     return data;
   }
 
+  //get stream of all ncs created by user
   Stream<List<UserModel>> searchMembers(String query) {
     return _ncRepository.searchMembers(query);
   }
 
+  //add members
   void addMembers(String ncId, List<String> uids, BuildContext context) async {
     final res = await _ncRepository.addMembers(ncId, uids);
     res.fold(
@@ -138,6 +144,7 @@ class NCController extends StateNotifier<bool> {
     );
   }
 
+  //get windfarms
   Stream<List<WindFarmModel>> getWindFarms(String query) {
     final user = _ref.read(userProvider);
     final companyName = user!.companyName;
