@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
+import 'package:windsy_solve/features/inspection/widgets/show_inspection_modal.dart';
 import 'package:windsy_solve/theme/pallete.dart';
 
 class DrawerWidget extends ConsumerWidget {
@@ -15,6 +16,10 @@ class DrawerWidget extends ConsumerWidget {
   void navigateToReportNCPage(BuildContext context) {
     Routemaster.of(context).push(Constants.rReportNC);
     Scaffold.of(context).closeDrawer();
+  }
+
+  void showInspectionModal(BuildContext context) {
+    showInspectionModelBottomSheet(context);
   }
 
   void navigateToSettingsPage(BuildContext context) {
@@ -59,9 +64,10 @@ class DrawerWidget extends ConsumerWidget {
                       leading: const Icon(Icons.report),
                       title: const Text("Report NC"),
                     ),
-                    const ListTile(
-                      leading: Icon(Icons.construction),
-                      title: Text("Perform Inspection"),
+                    ListTile(
+                      onTap: () => showInspectionModal(context),
+                      leading: const Icon(Icons.construction),
+                      title: const Text("Perform Inspection"),
                     ),
                     const ListTile(
                       leading: Icon(Icons.wysiwyg),
