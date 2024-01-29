@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
+import 'package:windsy_solve/features/nc/widgets/nc_attachments.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
 
 class ReportNCScreen extends ConsumerStatefulWidget {
-  const ReportNCScreen({Key? key}) : super(key: key);
+  const ReportNCScreen({super.key});
   static const routeName = '/non-conformity';
 
   @override

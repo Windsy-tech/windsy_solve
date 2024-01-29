@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:routemaster/routemaster.dart';
+import 'package:windsy_solve/core/common/alert_dialog.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
-import 'package:windsy_solve/core/constants/constants.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
+import 'package:windsy_solve/features/nc/widgets/nc_attachments.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
@@ -85,15 +85,22 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
         );
   }
 
+  Future showAlert(BuildContext context) async {
+    await showAlertDialog(
+      context: context,
+      title: 'Warning',
+      content: 'Are you sure you want to exit?',
+      defaultActionText: 'Yes',
+    );
+    if (context.mounted) Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ref.watch(getNCbyIdProvider(widget.ncId)).when(
           data: (nc) {
-            print("rebuilding...");
             if (ncModel.id == "") {
-              print("Assinging Data");
               ncModel = nc;
-              print(ncModel.id);
               titleController.text = ncModel.title;
               problemDescriptionController.text = ncModel.problemDescription;
               status = ncModel.status;
@@ -110,6 +117,12 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
             return Scaffold(
               appBar: AppBar(
                 title: Text('Non-Conformity: NC-${nc.id}'),
+                leading: IconButton(
+                  onPressed: () async {
+                    await showAlert(context);
+                  },
+                  icon: const Icon(Icons.close_outlined),
+                ),
                 actions: [
                   IconButton(
                     onPressed: updateNC,
@@ -117,120 +130,103 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                   ),
                 ],
               ),
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Text("Title"),
-                      const SizedBox(height: 4),
-                      TextField(
-                        controller: titleController,
-                        maxLength: 50,
-                      ),
-                      const SizedBox(height: 8),
-                      const Text("Problem Description"),
-                      const SizedBox(height: 4),
-                      TextField(
-                        controller: problemDescriptionController,
-                        maxLines: 3,
-                      ),
-                      const SizedBox(height: 8),
-                      NCWindFarm(
-                        windFarm,
-                        onSelected: (windFarm) {
-                          setState(() {
-                            this.windFarm = windFarm;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      ListTile(
-                        leading: const Text(
-                          'Status',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.all(0),
-                        trailing: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            value: status,
-                            items: statuses
-                                .map((e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Text(e),
-                                    ))
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                status = value!;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      ListTile(
-                        contentPadding: const EdgeInsets.all(0),
-                        leading: const Text(
-                          'Severity',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                        trailing: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            value: severity,
-                            items: severities
-                                .map((e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Text(e),
-                                    ))
-                                .toList(),
-                            onChanged: (value) => severity = value!,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      NCAssign(
-                        ref: ref,
-                        onAssign: (assignedTo) {
-                          setState(() {
-                            this.assignedTo.addAll(assignedTo.toList());
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 8),
-
-                      /* Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Text('Actions Taken'),
-                        IconButton(
-                          onPressed: () {
-                            Routemaster.of(context).push(
-                              'add-action-taken',
-                            );
-                          },
-                          icon: const Icon(Icons.add),
+                        const Text("Title"),
+                        const SizedBox(height: 4),
+                        TextField(
+                          controller: titleController,
+                          maxLength: 50,
                         ),
+                        const SizedBox(height: 8),
+                        const Text("Problem Description"),
+                        const SizedBox(height: 4),
+                        TextField(
+                          controller: problemDescriptionController,
+                          maxLines: 3,
+                        ),
+                        const SizedBox(height: 8),
+                        NCWindFarm(
+                          windFarm,
+                          onSelected: (windFarm) {
+                            setState(() {
+                              this.windFarm = windFarm;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        ListTile(
+                          leading: const Text(
+                            'Status',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.all(0),
+                          trailing: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              value: status,
+                              items: statuses
+                                  .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  status = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ListTile(
+                          contentPadding: const EdgeInsets.all(0),
+                          leading: const Text(
+                            'Severity',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          trailing: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              value: severity,
+                              items: severities
+                                  .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  severity = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        NCAssign(
+                          ref: ref,
+                          onAssign: (assignedTo) {
+                            setState(() {
+                              this.assignedTo.addAll(assignedTo.toList());
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        NCAttachments(ncId: ncModel.id),
+                        const SizedBox(height: 8),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                  ],
-                ), */
-/*                   const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () => createNC(),
-                    child: const Text('Create NC'),
-                  ), */
-                    ],
                   ),
                 ),
               ),
