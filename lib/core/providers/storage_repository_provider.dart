@@ -20,8 +20,8 @@ class StorageRepository {
       : _firebaseStorage = firebaseStorage;
 
   FutureEither<String> storeFile({
-    required String path,
     required String id,
+    required String path,
     required File? file,
     required Uint8List? webFile,
   }) async {
@@ -36,8 +36,25 @@ class StorageRepository {
       }
 
       final snapshot = await uploadTask;
-
+      print(snapshot);
       return right(await snapshot.ref.getDownloadURL());
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  FutureEither<String> deleteFile({
+    required String url,
+    required String id,
+  }) async {
+    try {
+      final filePath = _firebaseStorage.refFromURL(url);
+      print(filePath.name);
+      print(filePath.fullPath);
+      print(filePath.parent);
+      print(id);
+      await _firebaseStorage.ref().child(filePath.fullPath).delete();
+      return right('File deleted successfully!');
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
