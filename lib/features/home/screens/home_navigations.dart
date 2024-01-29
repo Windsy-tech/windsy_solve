@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:routemaster/routemaster.dart";
 import "package:windsy_solve/core/common/widgets/home_navigation_button.dart";
 import "package:windsy_solve/core/constants/constants.dart";
+import "package:windsy_solve/features/home/controller/home_controller.dart";
 
-class HomeNavigations extends StatelessWidget {
+class HomeNavigations extends ConsumerWidget {
   const HomeNavigations({super.key});
 
   void navigateToNCReportsPage(BuildContext context) {
@@ -23,8 +25,13 @@ class HomeNavigations extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
+    final ncCount = ref.watch(getNCCountByUserId);
+    final inspectionCount = ref.watch(getInspectionCountByUserId);
+    final safetyCount = ref.watch(getSafetyCountByUserId);
+    final d8Count = ref.watch(get8DCountByUserId);
+
     return SizedBox(
       width: size.width,
       child: Column(
@@ -36,7 +43,7 @@ class HomeNavigations extends StatelessWidget {
                 title: "NC",
                 icon: Constants.iNCReports,
                 onTap: () => navigateToNCReportsPage(context),
-                count: 10,
+                count: ncCount.value ?? 0,
               ),
               const SizedBox(
                 width: 8,
@@ -45,7 +52,7 @@ class HomeNavigations extends StatelessWidget {
                 title: "8D",
                 icon: Constants.i8DReports,
                 onTap: () => navigateTo8DReportsPage(context),
-                count: 4,
+                count: d8Count.value ?? 0,
               ),
             ],
           ),
@@ -58,7 +65,7 @@ class HomeNavigations extends StatelessWidget {
               HomeNavigationButton(
                 title: "Inspection",
                 icon: Constants.iInspectionReports,
-                count: 3,
+                count: inspectionCount.value ?? 0,
                 onTap: () => navigateToNCReportsPage(context),
               ),
               const SizedBox(
@@ -67,7 +74,7 @@ class HomeNavigations extends StatelessWidget {
               HomeNavigationButton(
                 title: "Safety",
                 icon: Constants.iSafetyReports,
-                count: 8,
+                count: safetyCount.value ?? 0,
                 onTap: () => navigateTo8DReportsPage(context),
               ),
             ],
