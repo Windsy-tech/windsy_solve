@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/auth/screens/login_screen.dart';
 import 'package:windsy_solve/features/home/screens/home_screen.dart';
+import 'package:windsy_solve/features/inspection/screens/create_inspection_screen.dart';
 import 'package:windsy_solve/features/nc/screens/create_nc_screen.dart';
 import 'package:windsy_solve/features/nc/screens/edit_nc_screen.dart';
 import 'package:windsy_solve/features/nc/screens/nc_add_actions_taken_screen.dart';
+import 'package:windsy_solve/features/reports_dashboard/inspection/inspection_reports.dart';
 import 'package:windsy_solve/features/reports_dashboard/nc/nc_reports.dart';
 import 'package:windsy_solve/features/settings/screens/general_setting_screen.dart';
 import 'package:windsy_solve/features/settings/screens/settings_screen.dart';
@@ -44,5 +46,15 @@ final loggedInRoute = RouteMap(
           ),
         ),
     '/reports-nc': (_) => const MaterialPage(child: NCReports()),
+    '/perform-inspection': (routeData) {
+      return MaterialPage(
+        child: PerformInspectionScreen(
+          type: routeData.queryParameters['type']!,
+          templateName: routeData.queryParameters['templateName']!,
+        ),
+      );
+    },
+    '/reports-inspection': (_) =>
+        const MaterialPage(child: InspectionReports()),
   },
 );

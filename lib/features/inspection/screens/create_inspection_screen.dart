@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
-import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
-import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
-import 'package:windsy_solve/models/nc_model.dart';
+import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
+import 'package:windsy_solve/features/inspection/widgets/inspection_section.dart';
+import 'package:windsy_solve/features/inspection/widgets/inspection_wind_farm.dart';
+import 'package:windsy_solve/models/inspection_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
 
-class ReportNCScreen extends ConsumerStatefulWidget {
-  const ReportNCScreen({super.key});
-  static const routeName = '/non-conformity';
-
+class PerformInspectionScreen extends ConsumerStatefulWidget {
+  final String type;
+  final String templateName;
+  const PerformInspectionScreen({
+    required this.type,
+    required this.templateName,
+    super.key,
+  });
   @override
-  ConsumerState<ReportNCScreen> createState() =>
-      _CreateConsumerReportNCScreenState();
+  ConsumerState<PerformInspectionScreen> createState() =>
+      _CreateConsumerPerformInspectionScreenState();
 }
 
-class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
+class _CreateConsumerPerformInspectionScreenState
+    extends ConsumerState<PerformInspectionScreen> {
   final titleController = TextEditingController();
-  final problemDescriptionController = TextEditingController();
+  final externalAuditorController = TextEditingController();
+  final supplierController = TextEditingController();
+  final customerController = TextEditingController();
+
   List<String> severities = ['Low', 'Medium', 'High'];
   List<String> statuses = ['Open', 'Closed'];
   String status = 'Open';
@@ -26,23 +34,25 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
   List<String> assignedTo = [];
   WindFarmModel windFarm = WindFarmModel();
 
-  void createNC() async {
-    final user = ref.read(userProvider);
-    ref.read(ncControllerProvider.notifier).createNC(
+  void createInspection() {
+    final user = ref.read(userProvider)!;
+    ref.read(inspectionControllerProvider.notifier).createNC(
           context,
-          user!.companyId,
-          NCModel(
+          user.companyId,
+          InspectionModel(
             id: '',
             title: titleController.text,
-            problemDescription: problemDescriptionController.text,
+            problemDescription: "",
+            externalAuditor: externalAuditorController.text,
+            supplier: supplierController.text,
+            customer: customerController.text,
+            category: '',
             status: status,
             severity: severities.indexOf(severity),
-            category: '',
             windFarm: windFarm.windFarm!,
             turbineNo: windFarm.turbineNo!,
             platform: windFarm.platform!,
             oem: windFarm.oem!,
-            assignedTo: assignedTo,
             createdBy: user.uid,
             createdAt: DateTime.now(),
             updatedBy: user.uid,
@@ -57,7 +67,9 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
   @override
   void dispose() {
     titleController.dispose();
-    problemDescriptionController.dispose();
+    externalAuditorController.dispose();
+    supplierController.dispose();
+    customerController.dispose();
     super.dispose();
   }
 
@@ -65,7 +77,15 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Report Non-Conformity'),
+        title: const Text("Perform Inspection"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              createInspection();
+            },
+            icon: const Icon(Icons.save),
+          ),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -81,14 +101,18 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
                   maxLength: 50,
                 ),
                 const SizedBox(height: 8),
-                const Text("Problem Description"),
-                const SizedBox(height: 4),
-                TextField(
-                  controller: problemDescriptionController,
-                  maxLines: 3,
+                const ListTile(
+                  contentPadding: EdgeInsets.all(0),
+                  leading: Text(
+                    'Start date',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 8),
-                NCWindFarm(
+                InspectionWindFarm(
                   null,
                   onSelected: (windFarm) {
                     setState(() {
@@ -153,43 +177,8 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                /* const Text('Wind Farm'),
-                const SizedBox(height: 4),
-                const SizedBox(height: 8), */
-                const SizedBox(height: 8),
-                NCAssign(
-                  ref: ref,
-                  onAssign: (assignedTo) {
-                    setState(() {
-                      this.assignedTo = assignedTo.toList();
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-
-                /* Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Actions Taken'),
-                        IconButton(
-                          onPressed: () {
-                            Routemaster.of(context).push(
-                              'add-action-taken',
-                            );
-                          },
-                          icon: const Icon(Icons.add),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                  ],
-                ), */
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () => createNC(),
-                  child: const Text('Create NC'),
+                const InspectionSection(
+                  inspectionId: 'I-1001',
                 ),
               ],
             ),
