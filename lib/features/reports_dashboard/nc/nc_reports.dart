@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
-import 'package:windsy_solve/core/common/widgets/report_nc_list_tile.dart';
+import 'package:windsy_solve/features/reports_dashboard/widgets/report_nc_list_tile.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 
 class NCReports extends ConsumerWidget {
