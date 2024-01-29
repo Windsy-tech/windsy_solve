@@ -3,42 +3,42 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
-import 'package:windsy_solve/core/common/widgets/report_nc_list_tile.dart';
-import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
+import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
+import 'package:windsy_solve/features/reports_dashboard/widgets/report_inspection_list_tile.dart';
 
 class InspectionReports extends ConsumerWidget {
   const InspectionReports({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ncData = ref.watch(getUserNCProvider);
+    final inspectionData = ref.watch(getUserInspectionProvider);
     print("ui rebuilt");
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("NC Reports"),
+        title: const Text("Inspection Reports"),
         actions: [
           IconButton(
-            onPressed: () => ref.refresh(getUserNCProvider),
+            onPressed: () => ref.refresh(getUserInspectionProvider),
             icon: const Icon(Icons.refresh),
           ),
         ],
       ),
-      body: ncData.when(
-        data: (ncs) {
-          if (ncs.isEmpty) {
+      body: inspectionData.when(
+        data: (inspections) {
+          if (inspections.isEmpty) {
             return const Center(
-              child: Text("No Non-Conformitiy Reports Found"),
+              child: Text("No Inspection Reports Found"),
             );
           }
           return ListView.builder(
-            itemCount: ncs.length,
+            itemCount: inspections.length,
             itemBuilder: (context, index) {
-              return ReportNCListTile(
-                nc: ncs[index],
+              return ReportInspectionListTile(
+                inspection: inspections[index],
                 onTap: () {
                   Routemaster.of(context).push(
-                    '/non-conformity/${ncs[index].id}',
+                    '/non-conformity/${inspections[index].id}',
                   );
                 },
               );
