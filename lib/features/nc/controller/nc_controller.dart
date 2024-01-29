@@ -148,7 +148,6 @@ class NCController extends StateNotifier<bool> {
   Stream<List<WindFarmModel>> getWindFarms(String query) {
     final user = _ref.read(userProvider);
     final companyName = user!.companyName;
-    print(companyName);
     return _ncRepository.getWindFarms(companyName, query);
   }
 }
