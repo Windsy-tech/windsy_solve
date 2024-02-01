@@ -125,6 +125,10 @@ class Pallete {
         color: blackColor,
       ),
     ),
+    tabBarTheme: TabBarTheme(
+      labelColor: blackColor,
+      unselectedLabelColor: blackColor.withOpacity(0.5),
+    ),
   );
 }
 
