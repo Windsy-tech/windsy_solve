@@ -51,7 +51,7 @@ class NCController extends StateNotifier<bool> {
   })  : _ncRepository = ncRepository,
         _ref = ref,
         _storageRepository = storageRepository,
-        super(false);
+        super(false); 
 
   //create new nc
   void createNC(BuildContext context, String companyId, NCModel ncModel) async {
