@@ -20,6 +20,7 @@ class DrawerWidget extends ConsumerWidget {
 
   void showInspectionModal(BuildContext context) {
     showInspectionModelBottomSheet(context);
+    Scaffold.of(context).closeDrawer();
   }
 
   void navigateToSettingsPage(BuildContext context) {
