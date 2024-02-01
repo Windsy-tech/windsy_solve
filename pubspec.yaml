@@ -44,7 +44,7 @@ dependencies:
   file_picker: ^6.1.1
   shared_preferences: ^2.2.2
   image_picker: ^1.0.7
-  uuid: ^4.3.3
+  uuid: ^4.2.2
   pdf: ^3.10.7
   flutter_cached_pdfview: ^0.4.2
 
