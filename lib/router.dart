@@ -3,6 +3,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/auth/screens/login_screen.dart';
 import 'package:windsy_solve/features/home/screens/home_screen.dart';
 import 'package:windsy_solve/features/inspection/screens/create_inspection_screen.dart';
+import 'package:windsy_solve/features/inspection/screens/edit_inspection_screen.dart';
 import 'package:windsy_solve/features/nc/screens/create_nc_screen.dart';
 import 'package:windsy_solve/features/nc/screens/edit_nc_screen.dart';
 import 'package:windsy_solve/features/nc/screens/nc_add_actions_taken_screen.dart';
@@ -49,11 +50,13 @@ final loggedInRoute = RouteMap(
     '/perform-inspection': (routeData) {
       return MaterialPage(
         child: PerformInspectionScreen(
+          title: routeData.queryParameters['title']!,
           type: routeData.queryParameters['type']!,
           templateName: routeData.queryParameters['templateName']!,
         ),
       );
     },
+    '/inspection/:id': (_) => const MaterialPage(child: EditInspectionScreen()),
     '/reports-inspection': (_) =>
         const MaterialPage(child: InspectionReports()),
   },
