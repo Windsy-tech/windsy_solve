@@ -3,14 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_section.dart';
+import 'package:windsy_solve/features/inspection/widgets/inspection_start_date.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_wind_farm.dart';
+import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 import 'package:windsy_solve/models/inspection_model.dart';
+import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
 
 class PerformInspectionScreen extends ConsumerStatefulWidget {
+  final String title;
   final String type;
   final String templateName;
   const PerformInspectionScreen({
+    required this.title,
     required this.type,
     required this.templateName,
     super.key,
@@ -32,7 +37,14 @@ class _CreateConsumerPerformInspectionScreenState
   String status = 'Open';
   String severity = 'Low';
   List<String> assignedTo = [];
+  List<String> sections = [];
   WindFarmModel windFarm = WindFarmModel();
+  DateTime startDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void createInspection() {
     final user = ref.read(userProvider)!;
@@ -40,7 +52,7 @@ class _CreateConsumerPerformInspectionScreenState
           context,
           user.companyId,
           InspectionModel(
-            id: '',
+            id: widget.title,
             title: titleController.text,
             problemDescription: "",
             externalAuditor: externalAuditorController.text,
@@ -53,6 +65,9 @@ class _CreateConsumerPerformInspectionScreenState
             turbineNo: windFarm.turbineNo!,
             platform: windFarm.platform!,
             oem: windFarm.oem!,
+            members: [],
+            assignedTo: assignedTo,
+            sections: sections,
             createdBy: user.uid,
             createdAt: DateTime.now(),
             updatedBy: user.uid,
@@ -77,7 +92,7 @@ class _CreateConsumerPerformInspectionScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Perform Inspection"),
+        title: Text(widget.title),
         actions: [
           IconButton(
             onPressed: () {
@@ -94,22 +109,22 @@ class _CreateConsumerPerformInspectionScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text("Title"),
+                const Text(
+                  "Title",
+                ),
                 const SizedBox(height: 4),
                 TextField(
                   controller: titleController,
                   maxLength: 50,
                 ),
                 const SizedBox(height: 8),
-                const ListTile(
-                  contentPadding: EdgeInsets.all(0),
-                  leading: Text(
-                    'Start date',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
+                InspectionStartDate(
+                  startDate: startDate,
+                  onChanged: (date) {
+                    setState(() {
+                      startDate = date!;
+                    });
+                  },
                 ),
                 const SizedBox(height: 8),
                 InspectionWindFarm(
@@ -177,8 +192,8 @@ class _CreateConsumerPerformInspectionScreenState
                   ),
                 ),
                 const SizedBox(height: 8),
-                const InspectionSection(
-                  inspectionId: 'I-1001',
+                InspectionSection(
+                  inspectionId: widget.title,
                 ),
               ],
             ),
