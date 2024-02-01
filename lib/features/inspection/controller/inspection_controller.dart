@@ -20,6 +20,27 @@ final inspectionControllerProvider =
   );
 });
 
+final inspectionProvider = Provider<InspectionModel>(
+  (ref) => InspectionModel(
+    id: '',
+    title: '',
+    problemDescription: '',
+    status: '',
+    severity: 0,
+    category: '',
+    customer: '',
+    externalAuditor: '',
+    sections: [],
+    supplier: '',
+    windFarm: '',
+    turbineNo: '',
+    createdBy: '',
+    createdAt: DateTime.now(),
+    updatedBy: '',
+    updatedAt: DateTime.now(),
+  ),
+);
+
 final getUserInspectionProvider = StreamProvider<List<InspectionModel>>((ref) {
   return ref
       .watch(inspectionControllerProvider.notifier)
@@ -64,7 +85,7 @@ class InspectionController extends StateNotifier<bool> {
     res.fold(
       (l) => showSnackBar(context, l.message),
       (r) {
-        showSnackBar(context, 'I-$r created successfully!');
+        showSnackBar(context, 'Inspection - $r created successfully!');
         Routemaster.of(context).pop();
       },
     );
@@ -137,6 +158,14 @@ class InspectionController extends StateNotifier<bool> {
   Stream<List<String>> getInspectionSections(String inspectionId) {
     final user = _ref.watch(userProvider)!;
     return _inspectionRepository.getInspectionSections(
+      user.companyId,
+      inspectionId,
+    );
+  }
+
+  Future<bool> checkIfInspectionIdExists(String inspectionId) async {
+    final user = _ref.watch(userProvider)!;
+    return _inspectionRepository.checkIfInspectionIdExists(
       user.companyId,
       inspectionId,
     );

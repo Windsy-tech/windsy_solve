@@ -17,32 +17,26 @@ class InspectionRepository {
   InspectionRepository({required FirebaseFirestore firestore})
       : _firestore = firestore;
 
-  CollectionReference get _inspections => _firestore.collection('inspections');
-  CollectionReference get _users => _firestore.collection('users');
-  CollectionReference get _windFarms => _firestore.collection('windfarms');
   CollectionReference get _companies => _firestore.collection('companies');
 
   //create new inspection
-  FutureEither<int> createInspection(
+  FutureEither<String> createInspection(
     String companyId,
     InspectionModel inspection,
   ) async {
     try {
-      final getLatestId = await _createNewInspectionId(companyId);
-      var newId = getLatestId;
-
-      // Update inspection with the new ID
-      inspection = inspection.copyWith(id: newId.toString());
-
-      if (newId != 0) {
+      bool isExists =
+          await checkIfInspectionIdExists(companyId, inspection.id);
+      if (!isExists) {
         await _companies
             .doc(companyId)
             .collection('inspections')
-            .doc(newId.toString())
+            .doc(inspection.id)
             .set(inspection.toMap());
+      } else {
+        return left(Failure(message: 'Inspection id already exists!'));
       }
-
-      return right(newId);
+      return right(inspection.id);
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -50,28 +44,19 @@ class InspectionRepository {
     }
   }
 
-  //get old id and create new inspection id
-  Future<int> _createNewInspectionId(String companyId) async {
-    try {
-      final querySnapshot = await _companies
-          .doc(companyId)
-          .collection('inspections')
-          .orderBy('id', descending: true)
-          .limit(1) // Limit the result to one document
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        final oldId = int.parse(querySnapshot.docs.first.data()['id']);
-        return oldId + 1;
-      } else {
-        // If no documents are found, start with ID 1
-        return 1001;
-      }
-    } on FirebaseException catch (e) {
-      throw e.message!;
-    } catch (e) {
-      return 0;
-    }
+  //check if the inspection id exists
+  Future<bool> checkIfInspectionIdExists(
+    String companyId,
+    String inspectionId,
+  ) {
+    return _companies
+        .doc(companyId)
+        .collection('inspections')
+        .doc(inspectionId)
+        .get()
+        .then(
+          (value) => value.exists,
+        );
   }
 
   //close inspection
@@ -90,7 +75,7 @@ class InspectionRepository {
         'closedBy': userId,
         'closedAt': DateTime.now().millisecondsSinceEpoch,
       });
-      return right('I-$inspectionId closed successfully!');
+      return right('Inspection: $inspectionId closed successfully!');
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -106,7 +91,7 @@ class InspectionRepository {
           .collection('inspections')
           .doc(inspectionId)
           .delete();
-      return right('I-$inspectionId deleted successfully!');
+      return right('Inspection: $inspectionId deleted successfully!');
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -200,7 +185,7 @@ class InspectionRepository {
           .add({
         "section": sectionName,
       });
-      return right('Section $sectionName added successfully!');
+      return right('Section: $sectionName added successfully!');
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
