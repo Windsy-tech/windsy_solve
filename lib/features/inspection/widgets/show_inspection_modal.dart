@@ -38,15 +38,66 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
     super.dispose();
   }
 
+  showTitleDialog({
+    required BuildContext context,
+    required String type,
+    required String templateName,
+  }) {
+    TextEditingController controller = TextEditingController();
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Name Inspection"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Enter Inspection Name"),
+              const SizedBox(height: 8),
+              TextField(
+                controller: controller,
+                maxLength: 50,
+                textCapitalization: TextCapitalization.words,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                navigateToPerformInspection(
+                  context,
+                  controller.text,
+                  type,
+                  templateName,
+                );
+              },
+              child: const Text("Next"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void navigateToPerformInspection(
     BuildContext context,
+    String title,
     String type,
     String templateName,
   ) {
     Routemaster.of(context).push('/perform-inspection', queryParameters: {
+      'title': title,
       'type': type,
       'templateName': templateName,
     });
+    Navigator.pop(context);
   }
 
   @override
@@ -58,8 +109,18 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
           TabBar(
             controller: _tabController,
             tabs: const [
-              Tab(text: "New", icon: Icon(Icons.new_label_outlined)),
-              Tab(text: "Templates", icon: Icon(Icons.extension_outlined)),
+              Tab(
+                text: "New",
+                icon: Icon(
+                  Icons.new_label_outlined,
+                ),
+              ),
+              Tab(
+                text: "Templates",
+                icon: Icon(
+                  Icons.extension_outlined,
+                ),
+              ),
             ],
           ),
           Expanded(
@@ -73,10 +134,10 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: ListTile(
-                          onTap: () => navigateToPerformInspection(
-                            context,
-                            "new",
-                            "",
+                          onTap: () => showTitleDialog(
+                            context: context,
+                            type: "new",
+                            templateName: "",
                           ),
                           contentPadding: const EdgeInsets.all(2),
                           leading: const Icon(
@@ -107,10 +168,10 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: ListTile(
-                                    onTap: () => navigateToPerformInspection(
-                                      context,
-                                      "template",
-                                      template.name,
+                                    onTap: () => showTitleDialog(
+                                      context: context,
+                                      type: "template",
+                                      templateName: template.name,
                                     ),
                                     contentPadding: const EdgeInsets.all(2),
                                     leading: const Icon(

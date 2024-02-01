@@ -80,7 +80,7 @@ class ReportInspectionListTile extends ConsumerWidget {
         ),
         titleAlignment: ListTileTitleAlignment.top,
         title: Text(
-          'I #${inspection.id}',
+          inspection.id,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,

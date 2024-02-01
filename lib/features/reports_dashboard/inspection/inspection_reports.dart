@@ -38,7 +38,7 @@ class InspectionReports extends ConsumerWidget {
                 inspection: inspections[index],
                 onTap: () {
                   Routemaster.of(context).push(
-                    '/non-conformity/${inspections[index].id}',
+                    '/inspection/${inspections[index].id}',
                   );
                 },
               );

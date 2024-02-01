@@ -16,6 +16,7 @@ class InspectionModel {
   final String? oem;
   final List<String>? members;
   final List<String>? assignedTo;
+  final List<String>? sections;
   final String createdBy;
   final DateTime createdAt;
   final String updatedBy;
@@ -40,6 +41,7 @@ class InspectionModel {
     this.oem,
     this.members,
     this.assignedTo,
+    this.sections,
     required this.createdBy,
     required this.createdAt,
     required this.updatedBy,
@@ -65,6 +67,7 @@ class InspectionModel {
     String? oem,
     List<String>? members,
     List<String>? assignedTo,
+    List<String>? sections,
     String? createdBy,
     DateTime? createdAt,
     String? updatedBy,
@@ -89,6 +92,7 @@ class InspectionModel {
       oem: oem ?? this.oem,
       members: members ?? this.members,
       assignedTo: assignedTo ?? this.assignedTo,
+      sections: sections ?? this.sections,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
       updatedBy: updatedBy ?? this.updatedBy,
@@ -116,6 +120,7 @@ class InspectionModel {
       'oem': oem,
       'members': members,
       'assignedTo': assignedTo,
+      'sections': sections,
       'createdBy': createdBy,
       'createdAt': createdAt.millisecondsSinceEpoch,
       'updatedBy': updatedBy,
@@ -143,6 +148,7 @@ class InspectionModel {
       oem: map['oem'] ?? '',
       members: List<String>.from((map['members'])),
       assignedTo: List<String>.from((map['assignedTo'])),
+      sections: List<String>.from((map['sections'])),
       createdBy: map['createdBy'] ?? '',
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
       updatedBy: map['updatedBy'] ?? '',
@@ -155,7 +161,7 @@ class InspectionModel {
 
   @override
   String toString() {
-    return 'InspectionModel(id: $id, title: $title, problemDescription: $problemDescription, status: $status, severity: $severity, category: $category, customer: $customer, externalAuditor: $externalAuditor, supplier: $supplier, windFarm: $windFarm, turbineNo: $turbineNo, platform: $platform, oem: $oem, members: $members, assignedTo: $assignedTo, createdBy: $createdBy, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt, closedBy: $closedBy, closedAt: $closedAt, closedReason: $closedReason)';
+    return 'InspectionModel(id: $id, title: $title, problemDescription: $problemDescription, status: $status, severity: $severity, category: $category, customer: $customer, externalAuditor: $externalAuditor, supplier: $supplier, windFarm: $windFarm, turbineNo: $turbineNo, platform: $platform, oem: $oem, members: $members, assignedTo: $assignedTo, sections: $sections , createdBy: $createdBy, createdAt: $createdAt, updatedBy: $updatedBy, updatedAt: $updatedAt, closedBy: $closedBy, closedAt: $closedAt, closedReason: $closedReason)';
   }
 
   @override
@@ -177,6 +183,7 @@ class InspectionModel {
         other.oem == oem &&
         listEquals(other.members, members) &&
         listEquals(other.assignedTo, assignedTo) &&
+        listEquals(other.sections, sections) &&
         other.createdBy == createdBy &&
         other.createdAt == createdAt &&
         other.updatedBy == updatedBy &&
@@ -203,6 +210,7 @@ class InspectionModel {
         oem.hashCode ^
         members.hashCode ^
         assignedTo.hashCode ^
+        sections.hashCode ^
         createdBy.hashCode ^
         createdAt.hashCode ^
         updatedBy.hashCode ^
