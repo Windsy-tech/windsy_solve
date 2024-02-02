@@ -4,6 +4,7 @@ import 'package:windsy_solve/features/auth/screens/login_screen.dart';
 import 'package:windsy_solve/features/home/screens/home_screen.dart';
 import 'package:windsy_solve/features/inspection/screens/create_inspection_screen.dart';
 import 'package:windsy_solve/features/inspection/screens/edit_inspection_screen.dart';
+import 'package:windsy_solve/features/inspection/screens/inspection_section_list.dart';
 import 'package:windsy_solve/features/nc/screens/create_nc_screen.dart';
 import 'package:windsy_solve/features/nc/screens/edit_nc_screen.dart';
 import 'package:windsy_solve/features/nc/screens/nc_add_actions_taken_screen.dart';
@@ -20,8 +21,12 @@ final loggedOutRoute = RouteMap(routes: {
 
 final loggedInRoute = RouteMap(
   routes: {
-    '/': (_) => const MaterialPage(child: HomeScreen()),
-    '/settings': (_) => const MaterialPage(child: Settings()),
+    '/': (_) => const MaterialPage(
+          child: HomeScreen(),
+        ),
+    '/settings': (_) => const MaterialPage(
+          child: Settings(),
+        ),
     '/user-profile/:uid': (routeData) => MaterialPage(
           child: UserProfileScreen(
             uid: routeData.pathParameters['uid']!,
@@ -32,8 +37,12 @@ final loggedInRoute = RouteMap(
             uid: routeData.pathParameters['uid']!,
           ),
         ),
-    '/general-settings': (_) => const MaterialPage(child: GeneralSettings()),
-    '/report-nc': (_) => const MaterialPage(child: ReportNCScreen()),
+    '/general-settings': (_) => const MaterialPage(
+          child: GeneralSettings(),
+        ),
+    '/report-nc': (_) => const MaterialPage(
+          child: ReportNCScreen(),
+        ),
     '/non-conformity/:id/': (routeData) {
       return MaterialPage(
         child: NCEditScreen(
@@ -46,8 +55,10 @@ final loggedInRoute = RouteMap(
             ncId: routeData.pathParameters['id']!,
           ),
         ),
-    '/reports-nc': (_) => const MaterialPage(child: NCReports()),
-    '/perform-inspection': (routeData) {
+    '/reports-nc': (_) => const MaterialPage(
+          child: NCReports(),
+        ),
+    '/inspection': (routeData) {
       return MaterialPage(
         child: PerformInspectionScreen(
           title: routeData.queryParameters['title']!,
@@ -56,8 +67,19 @@ final loggedInRoute = RouteMap(
         ),
       );
     },
-    '/inspection/:id': (_) => const MaterialPage(child: EditInspectionScreen()),
-    '/reports-inspection': (_) =>
-        const MaterialPage(child: InspectionReports()),
+    '/inspection/:id': (_) => const MaterialPage(
+          child: EditInspectionScreen(),
+        ),
+    '/inspection/section/:sectionname': (routeData) {
+      return MaterialPage(
+        child: InspectionSectionList(
+          inspectionId: routeData.queryParameters['id']!,
+          sectionName: routeData.pathParameters['sectionname']!,
+        ),
+      );
+    },
+    '/reports-inspection': (_) => const MaterialPage(
+          child: InspectionReports(),
+        ),
   },
 );

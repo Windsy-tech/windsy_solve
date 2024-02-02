@@ -7,6 +7,7 @@ import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/repository/inspection_repository.dart';
 import 'package:windsy_solve/models/inspection_model.dart';
 import 'package:windsy_solve/models/inspection_templates_model.dart';
+import 'package:windsy_solve/models/section_model.dart';
 import 'package:windsy_solve/utils/snack_bar.dart';
 
 final inspectionControllerProvider =
@@ -61,6 +62,21 @@ final getInspectionSectionsProvider =
       .getInspectionSections(inspectionId);
 });
 
+final checkInspectionIdExistsProvider = StreamProvider.family(
+  (ref, String inspectionId) {
+    return ref
+        .watch(inspectionControllerProvider.notifier)
+        .checkIfInspectionIdExists(inspectionId);
+  },
+);
+
+final getChecklistsFromSectionProvider =
+    StreamProvider.family((ref, SectionModel section) {
+  return ref
+      .watch(inspectionControllerProvider.notifier)
+      .getChecklistsFromSection(section);
+});
+
 class InspectionController extends StateNotifier<bool> {
   final InspectionRepository _inspectionRepository;
   final Ref _ref;
@@ -86,7 +102,7 @@ class InspectionController extends StateNotifier<bool> {
       (l) => showSnackBar(context, l.message),
       (r) {
         showSnackBar(context, 'Inspection - $r created successfully!');
-        Routemaster.of(context).pop();
+        //Routemaster.of(context).pop();
       },
     );
   }
@@ -124,18 +140,70 @@ class InspectionController extends StateNotifier<bool> {
       (l) => showSnackBar(context, l.message),
       (r) {
         showSnackBar(context, r.toString());
-        Routemaster.of(context).pop();
+      },
+    );
+  }
+
+  //update section in inspection
+  void updateSection(
+    BuildContext context,
+    inspectionId,
+    String sectionName,
+  ) async {
+    final user = _ref.watch(userProvider)!;
+    final res = await _inspectionRepository.updateSection(
+      user.companyId,
+      inspectionId,
+      sectionName,
+    );
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) {
+        addSection(context, inspectionId, sectionName);
       },
     );
   }
 
   //add new section
-  void addSection(String inspectionId, String sectionName) async {
+  void addSection(
+    BuildContext context,
+    inspectionId,
+    String sectionName,
+  ) async {
     final user = _ref.watch(userProvider)!;
-    await _inspectionRepository.addSection(
+    final res = await _inspectionRepository.addSection(
       user.companyId,
       inspectionId,
       sectionName,
+    );
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) {
+        showSnackBar(context, r.toString());
+        Routemaster.of(context).pop();
+      },
+    );
+  }
+
+  //add new checklist
+  void addChecklist(
+    BuildContext context,
+    String inspectionId,
+    String sectionName,
+    String checkName,
+  ) async {
+    final user = _ref.watch(userProvider)!;
+    final res = await _inspectionRepository.addChecklist(
+      user.companyId,
+      inspectionId,
+      sectionName,
+      checkName,
+    );
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) {
+        showSnackBar(context, r.toString());
+      },
     );
   }
 
@@ -163,11 +231,25 @@ class InspectionController extends StateNotifier<bool> {
     );
   }
 
-  Future<bool> checkIfInspectionIdExists(String inspectionId) async {
+  //check if inspection id exists as a stream
+  Stream<bool> checkIfInspectionIdExists(String inspectionId) {
     final user = _ref.watch(userProvider)!;
     return _inspectionRepository.checkIfInspectionIdExists(
       user.companyId,
       inspectionId,
+    );
+  }
+
+  //get checklists from section
+  Stream<List<String>> getChecklistsFromSection(
+    SectionModel section,
+  ) {
+    final user = _ref.watch(userProvider)!;
+    
+    return _inspectionRepository.getChecklistsFromSection(
+      user.companyId,
+      section.inspectionId,
+      section.sectionName,
     );
   }
 }

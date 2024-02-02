@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
+import 'package:windsy_solve/features/inspection/widgets/inspection_end_date.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_section.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_start_date.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_wind_farm.dart';
@@ -40,11 +41,7 @@ class _CreateConsumerPerformInspectionScreenState
   List<String> sections = [];
   WindFarmModel windFarm = WindFarmModel();
   DateTime startDate = DateTime.now();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  DateTime endDate = DateTime.now();
 
   void createInspection() {
     final user = ref.read(userProvider)!;
@@ -126,6 +123,8 @@ class _CreateConsumerPerformInspectionScreenState
                     });
                   },
                 ),
+                const SizedBox(height: 8),
+                InspectionEndDate(endDate: endDate),
                 const SizedBox(height: 8),
                 InspectionWindFarm(
                   null,

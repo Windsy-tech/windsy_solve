@@ -26,7 +26,7 @@ class InspectionRepository {
   ) async {
     try {
       bool isExists =
-          await checkIfInspectionIdExists(companyId, inspection.id);
+          await _checkIfInspectionIdExists(companyId, inspection.id);
       if (!isExists) {
         await _companies
             .doc(companyId)
@@ -44,8 +44,21 @@ class InspectionRepository {
     }
   }
 
-  //check if the inspection id exists
-  Future<bool> checkIfInspectionIdExists(
+  //check if the inspection id exists as future
+  Future<bool> _checkIfInspectionIdExists(
+    String companyId,
+    String inspectionId,
+  ) async {
+    final inspection = await _companies
+        .doc(companyId)
+        .collection('inspections')
+        .doc(inspectionId)
+        .get();
+    return inspection.exists;
+  }
+
+  //check if the inspection id exists as stream
+  Stream<bool> checkIfInspectionIdExists(
     String companyId,
     String inspectionId,
   ) {
@@ -53,10 +66,8 @@ class InspectionRepository {
         .doc(companyId)
         .collection('inspections')
         .doc(inspectionId)
-        .get()
-        .then(
-          (value) => value.exists,
-        );
+        .snapshots()
+        .map((inspection) => inspection.exists);
   }
 
   //close inspection
@@ -155,7 +166,7 @@ class InspectionRepository {
     });
   }
 
-  //get stream of sections
+  //get stream of sections (sub-collections) of an inspection
   Stream<List<String>> getInspectionSections(
     String companyId,
     String inspectionId,
@@ -165,8 +176,55 @@ class InspectionRepository {
         .collection('inspections')
         .doc(inspectionId)
         .snapshots()
-        .map((event) {
-      return event.data()!['sections'].cast<String>();
+        .map((sections) {
+      List<String> sectionList = [];
+      for (var section in sections.data()!['sections']) {
+        sectionList.add(section);
+      }
+      return sectionList;
+    });
+  }
+
+  //update section in inspection
+  FutureEither<bool> updateSection(
+    String companyId,
+    String inspectionId,
+    String sectionName,
+  ) async {
+    try {
+      await _companies
+          .doc(companyId)
+          .collection('inspections')
+          .doc(inspectionId)
+          .update({
+        "sections": FieldValue.arrayUnion([sectionName]),
+      });
+      return right(true);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  //get stream of checklists from section
+  Stream<List<String>> getChecklistsFromSection(
+    String companyId,
+    String inspectionId,
+    String sectionName,
+  ) {
+    return _companies
+        .doc(companyId)
+        .collection('inspections')
+        .doc(inspectionId)
+        .collection(sectionName)
+        .snapshots()
+        .map((checklists) {
+      List<String> checklistList = [];
+      for (var checklist in checklists.docs) {
+        checklistList.add(checklist.id);
+      }
+      return checklistList;
     });
   }
 
@@ -186,6 +244,31 @@ class InspectionRepository {
         "section": sectionName,
       });
       return right('Section: $sectionName added successfully!');
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  //add new checklist
+  FutureEither<String> addChecklist(
+    String companyId,
+    String inspectionId,
+    String sectionName,
+    String checklistName,
+  ) async {
+    try {
+      await _companies
+          .doc(companyId)
+          .collection('inspections')
+          .doc(inspectionId)
+          .collection(sectionName)
+          .doc(checklistName)
+          .set({
+        "checklist": checklistName,
+      });
+      return right('Checklist: $checklistName added successfully!');
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {

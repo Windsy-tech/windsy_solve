@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 
 class InspectionSection extends ConsumerStatefulWidget {
@@ -14,19 +15,6 @@ class InspectionSection extends ConsumerStatefulWidget {
 class _CreateConsumerInspectionSectionState
     extends ConsumerState<InspectionSection> {
   final sectionNameController = TextEditingController();
-  bool isExists = false;
-  @override
-  void initState() {
-    super.initState();
-    isExists = Future.delayed(const Duration(seconds: 1), () {
-      ref
-          .watch(inspectionControllerProvider.notifier)
-          .checkIfInspectionIdExists(
-            widget.inspectionId,
-          );
-    }) as bool;
-    print(isExists);
-  }
 
   Future showSectionDialog() {
     return showDialog(
@@ -50,8 +38,8 @@ class _CreateConsumerInspectionSectionState
             ),
             TextButton(
               onPressed: () {
-                addSection(sectionNameController.text);
-                Navigator.pop(context);
+                addSection(context, sectionNameController.text);
+                sectionNameController.clear();
               },
               child: const Text("Add"),
             ),
@@ -61,17 +49,50 @@ class _CreateConsumerInspectionSectionState
     );
   }
 
-  void addSection(String sectionName) async {
-    ref.read(inspectionControllerProvider.notifier).addSection(
+  Future showSaveAlertDialog() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          icon: const Icon(Icons.warning, color: Colors.yellow),
+          title: const Text("Warning!"),
+          content: const Text(
+              "Inorder to create a section, you need to save the inspection first"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                //saveInspection();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void addSection(BuildContext context, String sectionName) async {
+    ref.read(inspectionControllerProvider.notifier).updateSection(
+          context,
           widget.inspectionId,
           sectionName,
         );
   }
 
+  void navigateToSectionPage(BuildContext context, String sectionName) {
+    print(Routemaster.of(context).currentRoute);
+    Routemaster.of(context)
+        .push("/inspection/section/$sectionName", queryParameters: {
+      "id": widget.inspectionId,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final inspection = ref.watch(inspectionProvider);
-
+    final isExists =
+        ref.watch(checkInspectionIdExistsProvider(widget.inspectionId)).value;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -81,19 +102,22 @@ class _CreateConsumerInspectionSectionState
             const Text("Sections"),
             IconButton(
               onPressed: () async {
-                await showSectionDialog();
+                if (isExists != null && !isExists) {
+                  await showSaveAlertDialog();
+                  return;
+                } else {
+                  await showSectionDialog();
 
-                if (sectionNameController.text.isNotEmpty) {
-                  //addSection(sectionNameController.text);
-                  inspection.sections!.add(sectionNameController.text);
-                  print(inspection.sections);
+                  if (sectionNameController.text.isNotEmpty) {
+                    inspection.sections!.add(sectionNameController.text);
+                  }
                 }
               },
               icon: const Icon(Icons.add),
             ),
           ],
         ),
-        isExists
+        isExists != null && isExists
             ? ref
                 .watch(getInspectionSectionsProvider(widget.inspectionId))
                 .when(
@@ -103,10 +127,22 @@ class _CreateConsumerInspectionSectionState
                       itemCount: sections.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(sections[index]),
-                          trailing: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.delete),
+                          onTap: () => navigateToSectionPage(
+                            context,
+                            sections[index],
+                          ),
+                          visualDensity: const VisualDensity(
+                            horizontal: 0,
+                            vertical: -4,
+                          ),
+                          leading: const Icon(Icons.list),
+                          title: Text(
+                            sections[index],
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          trailing: const Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            size: 14,
                           ),
                         );
                       },
@@ -122,5 +158,11 @@ class _CreateConsumerInspectionSectionState
             : const SizedBox()
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    sectionNameController.dispose();
+    super.dispose();
   }
 }

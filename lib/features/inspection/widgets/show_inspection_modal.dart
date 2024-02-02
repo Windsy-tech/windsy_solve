@@ -48,18 +48,11 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Name Inspection"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Enter Inspection Name"),
-              const SizedBox(height: 8),
-              TextField(
-                controller: controller,
-                maxLength: 50,
-                textCapitalization: TextCapitalization.words,
-              ),
-            ],
+          title: const Text("Enter Inspection Name"),
+          content: TextField(
+            controller: controller,
+            maxLength: 50,
+            textCapitalization: TextCapitalization.words,
           ),
           actions: [
             TextButton(
@@ -92,7 +85,7 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
     String type,
     String templateName,
   ) {
-    Routemaster.of(context).push('/perform-inspection', queryParameters: {
+    Routemaster.of(context).push('/inspection', queryParameters: {
       'title': title,
       'type': type,
       'templateName': templateName,
