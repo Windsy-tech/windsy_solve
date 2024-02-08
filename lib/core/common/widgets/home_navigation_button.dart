@@ -16,6 +16,7 @@ class HomeNavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Expanded(
       child: ElevatedButton(
         onPressed: onTap,
@@ -23,7 +24,11 @@ class HomeNavigationButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          backgroundColor: theme.colorScheme.secondaryContainer,
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 16,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,16 +38,20 @@ class HomeNavigationButton extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  //style: Theme.of(context).textTheme.labelLarge,
+                  style: theme.textTheme.titleMedium!.copyWith(
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
                 ),
-                Icon(icon),
+                Icon(
+                  icon,
+                  color: theme.colorScheme.onSecondaryContainer,
+                ),
               ],
             ),
             Text(
               count.toString(),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              style: theme.textTheme.titleLarge!.copyWith(
+                color: theme.colorScheme.onSecondaryContainer,
               ),
             ),
           ],
