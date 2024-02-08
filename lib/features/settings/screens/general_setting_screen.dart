@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
 import 'package:windsy_solve/theme/pallete.dart';
+import 'package:windsy_solve/theme/provider/theme_provider.dart';
 
 class GeneralSettings extends ConsumerWidget {
   const GeneralSettings({super.key});
@@ -17,6 +18,7 @@ class GeneralSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeNotifierProvider.notifier).mode;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile Screen'),
@@ -34,9 +36,10 @@ class GeneralSettings extends ConsumerWidget {
               ListTile(
                 title: const Text("Theme"),
                 trailing: Switch.adaptive(
-                  value: ref.watch(themeNotifierProvider.notifier).mode ==
-                      ThemeMode.dark,
-                  onChanged: (val) => toggleTheme(ref),
+                  value: themeMode == ThemeMode.dark ? true : false,
+                  onChanged: (val) {
+                    toggleTheme(ref);
+                  },
                 ),
               )
             ],
