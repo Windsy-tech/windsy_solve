@@ -7,7 +7,8 @@ class Constants {
 
   //Routes
   static const String rHome = '/';
-  static const String rReportNC = '/report-nc';
+  static const String rReportNC = '/report-nc/new';
+  static const String rPerformInspection = '/inspection/new';
   static const String rSettings = '/settings';
   static const String rGeneralSettings = '/general-settings';
   static const String rReportsNC = '/reports-nc';
