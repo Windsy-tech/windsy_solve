@@ -8,7 +8,7 @@ import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/models/user_model.dart';
 import 'package:windsy_solve/router.dart';
-import 'package:windsy_solve/theme/pallete.dart';
+import 'package:windsy_solve/theme/provider/theme_provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -59,6 +59,8 @@ class _MyAppState extends ConsumerState<MyApp> {
             routeInformationParser: const RoutemasterParser(),
             title: 'Solve',
             theme: ref.watch(themeNotifierProvider),
+            //theme: AppTheme.lightTheme(),
+            //darkTheme: AppTheme.darkTheme(),
           ),
           loading: () => const Loader(),
           error: (error, stackTrace) => ErrorText(
