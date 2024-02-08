@@ -40,7 +40,7 @@ final loggedInRoute = RouteMap(
     '/general-settings': (_) => const MaterialPage(
           child: GeneralSettings(),
         ),
-    '/report-nc': (_) => const MaterialPage(
+    '/report-nc/new': (_) => const MaterialPage(
           child: ReportNCScreen(),
         ),
     '/non-conformity/:id/': (routeData) {
@@ -58,7 +58,7 @@ final loggedInRoute = RouteMap(
     '/reports-nc': (_) => const MaterialPage(
           child: NCReports(),
         ),
-    '/inspection': (routeData) {
+    '/inspection/new': (routeData) {
       return MaterialPage(
         child: PerformInspectionScreen(
           title: routeData.queryParameters['title']!,
