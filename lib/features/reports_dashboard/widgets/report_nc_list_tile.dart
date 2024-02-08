@@ -26,7 +26,7 @@ class ReportNCListTile extends ConsumerWidget {
   ) {
     return showMenu(
       context: context,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       position: RelativeRect.fromLTRB(
         position.dx - 200,
         position.dy,
@@ -61,7 +61,9 @@ class ReportNCListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     return Card(
+      color: theme.colorScheme.secondaryContainer,
       margin: const EdgeInsets.symmetric(
         vertical: 4.0,
         horizontal: 8.0,
@@ -74,83 +76,88 @@ class ReportNCListTile extends ConsumerWidget {
           borderRadius: BorderRadius.circular(20.0),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 12.0,
+          vertical: 8.0,
           horizontal: 16.0,
-        ),
-        titleAlignment: ListTileTitleAlignment.top,
-        title: Text(
-          'NC #${nc.id}',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                nc.status,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: nc.status == 'Open' ? Colors.green : Colors.red,
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                Container(
+                  width: 2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: const Color(0xffffc629),
+                  ),
+                  margin: const EdgeInsets.only(right: 20.0),
                 ),
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              Text(
-                nc.title,
-                style: const TextStyle(
-                  color: Colors.black54,
-                  fontSize: 14,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'NC #${nc.id}',
+                        style: theme.textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 4.0),
+                      Text(
+                        nc.status,
+                        style: theme.textTheme.titleMedium!.copyWith(
+                          color:
+                              nc.status == 'Open' ? Colors.green : Colors.red,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        nc.title,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      const SizedBox(
+                        height: 6,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            size: 16,
+                            color: theme.colorScheme.onSecondaryContainer,
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            TextUtils.capitalizeFirstLetter(nc.windFarm),
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.date_range_outlined,
+                            size: 16,
+                            color: theme.colorScheme.onSecondaryContainer,
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            nc.createdAt.toDateString(),
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.location_on_outlined,
-                    size: 14,
-                  ),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  Text(
-                    TextUtils.capitalizeFirstLetter(nc.windFarm),
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.date_range_outlined,
-                    size: 14,
-                  ),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  Text(
-                    nc.createdAt.toDateString(),
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              )
-            ],
+              ],
+            ),
           ),
         ),
         trailing: GestureDetector(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:windsy_solve/core/constants/constants.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 
 showInspectionModelBottomSheet(BuildContext context) {
@@ -85,11 +86,14 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
     String type,
     String templateName,
   ) {
-    Routemaster.of(context).push('/inspection', queryParameters: {
-      'title': title,
-      'type': type,
-      'templateName': templateName,
-    });
+    Routemaster.of(context).push(
+      Constants.rPerformInspection,
+      queryParameters: {
+        'title': title,
+        'type': type,
+        'templateName': templateName,
+      },
+    );
     Navigator.pop(context);
   }
 

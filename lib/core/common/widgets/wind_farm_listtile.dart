@@ -12,6 +12,7 @@ class CustomListTileWindFarm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -19,15 +20,11 @@ class CustomListTileWindFarm extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 14,
-            ),
+            style: theme.textTheme.bodyMedium,
           ),
           Text(
             data,
-            style: const TextStyle(
-              fontSize: 14,
-            ),
+            style: theme.textTheme.bodyMedium,
           ),
         ],
       ),

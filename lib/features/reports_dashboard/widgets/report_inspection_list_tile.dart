@@ -71,6 +71,7 @@ class ReportInspectionListTile extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: ListTile(
+        onTap: onTap,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
@@ -172,7 +173,6 @@ class ReportInspectionListTile extends ConsumerWidget {
             size: 20,
           ),
         ),
-        onTap: onTap,
       ),
     );
   }

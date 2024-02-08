@@ -3,6 +3,7 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/nc/controller/nc_attachments_controller.dart';
 import 'package:windsy_solve/models/attachment_model.dart';
+import 'package:windsy_solve/theme/color_palette.dart';
 
 class ShowAttachment extends ConsumerStatefulWidget {
   final String ncId;
@@ -40,8 +41,14 @@ class _CreateConsumerShowAttachmentState extends ConsumerState<ShowAttachment> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: IconButton(
           onPressed: () {
             if (widget.attachment.fileType != 'pdf' &&
@@ -57,77 +64,84 @@ class _CreateConsumerShowAttachmentState extends ConsumerState<ShowAttachment> {
         ),
         title: Text(
           widget.attachment.name,
-          style: const TextStyle(
-            fontSize: 12,
-          ),
+          style: theme.textTheme.labelMedium,
         ),
       ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              widget.attachment.fileType == 'pdf'
-                  ? Expanded(
-                      child: const PDF().fromUrl(widget.attachment.fileUrl))
-                  : Expanded(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: InteractiveViewer(
-                              constrained: true,
-                              child: Image.network(
-                                widget.attachment.fileUrl,
-                                loadingBuilder: (BuildContext context,
-                                    Widget child,
-                                    ImageChunkEvent? loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          loadingProgress.expectedTotalBytes !=
-                                                  null
-                                              ? "${((loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!) * 100).toInt().toString()} %"
-                                              : "",
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
+      body: Container(
+        height: size.height,
+        decoration: BoxDecoration(
+          gradient: theme.brightness == Brightness.dark
+              ? ColorPalette.darkSurface
+              : ColorPalette.lightSurface,
+        ),
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              children: [
+                widget.attachment.fileType == 'pdf'
+                    ? Expanded(
+                        child: const PDF().fromUrl(widget.attachment.fileUrl))
+                    : Expanded(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: InteractiveViewer(
+                                constrained: true,
+                                child: Image.network(
+                                  widget.attachment.fileUrl,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? "${((loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!) * 100).toInt().toString()} %"
+                                                : "",
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              controller: _controller,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Add a comment',
-                                border: OutlineInputBorder(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: _controller,
+                                maxLines: 2,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  hintText: 'Add Comment',
+                                  hintStyle: theme.textTheme.bodyMedium,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

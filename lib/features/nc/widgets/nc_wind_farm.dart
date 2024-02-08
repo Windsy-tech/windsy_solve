@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windsy_solve/core/common/widgets/label_widget.dart';
 import 'package:windsy_solve/features/nc/delegates/nc_windfarm_search_delegate.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
 import 'package:windsy_solve/utils/text_utils.dart';
@@ -46,12 +47,13 @@ class _CreateConsumerNCWindFarmState extends ConsumerState<NCWindFarm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Wind Farm Details'),
+            const LabelWidget("Wind Farm Details"),
             IconButton(
               onPressed: () => showSearchDelegate(),
               icon: const Icon(Icons.search),
@@ -64,9 +66,10 @@ class _CreateConsumerNCWindFarmState extends ConsumerState<NCWindFarm> {
             : Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: theme.colorScheme.outline,
                 ),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     CustomListTileWindFarm(

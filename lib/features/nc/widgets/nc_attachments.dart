@@ -90,48 +90,47 @@ class _CreateConsumerNCAttachmentsState extends ConsumerState<NCAttachments> {
   }
 
   _showBottomOptions(BuildContext context) {
+    final theme = Theme.of(context);
     return showModalBottomSheet(
       context: context,
+      backgroundColor: theme.colorScheme.surface,
       builder: (context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              textColor: Colors.blue,
               onTap: () {
                 _getAttachment('camera');
                 Navigator.pop(context);
               },
-              title: const Center(
+              title: Center(
                 child: Text(
                   'Capture Image',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleMedium,
                 ),
               ),
             ),
             ListTile(
-              textColor: Colors.blue,
               onTap: () {
                 _getAttachment('gallery');
                 Navigator.pop(context);
               },
-              title: const Center(
+              title: Center(
                 child: Text(
                   'Upload Images',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleMedium,
                 ),
               ),
             ),
             ListTile(
-              textColor: Colors.blue,
               onTap: () {
                 _getAttachment('files');
                 Navigator.pop(context);
               },
-              title: const Center(
+              title: Center(
                 child: Text(
                   'Upload Files',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleMedium,
                 ),
               ),
             ),
@@ -143,6 +142,7 @@ class _CreateConsumerNCAttachmentsState extends ConsumerState<NCAttachments> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ListTile(
       visualDensity: const VisualDensity(horizontal: 0, vertical: -2),
       contentPadding: const EdgeInsets.all(0),
@@ -150,12 +150,9 @@ class _CreateConsumerNCAttachmentsState extends ConsumerState<NCAttachments> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
+          Text(
             'Attachments',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-            ),
+            style: theme.textTheme.labelLarge,
           ),
           IconButton(
             padding: const EdgeInsets.all(0),

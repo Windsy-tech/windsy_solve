@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/core/common/alert_dialog.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
+import 'package:windsy_solve/core/common/widgets/label_widget.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
@@ -10,6 +11,7 @@ import 'package:windsy_solve/features/nc/widgets/nc_attachments.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
+import 'package:windsy_solve/theme/color_palette.dart';
 
 class NCEditScreen extends ConsumerStatefulWidget {
   final String ncId;
@@ -97,6 +99,8 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
     return ref.watch(getNCbyIdProvider(widget.ncId)).when(
           data: (nc) {
             if (ncModel.id == "") {
@@ -115,6 +119,8 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
             }
 
             return Scaffold(
+              backgroundColor: theme.colorScheme.background,
+              extendBodyBehindAppBar: true,
               appBar: AppBar(
                 title: Text('Non-Conformity: NC-${nc.id}'),
                 leading: IconButton(
@@ -123,6 +129,8 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                   },
                   icon: const Icon(Icons.close_outlined),
                 ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
                 actions: [
                   IconButton(
                     onPressed: updateNC,
@@ -130,102 +138,116 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                   ),
                 ],
               ),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Text("Title"),
-                        const SizedBox(height: 4),
-                        TextField(
-                          controller: titleController,
-                          maxLength: 50,
-                        ),
-                        const SizedBox(height: 8),
-                        const Text("Problem Description"),
-                        const SizedBox(height: 4),
-                        TextField(
-                          controller: problemDescriptionController,
-                          maxLines: 3,
-                        ),
-                        const SizedBox(height: 8),
-                        NCWindFarm(
-                          windFarm,
-                          onSelected: (windFarm) {
-                            setState(() {
-                              this.windFarm = windFarm;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        ListTile(
-                          leading: const Text(
-                            'Status',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
+              body: Container(
+                height: size.height,
+                decoration: BoxDecoration(
+                  gradient: theme.brightness == Brightness.dark
+                      ? ColorPalette.darkSurface
+                      : ColorPalette.lightSurface,
+                ),
+                child: SafeArea(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const LabelWidget('Title'),
+                          const SizedBox(height: 6),
+                          TextField(
+                            controller: titleController,
+                            maxLength: 50,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              hintText: 'Enter Title',
+                              hintStyle: theme.textTheme.bodyMedium,
                             ),
                           ),
-                          contentPadding: const EdgeInsets.all(0),
-                          trailing: DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              value: status,
-                              items: statuses
-                                  .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  status = value!;
-                                });
-                              },
+                          const SizedBox(height: 8),
+                          const LabelWidget("Problem Description"),
+                          const SizedBox(height: 6),
+                          TextField(
+                            controller: problemDescriptionController,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              hintText: 'Enter Problem Description',
+                              hintStyle: theme.textTheme.bodyMedium,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        ListTile(
-                          contentPadding: const EdgeInsets.all(0),
-                          leading: const Text(
-                            'Severity',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
+                          const SizedBox(height: 8),
+                          NCWindFarm(
+                            windFarm,
+                            onSelected: (windFarm) {
+                              setState(() {
+                                this.windFarm = windFarm;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          ListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            leading: const LabelWidget('Status'),
+                            trailing: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                value: status,
+                                style: theme.textTheme.bodyMedium!,
+                                dropdownColor: theme.colorScheme.surface,
+                                items: statuses
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    status = value!;
+                                  });
+                                },
+                              ),
                             ),
                           ),
-                          trailing: DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              value: severity,
-                              items: severities
-                                  .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  severity = value!;
-                                });
-                              },
+                          const SizedBox(height: 8),
+                          ListTile(
+                            contentPadding: const EdgeInsets.all(0),
+                            leading: const LabelWidget('Severity'),
+                            trailing: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                value: severity,
+                                style: theme.textTheme.bodyMedium!,
+                                dropdownColor: theme.colorScheme.surface,
+                                items: severities
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    severity = value!;
+                                  });
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        NCAssign(
-                          ref: ref,
-                          onAssign: (assignedTo) {
-                            setState(() {
-                              this.assignedTo.addAll(assignedTo.toList());
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        NCAttachments(ncId: ncModel.id),
-                        const SizedBox(height: 8),
-                      ],
+                          const SizedBox(height: 8),
+                          NCAssign(
+                            ref: ref,
+                            onAssign: (assignedTo) {
+                              setState(() {
+                                this.assignedTo.addAll(assignedTo.toList());
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          NCAttachments(ncId: ncModel.id),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
                     ),
                   ),
                 ),
