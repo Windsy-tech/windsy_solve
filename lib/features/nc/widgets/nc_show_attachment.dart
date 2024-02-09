@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/nc/controller/nc_attachments_controller.dart';
 import 'package:windsy_solve/models/attachment_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
+import 'package:windsy_solve/utils/progress_count.dart';
 
 class ShowAttachment extends ConsumerStatefulWidget {
   final String ncId;
@@ -80,7 +81,10 @@ class _CreateConsumerShowAttachmentState extends ConsumerState<ShowAttachment> {
               children: [
                 widget.attachment.fileType == 'pdf'
                     ? Expanded(
-                        child: const PDF().fromUrl(widget.attachment.fileUrl))
+                        child: const PDF().fromUrl(
+                          widget.attachment.fileUrl,
+                        ),
+                      )
                     : Expanded(
                         child: Column(
                           children: [
@@ -113,7 +117,9 @@ class _CreateConsumerShowAttachmentState extends ConsumerState<ShowAttachment> {
                                             loadingProgress
                                                         .expectedTotalBytes !=
                                                     null
-                                                ? "${((loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!) * 100).toInt().toString()} %"
+                                                ? downloadProgressIndicator(
+                                                    loadingProgress,
+                                                  )
                                                 : "",
                                           ),
                                         ],
