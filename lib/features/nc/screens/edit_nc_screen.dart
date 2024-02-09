@@ -122,7 +122,7 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
               backgroundColor: theme.colorScheme.background,
               extendBodyBehindAppBar: true,
               appBar: AppBar(
-                title: Text('Non-Conformity: NC-${nc.id}'),
+                title: Text('NC - ${nc.id}'),
                 leading: IconButton(
                   onPressed: () async {
                     await showAlert(context);
