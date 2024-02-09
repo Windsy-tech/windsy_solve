@@ -7,22 +7,39 @@ Future<void> showAlertDialog({
   required String content,
   required String defaultActionText,
 }) async {
-  return showDialog<void>(
+  final theme = Theme.of(context);
+  return showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (BuildContext context) {
+    builder: (dialogContext) {
       return AlertDialog(
-        title: Text(title),
+        title: Text(title, style: theme.textTheme.labelLarge),
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              Text(content),
+              Text(
+                content,
+                style: theme.textTheme.labelLarge,
+              ),
             ],
           ),
         ),
         actions: <Widget>[
           TextButton(
-            child: Text(defaultActionText),
+            onPressed: () {
+              //TODO: implement cancel action
+              Navigator.of(dialogContext, rootNavigator: true).pop('dialog');
+            },
+            child: Text(
+              'Cancel',
+              style: theme.textTheme.labelMedium,
+            ),
+          ),
+          TextButton(
+            child: Text(
+              defaultActionText,
+              style: theme.textTheme.labelMedium,
+            ),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ],
