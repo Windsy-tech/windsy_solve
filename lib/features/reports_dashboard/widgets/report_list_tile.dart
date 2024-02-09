@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
-import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
 import 'package:windsy_solve/utils/text_utils.dart';
 
-class ReportNCListTile extends ConsumerWidget {
-  const ReportNCListTile({
+class ReportListTile extends ConsumerWidget {
+  const ReportListTile({
     super.key,
-    required this.nc,
+    required this.id,
+    required this.status,
+    required this.title,
+    required this.windFarm,
+    required this.createdAt,
+    required this.onTapClose,
+    required this.onTapDelete,
     required this.onTap,
   });
 
-  final NCModel nc;
+  final String id;
+  final String status;
+  final String title;
+  final String windFarm;
+  final DateTime createdAt;
+  final VoidCallback onTapClose;
+  final VoidCallback onTapDelete;
   final VoidCallback onTap;
 
   _showPopupMenu(
     BuildContext context,
     Offset position,
-    WidgetRef ref,
-    String companyId,
-    String ncId,
     String status,
   ) {
     return showMenu(
@@ -39,20 +45,12 @@ class ReportNCListTile extends ConsumerWidget {
         ),
         if (status == "Open") ...[
           PopupMenuItem(
-            onTap: () => ref.read(ncControllerProvider.notifier).closeNC(
-                  context,
-                  companyId,
-                  ncId,
-                ),
+            onTap: onTapClose,
             child: const Text("Mark as closed"),
           ),
         ],
         PopupMenuItem(
-          onTap: () => ref.read(ncControllerProvider.notifier).deleteNC(
-                context,
-                companyId,
-                ncId,
-              ),
+          onTap: onTapDelete,
           child: const Text("Delete"),
         ),
       ],
@@ -88,7 +86,7 @@ class ReportNCListTile extends ConsumerWidget {
                   width: 2,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
-                    color: const Color(0xffffc629),
+                    color: status == 'Open' ? Colors.green : Colors.red,
                   ),
                   margin: const EdgeInsets.only(right: 20.0),
                 ),
@@ -97,22 +95,21 @@ class ReportNCListTile extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'NC #${nc.id}',
+                        id,
                         style: theme.textTheme.titleLarge,
                       ),
                       const SizedBox(height: 4.0),
                       Text(
-                        nc.status,
+                        status,
                         style: theme.textTheme.titleMedium!.copyWith(
-                          color:
-                              nc.status == 'Open' ? Colors.green : Colors.red,
+                          color: status == 'Open' ? Colors.green : Colors.red,
                         ),
                       ),
                       const SizedBox(
                         height: 4,
                       ),
                       Text(
-                        nc.title,
+                        title,
                         style: theme.textTheme.bodySmall,
                       ),
                       const SizedBox(
@@ -129,7 +126,7 @@ class ReportNCListTile extends ConsumerWidget {
                             width: 6,
                           ),
                           Text(
-                            TextUtils.capitalizeFirstLetter(nc.windFarm),
+                            TextUtils.capitalizeFirstLetter(windFarm),
                             style: theme.textTheme.bodySmall,
                           ),
                         ],
@@ -148,7 +145,7 @@ class ReportNCListTile extends ConsumerWidget {
                             width: 6,
                           ),
                           Text(
-                            nc.createdAt.toDateString(),
+                            createdAt.toDateString(),
                             style: theme.textTheme.bodySmall,
                           ),
                         ],
@@ -162,14 +159,10 @@ class ReportNCListTile extends ConsumerWidget {
         ),
         trailing: GestureDetector(
           onTapDown: (TapDownDetails details) {
-            final user = ref.read(userProvider)!;
             _showPopupMenu(
               context,
               details.globalPosition,
-              ref,
-              user.companyId,
-              nc.id,
-              nc.status,
+              status,
             );
           },
           child: const Icon(
