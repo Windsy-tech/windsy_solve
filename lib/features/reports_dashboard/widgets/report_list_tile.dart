@@ -74,7 +74,7 @@ class ReportListTile extends ConsumerWidget {
           borderRadius: BorderRadius.circular(20.0),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 8.0,
+          vertical: 4.0,
           horizontal: 16.0,
         ),
         subtitle: Padding(
@@ -83,12 +83,12 @@ class ReportListTile extends ConsumerWidget {
             child: Row(
               children: [
                 Container(
-                  width: 2,
+                  width: 4,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     color: status == 'Open' ? Colors.green : Colors.red,
                   ),
-                  margin: const EdgeInsets.only(right: 20.0),
+                  margin: const EdgeInsets.only(right: 18.0),
                 ),
                 Expanded(
                   child: Column(
