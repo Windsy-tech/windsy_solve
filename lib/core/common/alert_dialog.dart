@@ -14,6 +14,7 @@ Future<void> showAlertDialog({
     builder: (dialogContext) {
       return AlertDialog(
         title: Text(title, style: theme.textTheme.labelLarge),
+        backgroundColor: theme.colorScheme.surface,
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
@@ -32,7 +33,7 @@ Future<void> showAlertDialog({
             },
             child: Text(
               'Cancel',
-              style: theme.textTheme.labelMedium,
+              style: theme.textTheme.labelMedium!,
             ),
           ),
           TextButton(
