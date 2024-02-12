@@ -64,7 +64,6 @@ class _CreateConsumerInspectionSectionListState
             TextButton(
               onPressed: () {
                 addCheckList(context, checkListController.text);
-                checkListController.clear();
               },
               child: const Text("Add"),
             ),
@@ -81,7 +80,7 @@ class _CreateConsumerInspectionSectionListState
           widget.sectionName,
           checkListName,
         );
-    Navigator.pop(context);
+    checkListController.clear();
   }
 
   @override

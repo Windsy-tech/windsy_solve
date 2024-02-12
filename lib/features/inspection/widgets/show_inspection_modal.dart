@@ -44,23 +44,37 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
     required String type,
     required String templateName,
   }) {
+    final theme = Theme.of(context);
     TextEditingController controller = TextEditingController();
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Enter Inspection Name"),
+          title: Text(
+            "Enter Inspection Name",
+            style: theme.textTheme.headlineSmall,
+          ),
           content: TextField(
             controller: controller,
             maxLength: 50,
             textCapitalization: TextCapitalization.words,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              hintText: 'Enter a Inspection Name',
+              hintStyle: theme.textTheme.bodyMedium,
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text("Cancel"),
+              child: Text(
+                "Cancel",
+                style: theme.textTheme.bodyMedium,
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -72,7 +86,10 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
                   templateName,
                 );
               },
-              child: const Text("Next"),
+              child: Text(
+                "Next",
+                style: theme.textTheme.bodyMedium,
+              ),
             ),
           ],
         );
@@ -99,12 +116,15 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TabBar(
             controller: _tabController,
+            labelStyle: theme.textTheme.bodyMedium,
+            labelColor: theme.colorScheme.onPrimary,
             tabs: const [
               Tab(
                 text: "New",
@@ -136,12 +156,15 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
                             type: "new",
                             templateName: "",
                           ),
-                          contentPadding: const EdgeInsets.all(2),
+                          contentPadding: const EdgeInsets.all(6.0),
                           leading: const Icon(
                             Icons.new_label,
-                            size: 16,
+                            size: 20,
                           ),
-                          title: const Text("Create New"),
+                          title: Text(
+                            "Create New",
+                            style: theme.textTheme.bodyMedium,
+                          ),
                           dense: true,
                         ),
                       ),
@@ -170,12 +193,15 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
                                       type: "template",
                                       templateName: template.name,
                                     ),
-                                    contentPadding: const EdgeInsets.all(2),
+                                    contentPadding: const EdgeInsets.all(6.0),
                                     leading: const Icon(
                                       Icons.new_label,
                                       size: 16,
                                     ),
-                                    title: Text(template.name),
+                                    title: Text(
+                                      template.name,
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
                                     dense: true,
                                   ),
                                 ),

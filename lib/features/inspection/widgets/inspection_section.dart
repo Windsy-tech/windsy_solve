@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:windsy_solve/core/common/widgets/label_widget.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 
 class InspectionSection extends ConsumerStatefulWidget {
@@ -17,16 +18,21 @@ class _CreateConsumerInspectionSectionState
   final sectionNameController = TextEditingController();
 
   Future showSectionDialog() {
+    final theme = Theme.of(context);
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Add Section"),
+          title: const LabelWidget("Add Section"),
           content: TextField(
             controller: sectionNameController,
             textCapitalization: TextCapitalization.words,
-            decoration: const InputDecoration(
-              labelText: "Section Name",
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              hintText: 'Enter a Section Name',
+              hintStyle: theme.textTheme.bodyMedium,
             ),
           ),
           actions: [
@@ -34,14 +40,20 @@ class _CreateConsumerInspectionSectionState
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text("Cancel"),
+              child: Text(
+                "Cancel",
+                style: theme.textTheme.labelMedium,
+              ),
             ),
             TextButton(
               onPressed: () {
                 addSection(context, sectionNameController.text);
                 sectionNameController.clear();
               },
-              child: const Text("Add"),
+              child: Text(
+                "Add",
+                style: theme.textTheme.labelMedium,
+              ),
             ),
           ],
         );
@@ -50,21 +62,30 @@ class _CreateConsumerInspectionSectionState
   }
 
   Future showSaveAlertDialog() {
+    final theme = Theme.of(context);
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           icon: const Icon(Icons.warning, color: Colors.yellow),
-          title: const Text("Warning!"),
-          content: const Text(
-              "Inorder to create a section, you need to save the inspection first"),
+          title: Text(
+            "Warning!",
+            style: theme.textTheme.headlineLarge,
+          ),
+          content: Text(
+            "Inorder to create a section, you need to save the inspection first",
+            style: theme.textTheme.bodyMedium,
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 //saveInspection();
               },
-              child: const Text("OK"),
+              child: Text(
+                "OK",
+                style: theme.textTheme.labelMedium,
+              ),
             ),
           ],
         );
@@ -81,11 +102,12 @@ class _CreateConsumerInspectionSectionState
   }
 
   void navigateToSectionPage(BuildContext context, String sectionName) {
-    print(Routemaster.of(context).currentRoute);
-    Routemaster.of(context)
-        .push("/inspection/section/$sectionName", queryParameters: {
-      "id": widget.inspectionId,
-    });
+    Routemaster.of(context).push(
+      "/inspection/section/$sectionName",
+      queryParameters: {
+        "id": widget.inspectionId,
+      },
+    );
   }
 
   @override
@@ -99,7 +121,7 @@ class _CreateConsumerInspectionSectionState
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("Sections"),
+            const LabelWidget("Sections"),
             IconButton(
               onPressed: () async {
                 if (isExists != null && !isExists) {

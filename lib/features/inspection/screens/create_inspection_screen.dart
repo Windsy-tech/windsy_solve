@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:windsy_solve/core/common/widgets/label_widget.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_end_date.dart';
@@ -10,6 +11,7 @@ import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 import 'package:windsy_solve/models/inspection_model.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
+import 'package:windsy_solve/theme/color_palette.dart';
 
 class PerformInspectionScreen extends ConsumerStatefulWidget {
   final String title;
@@ -87,9 +89,15 @@ class _CreateConsumerPerformInspectionScreenState
 
   @override
   Widget build(BuildContext context) {
+        final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title, style: theme.textTheme.titleLarge,),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: () {
@@ -99,102 +107,110 @@ class _CreateConsumerPerformInspectionScreenState
           ),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  "Title",
-                ),
-                const SizedBox(height: 4),
-                TextField(
-                  controller: titleController,
-                  maxLength: 50,
-                ),
-                const SizedBox(height: 8),
-                InspectionStartDate(
-                  startDate: startDate,
-                  onChanged: (date) {
-                    setState(() {
-                      startDate = date!;
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                InspectionEndDate(endDate: endDate),
-                const SizedBox(height: 8),
-                InspectionWindFarm(
-                  null,
-                  onSelected: (windFarm) {
-                    setState(() {
-                      this.windFarm = windFarm;
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                ListTile(
-                  leading: const Text(
-                    'Status',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
+      body: Container(height: size.height,
+        decoration: BoxDecoration(
+          gradient: theme.brightness == Brightness.dark
+              ? ColorPalette.darkSurface
+              : ColorPalette.lightSurface,
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const LabelWidget(
+                    'Title'
+                  ),
+                  const SizedBox(height: 6),
+                  TextField(
+                    controller: titleController,
+                    maxLength: 50,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      hintText: 'Enter Title',
+                      hintStyle: theme.textTheme.bodyMedium,
                     ),
                   ),
-                  contentPadding: const EdgeInsets.all(0),
-                  trailing: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      value: status,
-                      items: statuses
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e,
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                  const SizedBox(height: 8),
+                  InspectionStartDate(
+                    startDate: startDate, 
+                    onChanged: (date) {
+                      setState(() {
+                        startDate = date!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  InspectionEndDate(endDate: endDate),
+                  const SizedBox(height: 8),
+                  InspectionWindFarm(
+                    null,
+                    onSelected: (windFarm) {
+                      setState(() {
+                        this.windFarm = windFarm;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  ListTile(
+                    leading: const LabelWidget(
+                      'Status'
+                    
+                    ),
+                    contentPadding: const EdgeInsets.all(0),
+                    trailing: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        value: status,
+                        items: statuses
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (value) => setState(() => status = value!),
+                                ))
+                            .toList(),
+                        onChanged: (value) => setState(() => status = value!),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                ListTile(
-                  contentPadding: const EdgeInsets.all(0),
-                  leading: const Text(
-                    'Severity',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
+                  const SizedBox(height: 8),
+                  ListTile(
+                    contentPadding: const EdgeInsets.all(0),
+                    leading: const LabelWidget(
+                      'Severity'
+                      
                     ),
-                  ),
-                  trailing: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      value: severity,
-                      items: severities
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e,
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                    trailing: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        value: severity,
+                        items: severities
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (value) => setState(() => severity = value!),
+                                ))
+                            .toList(),
+                        onChanged: (value) => setState(() => severity = value!),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                InspectionSection(
-                  inspectionId: widget.title,
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  InspectionSection(
+                    inspectionId: widget.title,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

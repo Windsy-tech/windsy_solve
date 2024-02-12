@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:windsy_solve/core/common/widgets/label_widget.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
 
 class InspectionStartDate extends StatelessWidget {
@@ -22,14 +23,11 @@ class InspectionStartDate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ListTile(
       contentPadding: const EdgeInsets.all(0),
-      leading: const Text(
-        'Start date',
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.normal,
-        ),
+      leading: const LabelWidget(
+        'Start date'
       ),
       trailing: TextButton(
         onPressed: () async {
@@ -38,6 +36,7 @@ class InspectionStartDate extends StatelessWidget {
         },
         child: Text(
           startDate.toDateString(),
+          style: theme.textTheme.bodyMedium,
         ),
       ),
     );
