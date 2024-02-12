@@ -203,6 +203,7 @@ class InspectionController extends StateNotifier<bool> {
       (l) => showSnackBar(context, l.message),
       (r) {
         showSnackBar(context, r.toString());
+        Routemaster.of(context).pop();
       },
     );
   }
