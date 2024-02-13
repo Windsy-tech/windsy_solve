@@ -4,7 +4,9 @@ import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
+import 'package:windsy_solve/features/inspection/screens/check_list/check_list_screen.dart';
 import 'package:windsy_solve/models/section_model.dart';
+import 'package:windsy_solve/theme/color_palette.dart';
 
 class InspectionSectionList extends ConsumerStatefulWidget {
   final String inspectionId;
@@ -42,16 +44,18 @@ class _CreateConsumerInspectionSectionListState
   }
 
   Future showAddCheckListDialog() {
+    final theme = Theme.of(context);
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text("Add new check"),
+          backgroundColor: theme.colorScheme.surface,
           content: TextField(
             controller: checkListController,
             textCapitalization: TextCapitalization.words,
             decoration: const InputDecoration(
-              labelText: "Check Name",
+              hintText: "Check Name",
             ),
           ),
           actions: [
@@ -59,7 +63,9 @@ class _CreateConsumerInspectionSectionListState
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text("Cancel"),
+              child: const Text(
+                "Cancel",
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -83,12 +89,33 @@ class _CreateConsumerInspectionSectionListState
     checkListController.clear();
   }
 
+  void navigateToCheckListPage(String checkId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return CheckListScreen(
+            checkId: checkId,
+            section: widget.sectionName,
+          );
+        },
+      ),
+    );
+    //Routemaster.of(context).push('check/$checkId');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+
     final checkLists =
         ref.watch(getChecklistsFromSectionProvider(sectionModel));
     print('ui rebuilt');
+    print(Routemaster.of(context).currentRoute);
     return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(widget.sectionName),
         leading: IconButton(
@@ -97,6 +124,8 @@ class _CreateConsumerInspectionSectionListState
           },
           icon: const Icon(Icons.arrow_back),
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: () => showAddCheckListDialog(),
@@ -106,14 +135,25 @@ class _CreateConsumerInspectionSectionListState
       ),
       body: checkLists.when(
         data: (checklists) {
-          return ListView.builder(
-            itemCount: checklists.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(checklists[index]),
-                onTap: () {},
-              );
-            },
+          return Container(
+            height: size.height,
+            decoration: BoxDecoration(
+              gradient: theme.brightness == Brightness.dark
+                  ? ColorPalette.darkSurface
+                  : ColorPalette.lightSurface,
+            ),
+            child: ListView.builder(
+              itemCount: checklists.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    checklists[index],
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  onTap: () => navigateToCheckListPage(checklists[index]),
+                );
+              },
+            ),
           );
         },
         loading: () => const Loader(),
