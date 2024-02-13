@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:windsy_solve/core/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/type_defs.dart';
+import 'package:windsy_solve/models/checklist_model.dart';
 import 'package:windsy_solve/models/inspection_model.dart';
 import 'package:windsy_solve/models/inspection_templates_model.dart';
 
@@ -108,6 +109,18 @@ class InspectionRepository {
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
+  }
+
+  //get inspection data by id
+  Future<DocumentSnapshot<Map<String, dynamic>>> getInspectionbyId(
+    String companyId,
+    String inspectionId,
+  ) {
+    return _companies
+        .doc(companyId)
+        .collection('inspections')
+        .doc(inspectionId)
+        .get();
   }
 
   //get stream of inspection assigned to by user id
@@ -259,15 +272,17 @@ class InspectionRepository {
     String checklistName,
   ) async {
     try {
+      CheckListModel checkList = CheckListModel();
+      checkList = checkList.copyWith(
+        section: sectionName,
+      );
       await _companies
           .doc(companyId)
           .collection('inspections')
           .doc(inspectionId)
           .collection(sectionName)
           .doc(checklistName)
-          .set({
-        "checklist": checklistName,
-      });
+          .set(checkList.toMap());
       return right('Checklist: $checklistName added successfully!');
     } on FirebaseException catch (e) {
       throw e.message!;

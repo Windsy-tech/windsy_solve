@@ -42,6 +42,12 @@ final inspectionProvider = Provider<InspectionModel>(
   ),
 );
 
+final getInspectionbyIdProvider =
+    FutureProvider.autoDispose.family((ref, String inspectionId) async {
+  final inspectionController = ref.watch(inspectionControllerProvider.notifier);
+  return inspectionController.getInspectionbyId(inspectionId);
+});
+
 final getUserInspectionProvider = StreamProvider<List<InspectionModel>>((ref) {
   return ref
       .watch(inspectionControllerProvider.notifier)
@@ -208,6 +214,16 @@ class InspectionController extends StateNotifier<bool> {
     );
   }
 
+  //get future of nc by id
+  Future<InspectionModel> getInspectionbyId(String inspectionId) async {
+    //final user = _ref.read(userProvider)!;
+    final inspectionModel =
+        await _inspectionRepository.getInspectionbyId('windsy', inspectionId);
+    return InspectionModel.fromMap(
+      inspectionModel.data() as Map<String, dynamic>,
+    );
+  }
+
   //get stream of all ncs created by user
   Stream<List<InspectionModel>> _getInspectionsCreatedByUser() {
     final user = _ref.read(userProvider)!;
@@ -246,7 +262,7 @@ class InspectionController extends StateNotifier<bool> {
     SectionModel section,
   ) {
     final user = _ref.watch(userProvider)!;
-    
+
     return _inspectionRepository.getChecklistsFromSection(
       user.companyId,
       section.inspectionId,
