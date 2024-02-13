@@ -173,12 +173,13 @@ class InspectionController extends StateNotifier<bool> {
   //add new section
   void addSection(
     BuildContext context,
-    inspectionId,
+    String inspectionId,
     String sectionName,
   ) async {
     final user = _ref.watch(userProvider)!;
     final res = await _inspectionRepository.addSection(
       user.companyId,
+      user.displayName,
       inspectionId,
       sectionName,
     );

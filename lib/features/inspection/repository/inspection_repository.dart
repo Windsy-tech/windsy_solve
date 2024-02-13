@@ -244,18 +244,24 @@ class InspectionRepository {
   //add new section
   FutureEither<String> addSection(
     String companyId,
+    String displayName,
     String inspectionId,
     String sectionName,
   ) async {
     try {
+      CheckListModel checkList = CheckListModel();
+      checkList = checkList.copyWith(
+        inspectionId: inspectionId,
+        section: sectionName,
+        createdBy: displayName,
+        modifiedBy: displayName,
+      );
       await _companies
           .doc(companyId)
           .collection('inspections')
           .doc(inspectionId)
           .collection(sectionName)
-          .add({
-        "section": sectionName,
-      });
+          .add(checkList.toMap());
       return right('Section: $sectionName added successfully!');
     } on FirebaseException catch (e) {
       throw e.message!;
@@ -274,6 +280,7 @@ class InspectionRepository {
     try {
       CheckListModel checkList = CheckListModel();
       checkList = checkList.copyWith(
+        inspectionId: inspectionId,
         section: sectionName,
       );
       await _companies
