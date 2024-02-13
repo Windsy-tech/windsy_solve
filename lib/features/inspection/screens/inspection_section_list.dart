@@ -95,6 +95,7 @@ class _CreateConsumerInspectionSectionListState
       MaterialPageRoute(
         builder: (context) {
           return CheckListScreen(
+            inspectionId: widget.inspectionId,
             checkId: checkId,
             section: widget.sectionName,
           );
