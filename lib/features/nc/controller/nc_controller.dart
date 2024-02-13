@@ -51,7 +51,7 @@ class NCController extends StateNotifier<bool> {
   })  : _ncRepository = ncRepository,
         _ref = ref,
         _storageRepository = storageRepository,
-        super(false); 
+        super(false);
 
   //create new nc
   void createNC(BuildContext context, String companyId, NCModel ncModel) async {
@@ -110,7 +110,7 @@ class NCController extends StateNotifier<bool> {
     );
   }
 
-  //get stream of nc by id
+  //get future of nc by id
   Future<NCModel> getNCbyId(String ncId) async {
     //final user = _ref.read(userProvider)!;
     final ncModel = await _ncRepository.getNCbyId('windsy', ncId);

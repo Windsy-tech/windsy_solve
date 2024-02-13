@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/core/common/alert_dialog.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
+import 'package:windsy_solve/core/common/warning_alert.dart';
 import 'package:windsy_solve/core/common/widgets/label_widget.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
@@ -87,16 +88,6 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
         );
   }
 
-  Future showAlert(BuildContext context) async {
-    await showAlertDialog(
-      context: context,
-      title: 'Warning',
-      content: 'Are you sure you want to exit?',
-      defaultActionText: 'Yes',
-    );
-    if (context.mounted) Navigator.pop(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -125,7 +116,7 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                 title: Text('NC - ${nc.id}'),
                 leading: IconButton(
                   onPressed: () async {
-                    await showAlert(context);
+                    await showWarningExitAlert(context);
                   },
                   icon: const Icon(Icons.close_outlined),
                 ),
