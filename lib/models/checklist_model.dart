@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 
 class CheckListModel {
   String id;
+  String section;
   String system;
   String type;
   String checks;
@@ -15,6 +16,7 @@ class CheckListModel {
 
   CheckListModel({
     String? id,
+    this.section = "",
     DateTime? createdAt,
     DateTime? modifiedAt,
     this.system = "Exterior",
@@ -30,6 +32,7 @@ class CheckListModel {
 
   CheckListModel copyWith({
     String? id,
+    String? section,
     String? system,
     String? type,
     String? checks,
@@ -42,6 +45,7 @@ class CheckListModel {
   }) {
     return CheckListModel(
       id: id ?? this.id,
+      section: section ?? this.section,
       system: system ?? this.system,
       type: type ?? this.type,
       checks: checks ?? this.checks,
@@ -57,6 +61,7 @@ class CheckListModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'section': section,
       'system': system,
       'type': type,
       'checks': checks,
@@ -72,6 +77,7 @@ class CheckListModel {
   factory CheckListModel.fromMap(Map<String, dynamic> map) {
     return CheckListModel(
       id: map['id'] as String,
+      section: map['section'] as String,
       system: map['system'] as String,
       type: map['type'] as String,
       checks: map['checks'] as String,
@@ -86,7 +92,7 @@ class CheckListModel {
 
   @override
   String toString() {
-    return 'CheckListModel(id: $id, system: $system, type: $type, checks: $checks, notes: $notes, remarks: $remarks, risk: $risk, createdAt: $createdAt, modifiedAt: $modifiedAt, closed: $closed)';
+    return 'CheckListModel(id: $id, section: $section, system: $system, type: $type, checks: $checks, notes: $notes, remarks: $remarks, risk: $risk, createdAt: $createdAt, modifiedAt: $modifiedAt, closed: $closed)';
   }
 
   @override
@@ -94,6 +100,7 @@ class CheckListModel {
     if (identical(this, other)) return true;
 
     return other.id == id &&
+        other.section == section &&
         other.system == system &&
         other.type == type &&
         other.checks == checks &&
@@ -108,6 +115,7 @@ class CheckListModel {
   @override
   int get hashCode {
     return id.hashCode ^
+        section.hashCode ^
         system.hashCode ^
         type.hashCode ^
         checks.hashCode ^
