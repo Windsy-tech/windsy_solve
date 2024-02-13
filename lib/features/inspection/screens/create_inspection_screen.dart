@@ -89,13 +89,16 @@ class _CreateConsumerPerformInspectionScreenState
 
   @override
   Widget build(BuildContext context) {
-        final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(widget.title, style: theme.textTheme.titleLarge,),
+        title: Text(
+          widget.title,
+          style: theme.textTheme.titleLarge,
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -107,7 +110,8 @@ class _CreateConsumerPerformInspectionScreenState
           ),
         ],
       ),
-      body: Container(height: size.height,
+      body: Container(
+        height: size.height,
         decoration: BoxDecoration(
           gradient: theme.brightness == Brightness.dark
               ? ColorPalette.darkSurface
@@ -120,24 +124,18 @@ class _CreateConsumerPerformInspectionScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const LabelWidget(
-                    'Title'
-                  ),
+                  const LabelWidget('Title'),
                   const SizedBox(height: 6),
                   TextField(
                     controller: titleController,
                     maxLength: 50,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                    decoration: const InputDecoration(
                       hintText: 'Enter Title',
-                      hintStyle: theme.textTheme.bodyMedium,
                     ),
                   ),
                   const SizedBox(height: 8),
                   InspectionStartDate(
-                    startDate: startDate, 
+                    startDate: startDate,
                     onChanged: (date) {
                       setState(() {
                         startDate = date!;
@@ -157,10 +155,7 @@ class _CreateConsumerPerformInspectionScreenState
                   ),
                   const SizedBox(height: 8),
                   ListTile(
-                    leading: const LabelWidget(
-                      'Status'
-                    
-                    ),
+                    leading: const LabelWidget('Status'),
                     contentPadding: const EdgeInsets.all(0),
                     trailing: DropdownButtonHideUnderline(
                       child: DropdownButton(
@@ -183,10 +178,7 @@ class _CreateConsumerPerformInspectionScreenState
                   const SizedBox(height: 8),
                   ListTile(
                     contentPadding: const EdgeInsets.all(0),
-                    leading: const LabelWidget(
-                      'Severity'
-                      
-                    ),
+                    leading: const LabelWidget('Severity'),
                     trailing: DropdownButtonHideUnderline(
                       child: DropdownButton(
                         value: severity,
