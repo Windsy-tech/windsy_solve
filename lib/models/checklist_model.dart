@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 
 class CheckListModel {
   String id;
+  String inspectionId;
   String section;
   String system;
   String type;
@@ -10,12 +11,15 @@ class CheckListModel {
   String notes;
   List<dynamic> remarks;
   int risk;
+  String createdBy;
   DateTime createdAt;
+  String modifiedBy;
   DateTime modifiedAt;
   bool closed;
 
   CheckListModel({
     String? id,
+    this.inspectionId = "",
     this.section = "",
     DateTime? createdAt,
     DateTime? modifiedAt,
@@ -26,12 +30,15 @@ class CheckListModel {
     this.remarks = const [],
     this.risk = 0,
     this.closed = false,
+    this.createdBy = "",
+    this.modifiedBy = "",
   })  : createdAt = createdAt ?? DateTime.now(),
         modifiedAt = modifiedAt ?? DateTime.now(),
         id = id ?? const Uuid().v1();
 
   CheckListModel copyWith({
     String? id,
+    String? inspectionId,
     String? section,
     String? system,
     String? type,
@@ -39,12 +46,15 @@ class CheckListModel {
     String? notes,
     List<dynamic>? remarks,
     int? risk,
+    String? createdBy,
     DateTime? createdAt,
+    String? modifiedBy,
     DateTime? modifiedAt,
     bool? closed,
   }) {
     return CheckListModel(
       id: id ?? this.id,
+      inspectionId: inspectionId ?? this.inspectionId,
       section: section ?? this.section,
       system: system ?? this.system,
       type: type ?? this.type,
@@ -52,7 +62,9 @@ class CheckListModel {
       notes: notes ?? this.notes,
       remarks: remarks ?? this.remarks,
       risk: risk ?? this.risk,
+      createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
+      modifiedBy: modifiedBy ?? this.modifiedBy,
       modifiedAt: modifiedAt ?? this.modifiedAt,
       closed: closed ?? this.closed,
     );
@@ -61,6 +73,7 @@ class CheckListModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'inspectionId': inspectionId,
       'section': section,
       'system': system,
       'type': type,
@@ -68,7 +81,9 @@ class CheckListModel {
       'notes': notes,
       'remarks': remarks,
       'risk': risk,
+      'createdBy': createdBy,
       'createdAt': createdAt.millisecondsSinceEpoch,
+      'modifiedBy': modifiedBy,
       'modifiedAt': modifiedAt.millisecondsSinceEpoch,
       'closed': closed,
     };
@@ -77,6 +92,7 @@ class CheckListModel {
   factory CheckListModel.fromMap(Map<String, dynamic> map) {
     return CheckListModel(
       id: map['id'] as String,
+      inspectionId: map['inspectionId'] as String,
       section: map['section'] as String,
       system: map['system'] as String,
       type: map['type'] as String,
@@ -84,7 +100,9 @@ class CheckListModel {
       notes: map['notes'] as String,
       remarks: List<dynamic>.from((map['remarks'] as List<dynamic>)),
       risk: map['risk'] as int,
+      createdBy: map['createdBy'] as String,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      modifiedBy: map['modifiedBy'] as String,
       modifiedAt: DateTime.fromMillisecondsSinceEpoch(map['modifiedAt'] as int),
       closed: map['closed'] as bool,
     );
@@ -92,7 +110,7 @@ class CheckListModel {
 
   @override
   String toString() {
-    return 'CheckListModel(id: $id, section: $section, system: $system, type: $type, checks: $checks, notes: $notes, remarks: $remarks, risk: $risk, createdAt: $createdAt, modifiedAt: $modifiedAt, closed: $closed)';
+    return 'CheckListModel(id: $id, inspectionId: $inspectionId, section: $section, system: $system, type: $type, checks: $checks, notes: $notes, remarks: $remarks, risk: $risk, createdBy: $createdBy, createdAt: $createdAt, modifiedBy: $modifiedBy, modifiedAt: $modifiedAt, closed: $closed)';
   }
 
   @override
@@ -100,6 +118,7 @@ class CheckListModel {
     if (identical(this, other)) return true;
 
     return other.id == id &&
+        other.inspectionId == inspectionId &&
         other.section == section &&
         other.system == system &&
         other.type == type &&
@@ -107,7 +126,9 @@ class CheckListModel {
         other.notes == notes &&
         listEquals(other.remarks, remarks) &&
         other.risk == risk &&
+        other.createdBy == createdBy &&
         other.createdAt == createdAt &&
+        other.modifiedBy == modifiedBy &&
         other.modifiedAt == modifiedAt &&
         other.closed == closed;
   }
@@ -115,6 +136,7 @@ class CheckListModel {
   @override
   int get hashCode {
     return id.hashCode ^
+        inspectionId.hashCode ^
         section.hashCode ^
         system.hashCode ^
         type.hashCode ^
@@ -122,7 +144,9 @@ class CheckListModel {
         notes.hashCode ^
         remarks.hashCode ^
         risk.hashCode ^
+        createdBy.hashCode ^
         createdAt.hashCode ^
+        modifiedBy.hashCode ^
         modifiedAt.hashCode ^
         closed.hashCode;
   }
