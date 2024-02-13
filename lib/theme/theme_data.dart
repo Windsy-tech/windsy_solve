@@ -32,6 +32,14 @@ class AppTheme {
         onSurfaceVariant: ColorPalette.lightOnSurfaceVariant,
       ),
       textTheme: textTheme,
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        hintStyle: textTheme.bodyMedium!.copyWith(
+          color: ColorPalette.lightPrimary,
+        ),
+      ),
     );
   }
 
@@ -64,6 +72,14 @@ class AppTheme {
         onSurfaceVariant: ColorPalette.darkOnSurfaceVariant,
       ),
       textTheme: textTheme,
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        hintStyle: textTheme.bodyMedium!.copyWith(
+          color: ColorPalette.darkOnPrimary,
+        ),
+      ),
     );
   }
 }
