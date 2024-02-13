@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/auth/screens/login_screen.dart';
 import 'package:windsy_solve/features/home/screens/home_screen.dart';
+import 'package:windsy_solve/features/inspection/screens/check_list/check_list_screen.dart';
 import 'package:windsy_solve/features/inspection/screens/create_inspection_screen.dart';
 import 'package:windsy_solve/features/inspection/screens/edit_inspection_screen.dart';
 import 'package:windsy_solve/features/inspection/screens/inspection_section_list.dart';
@@ -14,6 +15,7 @@ import 'package:windsy_solve/features/settings/screens/general_setting_screen.da
 import 'package:windsy_solve/features/settings/screens/settings_screen.dart';
 import 'package:windsy_solve/features/settings/user_profile/screens/edit_profile_screen.dart';
 import 'package:windsy_solve/features/settings/user_profile/screens/user_profile_screen.dart';
+import 'package:windsy_solve/models/section_model.dart';
 
 final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: LoginScreen()),
@@ -67,14 +69,24 @@ final loggedInRoute = RouteMap(
         ),
       );
     },
-    '/inspection/:id': (_) => const MaterialPage(
-          child: EditInspectionScreen(),
+    '/inspection/:id/': (routeData) => MaterialPage(
+          child: EditInspectionScreen(
+            inspectionId: routeData.pathParameters['id']!,
+          ),
         ),
     '/inspection/section/:sectionname': (routeData) {
       return MaterialPage(
         child: InspectionSectionList(
           inspectionId: routeData.queryParameters['id']!,
           sectionName: routeData.pathParameters['sectionname']!,
+        ),
+      );
+    },
+    'check/:checkid': (routeData) {
+      return MaterialPage(
+        child: CheckListScreen(
+          checkId: routeData.pathParameters['checkid']!,
+          section: routeData.queryParameters['section']!,
         ),
       );
     },
