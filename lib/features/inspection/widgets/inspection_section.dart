@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:windsy_solve/core/common/warning_alert.dart';
 import 'package:windsy_solve/core/common/widgets/label_widget.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 
@@ -61,38 +62,6 @@ class _CreateConsumerInspectionSectionState
     );
   }
 
-  Future showSaveAlertDialog() {
-    final theme = Theme.of(context);
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          icon: const Icon(Icons.warning, color: Colors.yellow),
-          title: Text(
-            "Warning!",
-            style: theme.textTheme.headlineLarge,
-          ),
-          content: Text(
-            "Inorder to create a section, you need to save the inspection first",
-            style: theme.textTheme.bodyMedium,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                //saveInspection();
-              },
-              child: Text(
-                "OK",
-                style: theme.textTheme.labelMedium,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void addSection(BuildContext context, String sectionName) async {
     ref.read(inspectionControllerProvider.notifier).updateSection(
           context,
@@ -112,6 +81,7 @@ class _CreateConsumerInspectionSectionState
 
   @override
   Widget build(BuildContext context) {
+    print(widget.inspectionId);
     final inspection = ref.watch(inspectionProvider);
     final isExists =
         ref.watch(checkInspectionIdExistsProvider(widget.inspectionId)).value;
@@ -125,7 +95,7 @@ class _CreateConsumerInspectionSectionState
             IconButton(
               onPressed: () async {
                 if (isExists != null && !isExists) {
-                  await showSaveAlertDialog();
+                  showWarningSaveAlertDialog;
                   return;
                 } else {
                   await showSectionDialog();
