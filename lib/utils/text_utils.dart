@@ -17,4 +17,12 @@ extension TextUtils on String {
 
     return '$truncatedName...$extension';
   }
+
+  String shortenText() {
+    if (length <= 30) {
+      return this;
+    }
+
+    return '${substring(0, 30)}...';
+  }
 }
