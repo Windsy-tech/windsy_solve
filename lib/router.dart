@@ -85,6 +85,7 @@ final loggedInRoute = RouteMap(
     'check/:checkid': (routeData) {
       return MaterialPage(
         child: CheckListScreen(
+          inspectionId: routeData.queryParameters['inspectionId']!,
           checkId: routeData.pathParameters['checkid']!,
           section: routeData.queryParameters['section']!,
         ),
