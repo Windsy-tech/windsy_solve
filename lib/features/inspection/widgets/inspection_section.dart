@@ -24,6 +24,7 @@ class _CreateConsumerInspectionSectionState
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: theme.colorScheme.surface,
           title: const LabelWidget("Add Section"),
           content: TextField(
             controller: sectionNameController,
@@ -79,6 +80,44 @@ class _CreateConsumerInspectionSectionState
     );
   }
 
+  
+  //Delete a Action
+  Future<bool?> _showDeleteDialog(BuildContext context, String sectionName) async {
+    final theme = Theme.of(context);
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: theme.colorScheme.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: const Text("Delete section"),
+          content: const Text(
+            "Are you sure you want to delete? This action cannot be undone!",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                ref.read(inspectionControllerProvider.notifier).deleteSection(
+                      context,
+                      widget.inspectionId,
+                      sectionName,
+                    );
+                Navigator.pop(context);
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.inspectionId);
@@ -123,6 +162,12 @@ class _CreateConsumerInspectionSectionState
                             context,
                             sections[index],
                           ),
+                          onLongPress: () async {
+                            await _showDeleteDialog(
+                              context, 
+                              sections[index],
+                            );
+                          },
                           visualDensity: const VisualDensity(
                             horizontal: 0,
                             vertical: -4,
