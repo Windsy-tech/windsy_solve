@@ -165,7 +165,9 @@ class InspectionController extends StateNotifier<bool> {
     res.fold(
       (l) => showSnackBar(context, l.message),
       (r) {
-        addSection(context, inspectionId, sectionName);
+        //addSection(context, inspectionId, sectionName);
+        showSnackBar(context, r.toString());
+        Routemaster.of(context).pop();
       },
     );
   }
@@ -177,12 +179,46 @@ class InspectionController extends StateNotifier<bool> {
     String sectionName,
   ) async {
     final user = _ref.watch(userProvider)!;
-    final res = await _inspectionRepository.addSection(
+    await _inspectionRepository
+        .checkIfSectionExists(
       user.companyId,
-      user.displayName,
+      inspectionId,
+      sectionName,
+    )
+        .then(
+      (isExists) async {
+        if (isExists) {
+          showSnackBar(context, "Section id already exists");
+          Routemaster.of(context).pop();
+        } else {
+          final res = await _inspectionRepository.addSection(
+            user.companyId,
+            user.displayName,
+            inspectionId,
+            sectionName,
+          );
+          res.fold(
+            (l) => showSnackBar(context, l.message),
+            (r) {
+              showSnackBar(context, r.toString());
+              Routemaster.of(context).pop();
+            },
+          );
+        }
+      },
+    );
+  }
+
+  void deleteSection(
+      BuildContext context, String inspectionId, String sectionName) async {
+    final user = _ref.watch(userProvider)!;
+    state = true;
+    final res = await _inspectionRepository.deleteSection(
+      user.companyId,
       inspectionId,
       sectionName,
     );
+
     res.fold(
       (l) => showSnackBar(context, l.message),
       (r) {
@@ -200,19 +236,33 @@ class InspectionController extends StateNotifier<bool> {
     String checkName,
   ) async {
     final user = _ref.watch(userProvider)!;
-    final res = await _inspectionRepository.addChecklist(
+    await _inspectionRepository
+        .checkIfChecklistExists(
       user.companyId,
       inspectionId,
       sectionName,
       checkName,
-    );
-    res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        showSnackBar(context, r.toString());
+    )
+        .then((isExists) async {
+      if (isExists) {
+        showSnackBar(context, "Check list id already exists");
         Routemaster.of(context).pop();
-      },
-    );
+      } else {
+        final res = await _inspectionRepository.addChecklist(
+          user.companyId,
+          inspectionId,
+          sectionName,
+          checkName,
+        );
+        res.fold(
+          (l) => showSnackBar(context, l.message),
+          (r) {
+            showSnackBar(context, r.toString());
+            Routemaster.of(context).pop();
+          },
+        );
+      }
+    });
   }
 
   //get future of nc by id
