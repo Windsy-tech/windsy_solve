@@ -145,6 +145,7 @@ class _CreateConsumerInspectionSectionListState
             ),
             child: ListView.builder(
               itemCount: checklists.length,
+              itemExtentBuilder: ((index, dimensions) => 60.0),
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
