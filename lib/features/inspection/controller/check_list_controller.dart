@@ -57,6 +57,11 @@ class CheckListController extends StateNotifier<bool> {
     CheckListModel checkList,
   ) async {
     final user = _ref.watch(userProvider)!;
+
+    checkList = checkList.copyWith(
+      modifiedBy: user.displayName,
+      modifiedAt: DateTime.now(),
+    );
     final res = await _checkListRepository.updateCheckList(
       user.companyId,
       checkListId,
