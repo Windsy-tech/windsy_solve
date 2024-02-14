@@ -7,9 +7,11 @@ import 'package:windsy_solve/core/common/widgets/created_modified_by.dart';
 import 'package:windsy_solve/features/inspection/controller/check_list_controller.dart';
 import 'package:windsy_solve/features/inspection/delegates/check_list/check_search_delegate.dart';
 import 'package:windsy_solve/features/inspection/delegates/check_list/components_search_delegate.dart';
+import 'package:windsy_solve/features/inspection/screens/check_list/actions_page.dart';
 import 'package:windsy_solve/features/inspection/screens/check_list/notes_page.dart';
 import 'package:windsy_solve/features/inspection/screens/check_list/risk_page.dart';
 import 'package:windsy_solve/features/inspection/screens/check_list/type_page.dart';
+import 'package:windsy_solve/features/inspection/widgets/check_list/check_list_attachments.dart';
 import 'package:windsy_solve/features/inspection/widgets/check_list/check_list_listtile.dart';
 import 'package:windsy_solve/models/checklist_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
@@ -171,11 +173,26 @@ class _CreateConsumerCheckListScreenState
                     },
                   ),
 
-                  //Comments
+                  //Actions
                   CheckListListTile(
-                    title: 'Comments',
-                    onTap: () {},
-                  ),
+                      title: 'Actions',
+                      value: checkList.actions.length.toString(),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CheckListActionsPage(
+                                checkListId: widget.checkId,
+                                checkListModel: checkList,
+                              );
+                            },
+                          ),
+                        );
+                      }),
+
+                  //Attachments
+                  CheckListAttachments(checkList: checkList),
 
                   //Created and Modified
                   CreatedModifiedBy(
