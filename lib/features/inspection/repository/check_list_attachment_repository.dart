@@ -5,8 +5,10 @@ import 'package:windsy_solve/core/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/type_defs.dart';
 import 'package:windsy_solve/models/attachment_model.dart';
+import 'package:windsy_solve/models/checklist_model.dart';
 
-final checkListAttachmentRepositoryProvider = Provider<CheckListAttachmentRepository>((ref) {
+final checkListAttachmentRepositoryProvider =
+    Provider<CheckListAttachmentRepository>((ref) {
   return CheckListAttachmentRepository(firestore: ref.watch(firestoreProvider));
 });
 
@@ -16,25 +18,21 @@ class CheckListAttachmentRepository {
   CheckListAttachmentRepository({required FirebaseFirestore firestore})
       : _firestore = firestore;
 
-  CollectionReference get _inspection => _firestore.collection('inspections');
-  CollectionReference get _users => _firestore.collection('users');
   CollectionReference get _companies => _firestore.collection('companies');
 
   //add Attachment
   FutureEither addAttachment(
     String companyId,
-    String inspectionId,
-    String sectionName,
-    String checkListId,
+    CheckListModel checkList,
     AttachmentModel attachment,
   ) async {
     try {
       await _companies
           .doc(companyId)
           .collection('inspections')
-          .doc(inspectionId)
-          .collection('sections')
-          .doc(checkListId)
+          .doc(checkList.inspectionId)
+          .collection(checkList.section)
+          .doc(checkList.id)
           .collection('attachments')
           .doc(attachment.id)
           .set(attachment.toMap());
@@ -47,18 +45,16 @@ class CheckListAttachmentRepository {
   }
 
   //get stream of all ncs created by user
-  Stream<List<AttachmentModel>> getNCAttachments(
+  Stream<List<AttachmentModel>> getCheckListAttachments(
     String companyId,
-    String inspectionId,
-    String sectionName,
-    String checkListId,
+    CheckListModel checkList,
   ) {
     return _companies
         .doc(companyId)
         .collection('inspections')
-        .doc(inspectionId)
-        .collection('sections')
-        .doc(checkListId)
+        .doc(checkList.inspectionId)
+        .collection(checkList.section)
+        .doc(checkList.id)
         .collection('attachments')
         .snapshots()
         .map((data) {
@@ -77,17 +73,15 @@ class CheckListAttachmentRepository {
   //get Attachment by id
   Future<DocumentSnapshot<Map<String, dynamic>>> getAttachmentById(
     String companyId,
-    String inspectionId,
-    String sectionName,
-    String checkListId,
+    CheckListModel checkList,
     String attachmentId,
   ) {
     return _companies
         .doc(companyId)
         .collection('inspections')
-        .doc(inspectionId)
-        .collection('sections')
-        .doc(checkListId)
+        .doc(checkList.inspectionId)
+        .collection(checkList.section)
+        .doc(checkList.id)
         .collection('attachments')
         .doc(attachmentId)
         .get();
@@ -96,18 +90,16 @@ class CheckListAttachmentRepository {
   //delete Attachment by Id
   FutureEither deleteAttachmentById(
     String companyId,
-    String inspectionId,
-    String sectionName,
-    String checkListId,
+    CheckListModel checkList,
     String attachmentId,
   ) async {
     try {
       await _companies
           .doc(companyId)
           .collection('inspections')
-          .doc(inspectionId)
-          .collection('sections')
-          .doc(checkListId)
+          .doc(checkList.inspectionId)
+          .collection(checkList.section)
+          .doc(checkList.id)
           .collection('attachments')
           .doc(attachmentId)
           .delete();
@@ -122,18 +114,16 @@ class CheckListAttachmentRepository {
   //Update attachment comment
   FutureEither updateAttachmentComment(
     String companyId,
-    String inspectionId,
-    String sectionName,
-    String checkListId,
+    CheckListModel checkList,
     AttachmentModel attachment,
   ) async {
     try {
       await _companies
           .doc(companyId)
           .collection('inspections')
-          .doc(inspectionId)
-          .collection('sections')
-          .doc(checkListId)
+          .doc(checkList.inspectionId)
+          .collection(checkList.section)
+          .doc(checkList.id)
           .collection('attachments')
           .doc(attachment.id)
           .update(attachment.toMap());
