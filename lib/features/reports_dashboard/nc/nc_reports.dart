@@ -21,7 +21,7 @@ class NCReports extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
@@ -47,44 +47,37 @@ class NCReports extends ConsumerWidget {
               ),
             );
           }
-          return Container(
-            decoration: BoxDecoration(
-              gradient: theme.brightness == Brightness.dark
-                  ? ColorPalette.darkSurface
-                  : ColorPalette.lightSurface,
-            ),
-            child: ListView.builder(
-              itemCount: ncs.length,
-              itemBuilder: (context, index) {
-                NCModel nc = ncs[index];
-                return ReportListTile(
-                  id: nc.id,
-                  status: nc.status,
-                  title: nc.title,
-                  windFarm: nc.windFarm,
-                  createdAt: nc.createdAt,
-                  onTapClose: () {
-                    ref.read(ncControllerProvider.notifier).closeNC(
-                          context,
-                          user.companyId,
-                          nc.id,
-                        );
-                  },
-                  onTapDelete: () {
-                    ref.read(ncControllerProvider.notifier).deleteNC(
-                          context,
-                          user.companyId,
-                          nc.id,
-                        );
-                  },
-                  onTap: () {
-                    Routemaster.of(context).push(
-                      '/non-conformity/${nc.id}',
-                    );
-                  },
-                );
-              },
-            ),
+          return ListView.builder(
+            itemCount: ncs.length,
+            itemBuilder: (context, index) {
+              NCModel nc = ncs[index];
+              return ReportListTile(
+                id: nc.id,
+                status: nc.status,
+                title: nc.title,
+                windFarm: nc.windFarm,
+                createdAt: nc.createdAt,
+                onTapClose: () {
+                  ref.read(ncControllerProvider.notifier).closeNC(
+                        context,
+                        user.companyId,
+                        nc.id,
+                      );
+                },
+                onTapDelete: () {
+                  ref.read(ncControllerProvider.notifier).deleteNC(
+                        context,
+                        user.companyId,
+                        nc.id,
+                      );
+                },
+                onTap: () {
+                  Routemaster.of(context).push(
+                    '/non-conformity/${nc.id}',
+                  );
+                },
+              );
+            },
           );
         },
         loading: () => const Loader(),
