@@ -3,20 +3,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:windsy_solve/core/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
+import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/core/type_defs.dart';
 import 'package:windsy_solve/models/checklist_model.dart';
 import 'package:windsy_solve/models/inspection_model.dart';
 import 'package:windsy_solve/models/inspection_templates_model.dart';
 
 final inspectionRepositoryProvider = Provider<InspectionRepository>((ref) {
-  return InspectionRepository(firestore: ref.watch(firestoreProvider));
+  return InspectionRepository(
+      firestore: ref.watch(firestoreProvider),
+      storageRepository: ref.watch(storageRepositoryProvider));
 });
 
 class InspectionRepository {
   final FirebaseFirestore _firestore;
+  final StorageRepository _storageRepository;
 
-  InspectionRepository({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  InspectionRepository(
+      {required FirebaseFirestore firestore,
+      required StorageRepository storageRepository})
+      : _firestore = firestore,
+        _storageRepository = storageRepository;
 
   CollectionReference get _companies => _firestore.collection('companies');
 
@@ -231,6 +238,7 @@ class InspectionRepository {
         .collection('inspections')
         .doc(inspectionId)
         .collection(sectionName)
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .map((checklists) {
       List<String> checklistList = [];
@@ -251,6 +259,7 @@ class InspectionRepository {
     try {
       CheckListModel checkList = CheckListModel();
       checkList = checkList.copyWith(
+        id: 'Default',
         inspectionId: inspectionId,
         section: sectionName,
         createdBy: displayName,
@@ -261,8 +270,47 @@ class InspectionRepository {
           .collection('inspections')
           .doc(inspectionId)
           .collection(sectionName)
-          .add(checkList.toMap());
+          .doc('Default')
+          .set(checkList.toMap());
       return right('Section: $sectionName added successfully!');
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  FutureEither<String> deleteSection(
+    String companyId,
+    String inspectionId,
+    String sectionName,
+  ) async {
+    try {
+      await _companies
+          .doc(companyId)
+          .collection('inspections')
+          .doc(inspectionId)
+          .collection(sectionName)
+          .get()
+          .then((value) {
+        for (var doc in value.docs) {
+          print(doc.id);
+          doc.reference.delete();
+        }
+      });
+      await _storageRepository.deleteFolder(
+        companyId,
+        inspectionId,
+        sectionName,
+      );
+      await _companies
+          .doc(companyId)
+          .collection('inspections')
+          .doc(inspectionId)
+          .update({
+        "sections": FieldValue.arrayRemove([sectionName]),
+      });
+      return right('Section: $sectionName deleted successfully!');
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -280,6 +328,7 @@ class InspectionRepository {
     try {
       CheckListModel checkList = CheckListModel();
       checkList = checkList.copyWith(
+        id: checklistName,
         inspectionId: inspectionId,
         section: sectionName,
       );
@@ -296,5 +345,39 @@ class InspectionRepository {
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
+  }
+
+  //check if checklist exists by id
+  Future<bool> checkIfChecklistExists(
+    String companyId,
+    String inspectionId,
+    String sectionName,
+    String checklistId,
+  ) async {
+    final checklist = await _companies
+        .doc(companyId)
+        .collection('inspections')
+        .doc(inspectionId)
+        .collection(sectionName)
+        .doc(checklistId)
+        .get();
+    return checklist.exists;
+  }
+
+  //check if section exists by id
+  Future<bool> checkIfSectionExists(
+    String companyId,
+    String inspectionId,
+    String sectionName,
+  ) async {
+    final section = await _companies
+        .doc(companyId)
+        .collection('inspections')
+        .doc(inspectionId)
+        .get()
+        .then(
+          (value) => value.data()!['sections'].contains(sectionName),
+        );
+    return section.exists;
   }
 }
