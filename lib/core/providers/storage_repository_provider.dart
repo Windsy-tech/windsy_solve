@@ -59,4 +59,20 @@ class StorageRepository {
       return left(Failure(message: e.toString()));
     }
   }
+
+  FutureEither<bool> deleteFolder(
+      String companyId, String inspectionId, String sectionName,) async {
+    try {
+      await _firebaseStorage
+          .ref()
+          .child(companyId)
+          .child('inspections')
+          .child(inspectionId)
+          .child(sectionName)
+          .delete();
+      return right(true);
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
 }
