@@ -7,6 +7,7 @@ import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/reports_dashboard/widgets/report_list_tile.dart';
 import 'package:windsy_solve/models/inspection_model.dart';
+import 'package:windsy_solve/theme/color_palette.dart';
 
 class InspectionReports extends ConsumerWidget {
   const InspectionReports({super.key});
@@ -17,10 +18,18 @@ class InspectionReports extends ConsumerWidget {
     final user = ref.read(userProvider)!;
 
     print("ui rebuilt");
-
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
-        title: const Text("Inspection Reports"),
+        title: Text(
+          "Inspection Reports",
+          style: theme.textTheme.titleLarge,
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: () => ref.refresh(getUserInspectionProvider),
@@ -31,8 +40,11 @@ class InspectionReports extends ConsumerWidget {
       body: inspectionData.when(
         data: (inspections) {
           if (inspections.isEmpty) {
-            return const Center(
-              child: Text("No Inspection Reports Found"),
+            return Center(
+              child: Text(
+                "No Inspection Reports Found",
+                style: theme.textTheme.titleMedium,
+              ),
             );
           }
           return ListView.builder(
