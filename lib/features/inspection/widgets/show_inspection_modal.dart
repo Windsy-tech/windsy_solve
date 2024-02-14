@@ -50,9 +50,10 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: theme.colorScheme.surface,
           title: Text(
             "Enter Inspection Name",
-            style: theme.textTheme.headlineSmall,
+            style: theme.textTheme.titleSmall,
           ),
           content: TextField(
             controller: controller,
@@ -60,10 +61,8 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
             textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              hintText: 'Enter a Inspection Name',
-              hintStyle: theme.textTheme.bodyMedium,
             ),
           ),
           actions: [
@@ -124,7 +123,7 @@ class _InspectionBottomSheetState extends ConsumerState<InspectionBottomSheet>
           TabBar(
             controller: _tabController,
             labelStyle: theme.textTheme.bodyMedium,
-            labelColor: theme.colorScheme.onPrimary,
+            labelColor: theme.colorScheme.onSurface,
             tabs: const [
               Tab(
                 text: "New",
