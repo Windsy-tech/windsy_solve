@@ -9,7 +9,7 @@ class CheckListModel {
   String type;
   String checks;
   String notes;
-  List<dynamic> remarks;
+  List<dynamic> actions;
   int risk;
   String createdBy;
   DateTime createdAt;
@@ -27,7 +27,7 @@ class CheckListModel {
     this.type = "A.1",
     this.checks = "Visual Inspection",
     this.notes = "",
-    this.remarks = const [],
+    this.actions = const [],
     this.risk = 0,
     this.closed = false,
     this.createdBy = "",
@@ -44,7 +44,7 @@ class CheckListModel {
     String? type,
     String? checks,
     String? notes,
-    List<dynamic>? remarks,
+    List<dynamic>? actions,
     int? risk,
     String? createdBy,
     DateTime? createdAt,
@@ -60,7 +60,7 @@ class CheckListModel {
       type: type ?? this.type,
       checks: checks ?? this.checks,
       notes: notes ?? this.notes,
-      remarks: remarks ?? this.remarks,
+      actions: actions ?? this.actions,
       risk: risk ?? this.risk,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
@@ -79,7 +79,7 @@ class CheckListModel {
       'type': type,
       'checks': checks,
       'notes': notes,
-      'remarks': remarks,
+      'actions': actions,
       'risk': risk,
       'createdBy': createdBy,
       'createdAt': createdAt.millisecondsSinceEpoch,
@@ -98,7 +98,7 @@ class CheckListModel {
       type: map['type'] as String,
       checks: map['checks'] as String,
       notes: map['notes'] as String,
-      remarks: List<dynamic>.from((map['remarks'] as List<dynamic>)),
+      actions: List<dynamic>.from((map['actions'] as List<dynamic>)),
       risk: map['risk'] as int,
       createdBy: map['createdBy'] as String,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
@@ -110,7 +110,7 @@ class CheckListModel {
 
   @override
   String toString() {
-    return 'CheckListModel(id: $id, inspectionId: $inspectionId, section: $section, system: $system, type: $type, checks: $checks, notes: $notes, remarks: $remarks, risk: $risk, createdBy: $createdBy, createdAt: $createdAt, modifiedBy: $modifiedBy, modifiedAt: $modifiedAt, closed: $closed)';
+    return 'CheckListModel(id: $id, inspectionId: $inspectionId, section: $section, system: $system, type: $type, checks: $checks, notes: $notes, actions: $actions, risk: $risk, createdBy: $createdBy, createdAt: $createdAt, modifiedBy: $modifiedBy, modifiedAt: $modifiedAt, closed: $closed)';
   }
 
   @override
@@ -124,7 +124,7 @@ class CheckListModel {
         other.type == type &&
         other.checks == checks &&
         other.notes == notes &&
-        listEquals(other.remarks, remarks) &&
+        listEquals(other.actions, actions) &&
         other.risk == risk &&
         other.createdBy == createdBy &&
         other.createdAt == createdAt &&
@@ -142,7 +142,7 @@ class CheckListModel {
         type.hashCode ^
         checks.hashCode ^
         notes.hashCode ^
-        remarks.hashCode ^
+        actions.hashCode ^
         risk.hashCode ^
         createdBy.hashCode ^
         createdAt.hashCode ^
