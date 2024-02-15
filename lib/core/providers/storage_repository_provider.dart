@@ -3,7 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:windsy_solve/core/failure.dart';
+import 'package:windsy_solve/core/handler/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/type_defs.dart';
 
@@ -61,15 +61,13 @@ class StorageRepository {
   }
 
   FutureEither<bool> deleteFolder(
-      String companyId, String inspectionId, String sectionName,) async {
+    String companyId,
+    String inspectionId,
+    String sectionName,
+  ) async {
     try {
-      await _firebaseStorage
-          .ref()
-          .child(companyId)
-          .child('inspections')
-          .child(inspectionId)
-          .child(sectionName)
-          .delete();
+      String path = '$companyId/inspections/$inspectionId/$sectionName';
+      await _firebaseStorage.ref().child(path).delete();
       return right(true);
     } catch (e) {
       return left(Failure(message: e.toString()));
