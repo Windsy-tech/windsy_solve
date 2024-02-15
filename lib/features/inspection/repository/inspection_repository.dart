@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:windsy_solve/core/failure.dart';
+import 'package:windsy_solve/core/handler/failure.dart';
+import 'package:windsy_solve/core/handler/firebase_exceptions_handler.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/core/type_defs.dart';
@@ -286,18 +287,17 @@ class InspectionRepository {
     String sectionName,
   ) async {
     try {
-      await _companies
+      final sectionData = await _companies
           .doc(companyId)
           .collection('inspections')
           .doc(inspectionId)
           .collection(sectionName)
-          .get()
-          .then((value) {
-        for (var doc in value.docs) {
-          print(doc.id);
-          doc.reference.delete();
-        }
-      });
+          .get();
+
+      for (var doc in sectionData.docs) {
+        print(doc.id);
+        doc.reference.delete();
+      }
       await _storageRepository.deleteFolder(
         companyId,
         inspectionId,
@@ -354,14 +354,24 @@ class InspectionRepository {
     String sectionName,
     String checklistId,
   ) async {
-    final checklist = await _companies
-        .doc(companyId)
-        .collection('inspections')
-        .doc(inspectionId)
-        .collection(sectionName)
-        .doc(checklistId)
-        .get();
-    return checklist.exists;
+    try {
+      final checklist = await _companies
+          .doc(companyId)
+          .collection('inspections')
+          .doc(inspectionId)
+          .collection(sectionName)
+          .doc(checklistId)
+          .get();
+      return checklist.exists;
+    } on FirebaseException catch (e) {
+            String errorMessage = FirebaseExceptionHandler.handleException(e);
+      if (errorMessage == 'unavailable') {
+        throw Failure(message: 'Service unavailable. Please try again later.');
+      }
+      throw Failure(message: errorMessage);
+    } catch (e) {
+      return false;
+    }
   }
 
   //check if section exists by id
@@ -370,14 +380,24 @@ class InspectionRepository {
     String inspectionId,
     String sectionName,
   ) async {
-    final section = await _companies
-        .doc(companyId)
-        .collection('inspections')
-        .doc(inspectionId)
-        .get()
-        .then(
-          (value) => value.data()!['sections'].contains(sectionName),
-        );
-    return section.exists;
+    try {
+      final section = await _companies
+          .doc(companyId)
+          .collection('inspections')
+          .doc(inspectionId)
+          .get()
+          .then(
+            (value) => value.data()!['sections'].contains(sectionName),
+          );
+      return section.exists;
+    } on FirebaseException catch (e) {
+      String errorMessage = FirebaseExceptionHandler.handleException(e);
+      if (errorMessage == 'un-available') {
+        throw Failure(message: 'Service unavailable. Please try again later.');
+      }
+      throw Failure(message: errorMessage);
+    } catch (e) {
+      return false;
+    }
   }
 }
