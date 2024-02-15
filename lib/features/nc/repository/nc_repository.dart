@@ -3,21 +3,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:windsy_solve/core/failure.dart';
+import 'package:windsy_solve/core/handler/failure.dart';
+import 'package:windsy_solve/core/hive/adapters/nc_sync_task/nc_sync_task.dart';
+import 'package:windsy_solve/core/providers/connectivity_provider.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
+import 'package:windsy_solve/core/providers/sync_task/sync_task.dart';
 import 'package:windsy_solve/core/type_defs.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/user_model.dart';
 import 'package:windsy_solve/models/windfarm_model.dart';
 
 final ncRepositoryProvider = Provider<NCRepository>((ref) {
-  return NCRepository(firestore: ref.watch(firestoreProvider));
+  return NCRepository(
+    firestore: ref.watch(firestoreProvider),
+    localDatabase: ref.watch(localDataProvider),
+    connectivityProvider: ref.watch(connectivityProvider),
+  );
 });
 
 class NCRepository {
   final FirebaseFirestore _firestore;
+  final LocalDatabase _localDatabase;
+  final ConnectivityProvider _connectivityProvider;
 
-  NCRepository({required FirebaseFirestore firestore}) : _firestore = firestore;
+  NCRepository(
+      {required FirebaseFirestore firestore,
+      required LocalDatabase localDatabase,
+      required ConnectivityProvider connectivityProvider})
+      : _firestore = firestore,
+        _localDatabase = localDatabase,
+        _connectivityProvider = connectivityProvider;
 
   CollectionReference get _ncs => _firestore.collection('ncs');
   CollectionReference get _users => _firestore.collection('users');
@@ -77,6 +92,18 @@ class NCRepository {
     String userId,
     NCModel ncModel,
   ) async {
+    //check internet connection
+    if (await _connectivityProvider.connectivityStatus ==
+        ConnectivityStatus.offline) {
+      final ncSyncTask = NCSyncTask(
+        companyId: companyId,
+        ncModel: ncModel,
+        action: 'update',
+      );
+      await _localDatabase.saveNCSyncTask(ncSyncTask);
+      return right('No internet. Storing to local database!');
+    }
+
     try {
       await _companies
           .doc(companyId)
@@ -85,7 +112,13 @@ class NCRepository {
           .update(ncModel.toMap());
       return right('NC-${ncModel.id} updated successfully!');
     } on FirebaseException catch (e) {
-      throw e.message!;
+      final ncSyncTask = NCSyncTask(
+        companyId: companyId,
+        ncModel: ncModel,
+        action: 'update',
+      );
+      await _localDatabase.saveNCSyncTask(ncSyncTask);
+      return right('No internet. Storing to local database!');
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
