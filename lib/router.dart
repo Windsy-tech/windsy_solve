@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/auth/screens/login_screen.dart';
 import 'package:windsy_solve/features/home/screens/home_screen.dart';
+import 'package:windsy_solve/features/home/screens/pending_sync.dart';
 import 'package:windsy_solve/features/inspection/screens/check_list/check_list_screen.dart';
 import 'package:windsy_solve/features/inspection/screens/create_inspection_screen.dart';
 import 'package:windsy_solve/features/inspection/screens/edit_inspection_screen.dart';
@@ -41,6 +42,9 @@ final loggedInRoute = RouteMap(
         ),
     '/general-settings': (_) => const MaterialPage(
           child: GeneralSettings(),
+        ),
+    '/pending-sync': (_) => const MaterialPage(
+          child: PendingSync(),
         ),
     '/report-nc/new': (_) => const MaterialPage(
           child: ReportNCScreen(),
