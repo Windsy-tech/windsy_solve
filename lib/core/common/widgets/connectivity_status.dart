@@ -55,19 +55,19 @@ class _ConnectivityStatusState extends State<ConnectivityStatus> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: _connectivityResult == ConnectivityResult.none
-          ? const Icon(
-              Icons.wifi_off,
-              color: Colors.red,
-              size: 24.0,
-            )
-          : const Icon(
-              Icons.wifi,
-              color: Colors.green,
-              size: 24.0,
-            ),
+    return IconButton(
+      tooltip: _connectivityResult == ConnectivityResult.none
+          ? 'No Internet Connection'
+          : 'Internet Connected',
+      onPressed: () {},
+      icon: Icon(
+        _connectivityResult == ConnectivityResult.none
+            ? Icons.wifi_off
+            : Icons.wifi,
+        color: _connectivityResult == ConnectivityResult.none
+            ? Colors.red
+            : Colors.green,
+      ),
     );
   }
 }
