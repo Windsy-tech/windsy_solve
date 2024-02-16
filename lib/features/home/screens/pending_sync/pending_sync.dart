@@ -58,8 +58,12 @@ class PendingSync extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Non-Conformities : ${snapshot.data!.length}',
+                              'Non-Conformities',
                               style: theme.textTheme.titleMedium,
+                            ),
+                            Text(
+                              'Pending : ${snapshot.data!.length}',
+                              style: theme.textTheme.titleSmall,
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -78,6 +82,9 @@ class PendingSync extends ConsumerWidget {
                       ),
                     );
                   },
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 FutureBuilder(
                   future: syncInspectionTasks,
@@ -103,8 +110,12 @@ class PendingSync extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Inspections : ${snapshot.data!.length}',
+                              'Inspections',
                               style: theme.textTheme.titleMedium,
+                            ),
+                            Text(
+                              'Pending : ${snapshot.data!.length}',
+                              style: theme.textTheme.titleSmall,
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
