@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:windsy_solve/core/providers/firebase_providers.dart';
+import 'package:windsy_solve/core/providers/sync_task/sync_task_controller.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
+import 'package:windsy_solve/utils/date_time_utils.dart';
 
 class PendingSync extends ConsumerWidget {
   const PendingSync({super.key});
+
+  void _syncAll() {}
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    final syncNCTasks = ref.watch(localDataProvider).getNCSyncTasks();
+    final syncNCTasks = ref.watch(localDatabaseProvider).getNCSyncTasks();
     final syncInspectionTasks =
-        ref.watch(localDataProvider).getInspectionSyncTasks();
+        ref.watch(localDatabaseProvider).getInspectionSyncTasks();
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       extendBodyBehindAppBar: true,
@@ -20,6 +23,14 @@ class PendingSync extends ConsumerWidget {
         title: const Text('Pending Sync'),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: const Text(
+              'Sync All',
+            ),
+          ),
+        ],
       ),
       body: Container(
         height: size.height,
@@ -73,7 +84,20 @@ class PendingSync extends ConsumerWidget {
                                 itemCount: snapshot.data!.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  return Text(snapshot.data![index].ncModel.id);
+                                  return ListTile(
+                                    dense: true,
+                                    visualDensity: const VisualDensity(
+                                      vertical: -4,
+                                      horizontal: 0,
+                                    ),
+                                    title: Text(
+                                      snapshot.data![index].ncModel.id,
+                                      style: theme.textTheme.titleMedium,
+                                    ),
+                                    subtitle: Text(
+                                      'Updated at ${snapshot.data![index].ncModel.updatedAt.toDateTimeString()}',
+                                    ),
+                                  );
                                 },
                               ),
                             ),
