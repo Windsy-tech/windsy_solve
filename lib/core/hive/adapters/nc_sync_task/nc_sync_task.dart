@@ -9,13 +9,17 @@ class NCSyncTask {
   final String companyId;
 
   @HiveField(1)
-  final NCModel ncModel;
+  final String userId;
 
   @HiveField(2)
+  final NCModel ncModel;
+
+  @HiveField(3)
   final String action;
 
   NCSyncTask({
     required this.companyId,
+    required this.userId,
     required this.ncModel,
     required this.action,
   });

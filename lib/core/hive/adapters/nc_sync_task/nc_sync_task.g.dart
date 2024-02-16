@@ -18,20 +18,23 @@ class NCSyncTaskAdapter extends TypeAdapter<NCSyncTask> {
     };
     return NCSyncTask(
       companyId: fields[0] as String,
-      ncModel: fields[1] as NCModel,
-      action: fields[2] as String,
+      userId: fields[1] as String,
+      ncModel: fields[2] as NCModel,
+      action: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, NCSyncTask obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.companyId)
       ..writeByte(1)
-      ..write(obj.ncModel)
+      ..write(obj.userId)
       ..writeByte(2)
+      ..write(obj.ncModel)
+      ..writeByte(3)
       ..write(obj.action);
   }
 
