@@ -9,13 +9,17 @@ class InspectionSyncTask {
   final String companyId;
 
   @HiveField(1)
-  final InspectionModel inspectionModel;
+  final String userId;
 
   @HiveField(2)
+  final InspectionModel inspectionModel;
+
+  @HiveField(3)
   final String action;
 
   InspectionSyncTask({
     required this.companyId,
+    required this.userId,
     required this.inspectionModel,
     required this.action,
   });

@@ -18,20 +18,23 @@ class InspectionSyncTaskAdapter extends TypeAdapter<InspectionSyncTask> {
     };
     return InspectionSyncTask(
       companyId: fields[0] as String,
-      inspectionModel: fields[1] as InspectionModel,
-      action: fields[2] as String,
+      userId: fields[1] as String,
+      inspectionModel: fields[2] as InspectionModel,
+      action: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, InspectionSyncTask obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.companyId)
       ..writeByte(1)
-      ..write(obj.inspectionModel)
+      ..write(obj.userId)
       ..writeByte(2)
+      ..write(obj.inspectionModel)
+      ..writeByte(3)
       ..write(obj.action);
   }
 
