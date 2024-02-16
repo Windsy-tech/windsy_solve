@@ -4,7 +4,7 @@ class DateTimeUtils {
   }
 
   static String getFormattedTime(DateTime dateTime) {
-    return '${dateTime.hour}:${dateTime.minute}';
+    return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   static String getFormattedDateTime(DateTime dateTime) {
@@ -18,7 +18,7 @@ extension DateTimeExtension on DateTime {
   }
 
   String toTimeString() {
-    return '$hour:$minute';
+    return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 
   String toDateTimeString() {
