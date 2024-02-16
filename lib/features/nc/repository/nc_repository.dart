@@ -7,7 +7,7 @@ import 'package:windsy_solve/core/handler/failure.dart';
 import 'package:windsy_solve/core/hive/adapters/nc_sync_task/nc_sync_task.dart';
 import 'package:windsy_solve/core/providers/connectivity_provider.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
-import 'package:windsy_solve/core/providers/sync_task/sync_task.dart';
+import 'package:windsy_solve/core/providers/sync_task/sync_task_controller.dart';
 import 'package:windsy_solve/core/type_defs.dart';
 import 'package:windsy_solve/models/nc_model.dart';
 import 'package:windsy_solve/models/user_model.dart';
@@ -16,7 +16,7 @@ import 'package:windsy_solve/models/windfarm_model.dart';
 final ncRepositoryProvider = Provider<NCRepository>((ref) {
   return NCRepository(
     firestore: ref.watch(firestoreProvider),
-    localDatabase: ref.watch(localDataProvider),
+    localDatabase: ref.watch(localDatabaseProvider),
     connectivityProvider: ref.watch(connectivityProvider),
   );
 });
@@ -97,6 +97,7 @@ class NCRepository {
         ConnectivityStatus.offline) {
       final ncSyncTask = NCSyncTask(
         companyId: companyId,
+        userId: userId,
         ncModel: ncModel,
         action: 'update',
       );
@@ -114,6 +115,7 @@ class NCRepository {
     } on FirebaseException catch (e) {
       final ncSyncTask = NCSyncTask(
         companyId: companyId,
+        userId: userId,
         ncModel: ncModel,
         action: 'update',
       );
