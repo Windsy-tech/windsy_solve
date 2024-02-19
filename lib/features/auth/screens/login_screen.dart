@@ -10,26 +10,31 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(authControllerProvider);
-
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      extendBodyBehindAppBar: true,
       body: isLoading
           ? const Loader()
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Image.asset(
-                        Constants.pLogoPath,
+          : Container(
+              color: theme.colorScheme.surface,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: Image.asset(
+                          Constants.pLogoPath,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const SignInForm(),
-                  ],
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const SignInForm(),
+                    ],
+                  ),
                 ),
               ),
             ),
