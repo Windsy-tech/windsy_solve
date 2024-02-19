@@ -16,7 +16,7 @@ import 'package:windsy_solve/models/windfarm_model.dart';
 final ncRepositoryProvider = Provider<NCRepository>((ref) {
   return NCRepository(
     firestore: ref.watch(firestoreProvider),
-    localDatabase: ref.watch(localDatabaseProvider),
+    localDatabase: ref.watch(testProvider),
     connectivityProvider: ref.watch(connectivityProvider),
   );
 });
@@ -113,13 +113,6 @@ class NCRepository {
           .update(ncModel.toMap());
       return right('NC-${ncModel.id} updated successfully!');
     } on FirebaseException catch (e) {
-      final ncSyncTask = NCSyncTask(
-        companyId: companyId,
-        userId: userId,
-        ncModel: ncModel,
-        action: 'update',
-      );
-      await _localDatabase.saveNCSyncTask(ncSyncTask);
       return right('No internet. Storing to local database!');
     } catch (e) {
       return left(Failure(message: e.toString()));
