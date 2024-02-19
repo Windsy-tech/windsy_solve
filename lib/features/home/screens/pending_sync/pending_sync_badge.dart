@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:windsy_solve/core/providers/sync_task/sync_task_controller.dart';
+import 'package:windsy_solve/features/home/screens/pending_sync/controller/sync_task_controller.dart';
 
 class PendingSyncBadge extends ConsumerWidget {
   const PendingSyncBadge({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final syncTasks = ref.watch(localDatabaseProvider).getTotalSyncTasksCount();
+    final syncTasks =
+        ref.watch(syncTaskControllerProvider).getTotalSyncTasksCount();
     return FutureBuilder(
       future: syncTasks,
       builder: (context, s) {
