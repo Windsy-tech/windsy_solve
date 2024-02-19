@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:windsy_solve/core/providers/sync_task/sync_task_controller.dart';
+import 'package:windsy_solve/features/home/screens/pending_sync/controller/sync_task_controller.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
 
 class PendingSync extends ConsumerWidget {
   const PendingSync({super.key});
 
-  void _syncAll() {}
+  void _syncAll(WidgetRef ref) {
+    ref.read(syncTaskControllerProvider).syncNCTasks(ref);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    final syncNCTasks = ref.watch(localDatabaseProvider).getNCSyncTasks();
+    final syncNCTasks = ref.watch(syncTaskControllerProvider).getNCSyncTasks();
     final syncInspectionTasks =
-        ref.watch(localDatabaseProvider).getInspectionSyncTasks();
+        ref.watch(syncTaskControllerProvider).getInspectionSyncTasks();
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       extendBodyBehindAppBar: true,
@@ -25,7 +27,7 @@ class PendingSync extends ConsumerWidget {
         elevation: 0,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () => _syncAll(ref),
             child: const Text(
               'Sync All',
             ),
