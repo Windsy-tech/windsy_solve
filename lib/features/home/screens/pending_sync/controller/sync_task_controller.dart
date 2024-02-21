@@ -13,6 +13,11 @@ final syncTaskControllerProvider = Provider((ref) {
   );
 });
 
+final getTotalSyncTasksCountProvider = StreamProvider<int>((ref) {
+  final syncTaskController = ref.watch(syncTaskControllerProvider);
+  return syncTaskController.getTotalSyncTasksCountStream();
+});
+
 class SyncTaskController {
   final SyncTaskRepository _syncTaskRepository;
 
@@ -69,6 +74,13 @@ class SyncTaskController {
     final box = await Hive.openBox<InspectionSyncTask>('inspection_sync_tasks');
     final box2 = await Hive.openBox<NCSyncTask>('nc_sync_tasks');
     return box.length + box2.length;
+  }
+
+  //Steam get the number of pending sync tasks count
+  Stream<int> getTotalSyncTasksCountStream() async* {
+    final box = await Hive.openBox<InspectionSyncTask>('inspection_sync_tasks');
+    final box2 = await Hive.openBox<NCSyncTask>('nc_sync_tasks');
+    yield box.length + box2.length;
   }
 
   Future<void> clearAllSyncTasks() async {
