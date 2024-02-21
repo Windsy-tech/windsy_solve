@@ -364,7 +364,7 @@ class InspectionRepository {
           .get();
       return checklist.exists;
     } on FirebaseException catch (e) {
-            String errorMessage = FirebaseExceptionHandler.handleException(e);
+      String errorMessage = FirebaseExceptionHandler.handleException(e);
       if (errorMessage == 'unavailable') {
         throw Failure(message: 'Service unavailable. Please try again later.');
       }
