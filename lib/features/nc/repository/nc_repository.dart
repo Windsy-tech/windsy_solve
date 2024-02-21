@@ -39,23 +39,19 @@ class NCRepository {
   CollectionReference get _windFarms => _firestore.collection('windfarms');
   CollectionReference get _companies => _firestore.collection('companies');
 
-  FutureEither<int> createNC(String companyId, NCModel ncModel) async {
+  FutureEither<String> createNC(String companyId, NCModel ncModel) async {
     try {
-      final getLatestId = await _createNewNCId(companyId);
-      var newId = getLatestId;
-
-      // Update ncModel with the new ID
-      ncModel = ncModel.copyWith(id: newId.toString());
-
-      if (newId != 0) {
+      bool isExists = await _checkIfNCIdExists(companyId, ncModel.id);
+      if (isExists) {
         await _companies
             .doc(companyId)
             .collection('ncs')
-            .doc(newId.toString())
+            .doc(ncModel.id)
             .set(ncModel.toMap());
+      } else {
+        return left(Failure(message: 'NC ${ncModel.id} already exists!'));
       }
-
-      return right(newId);
+      return right(ncModel.id);
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -63,27 +59,14 @@ class NCRepository {
     }
   }
 
-  Future<int> _createNewNCId(String companyId) async {
-    try {
-      final querySnapshot = await _companies
-          .doc(companyId)
-          .collection('ncs')
-          .orderBy('id', descending: true)
-          .limit(1) // Limit the result to one document
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        final oldId = int.parse(querySnapshot.docs.first.data()['id']);
-        return oldId + 1;
-      } else {
-        // If no documents are found, start with ID 1
-        return 1001;
-      }
-    } on FirebaseException catch (e) {
-      throw e.message!;
-    } catch (e) {
-      return 0;
-    }
+  //check if the nc id exists as future
+  Future<bool> _checkIfNCIdExists(
+    String companyId,
+    String ncId,
+  ) async {
+    final nc =
+        await _companies.doc(companyId).collection('ncs').doc(ncId).get();
+    return nc.exists;
   }
 
   //Update NC data by id
@@ -93,7 +76,7 @@ class NCRepository {
     NCModel ncModel,
   ) async {
     //check internet connection
-    if (await _connectivityProvider.connectivityStatus ==
+/*     if (await _connectivityProvider.connectivityStatus ==
         ConnectivityStatus.offline) {
       final ncSyncTask = NCSyncTask(
         companyId: companyId,
@@ -103,7 +86,7 @@ class NCRepository {
       );
       await _localDatabase.saveNCSyncTask(ncSyncTask);
       return right('No internet. Storing to local database!');
-    }
+    } */
 
     try {
       await _companies
