@@ -10,7 +10,9 @@ import 'package:windsy_solve/models/windfarm_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 
 class ReportNCScreen extends ConsumerStatefulWidget {
-  const ReportNCScreen({super.key});
+  final String title;
+
+  const ReportNCScreen({required this.title, super.key});
   static const routeName = '/non-conformity';
 
   @override
@@ -34,7 +36,7 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
           context,
           user!.companyId,
           NCModel(
-            id: '',
+            id: widget.title,
             title: titleController.text,
             problemDescription: problemDescriptionController.text,
             status: status,
@@ -72,7 +74,7 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Report Non-Conformity',
+          'Non-Conformity: ${widget.title}',
           style: theme.textTheme.titleLarge,
         ),
         backgroundColor: Colors.transparent,
