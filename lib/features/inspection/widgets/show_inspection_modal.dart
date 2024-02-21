@@ -7,8 +7,6 @@ import 'package:windsy_solve/features/inspection/controller/inspection_controlle
 showInspectionModelBottomSheet(BuildContext context) {
   return showModalBottomSheet(
     context: context,
-    //isScrollControlled: true,
-    // backgroundColor: Colors.transparent,
     builder: (context) {
       return const InspectionBottomSheet();
     },
