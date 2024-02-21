@@ -4,6 +4,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/widgets/show_inspection_modal.dart';
+import 'package:windsy_solve/features/nc/widgets/show_nc_modal.dart';
 import 'package:windsy_solve/theme/pallete.dart';
 
 class DrawerWidget extends ConsumerWidget {
@@ -14,7 +15,7 @@ class DrawerWidget extends ConsumerWidget {
   }
 
   void navigateToReportNCPage(BuildContext context) {
-    Routemaster.of(context).push(Constants.rReportNC);
+    showNCModelBottomSheet(context);
     Scaffold.of(context).closeDrawer();
   }
 
