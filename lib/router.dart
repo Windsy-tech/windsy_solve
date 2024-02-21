@@ -45,8 +45,10 @@ final loggedInRoute = RouteMap(
     '/pending-sync': (_) => const MaterialPage(
           child: PendingSync(),
         ),
-    '/report-nc/new': (_) => const MaterialPage(
-          child: ReportNCScreen(),
+    '/report-nc/new': (routeData) => MaterialPage(
+          child: ReportNCScreen(
+            title: routeData.queryParameters['title']!,
+          ),
         ),
     '/non-conformity/:id/': (routeData) {
       return MaterialPage(
