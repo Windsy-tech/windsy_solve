@@ -34,52 +34,55 @@ class HomeNavigations extends ConsumerWidget {
 
     return SizedBox(
       width: size.width,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              HomeNavigationButton(
-                title: "NC",
-                icon: Constants.iNCReports,
-                onTap: () => navigateToNCReportsPage(context),
-                count: ncCount.value ?? 0,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              HomeNavigationButton(
-                title: "8D",
-                icon: Constants.i8DReports,
-                onTap: () => navigateTo8DReportsPage(context),
-                count: d8Count.value ?? 0,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              HomeNavigationButton(
-                title: "Inspection",
-                icon: Constants.iInspectionReports,
-                count: inspectionCount.value ?? 0,
-                onTap: () => navigateToInspectionReportsPage(context),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              HomeNavigationButton(
-                title: "Safety",
-                icon: Constants.iSafetyReports,
-                count: safetyCount.value ?? 0,
-                onTap: () => navigateTo8DReportsPage(context),
-              ),
-            ],
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                HomeNavigationButton(
+                  title: "NC",
+                  icon: Constants.iNCReports,
+                  onTap: () => navigateToNCReportsPage(context),
+                  count: ncCount.value ?? 0,
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                HomeNavigationButton(
+                  title: "8D",
+                  icon: Constants.i8DReports,
+                  onTap: () => navigateTo8DReportsPage(context),
+                  count: d8Count.value ?? 0,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                HomeNavigationButton(
+                  title: "Inspection",
+                  icon: Constants.iInspectionReports,
+                  count: inspectionCount.value ?? 0,
+                  onTap: () => navigateToInspectionReportsPage(context),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                HomeNavigationButton(
+                  title: "Safety",
+                  icon: Constants.iSafetyReports,
+                  count: safetyCount.value ?? 0,
+                  onTap: () => navigateTo8DReportsPage(context),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
