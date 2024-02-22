@@ -6,8 +6,7 @@ import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/reports_dashboard/widgets/report_list_tile.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/models/nc_model.dart';
-import 'package:windsy_solve/theme/color_palette.dart';
+import 'package:windsy_solve/models/nc/nc_model.dart';
 
 class NCReports extends ConsumerWidget {
   const NCReports({super.key});
@@ -16,8 +15,6 @@ class NCReports extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ncData = ref.watch(getUserNCProvider);
     final user = ref.read(userProvider)!;
-
-    print("ui rebuilt");
     final theme = Theme.of(context);
 
     return Scaffold(
