@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:windsy_solve/core/constants/firebase_constants.dart';
 import 'package:windsy_solve/core/handler/failure.dart';
 import 'package:windsy_solve/core/type_defs.dart';
-import 'package:windsy_solve/models/user_model.dart';
+import 'package:windsy_solve/models/common/user_model.dart';
 
 final userProfileRepositoryProvider = Provider<UserProfileRepository>(
   (ref) => UserProfileRepository(
