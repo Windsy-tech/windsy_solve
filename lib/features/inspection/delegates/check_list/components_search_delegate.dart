@@ -4,7 +4,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/inspection/controller/check_list_controller.dart';
-import 'package:windsy_solve/models/checklist_model.dart';
+import 'package:windsy_solve/models/inspection/checklist_model.dart';
 
 class CheckListComponentSearchDelegate extends SearchDelegate {
   final WidgetRef ref;

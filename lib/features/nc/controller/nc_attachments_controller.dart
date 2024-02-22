@@ -6,9 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
-import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 import 'package:windsy_solve/features/nc/repository/nc_attachment_repository.dart';
-import 'package:windsy_solve/models/attachment_model.dart';
+import 'package:windsy_solve/models/common/attachment_model.dart';
 import 'package:windsy_solve/utils/snack_bar.dart';
 
 final ncAttachmentControllerProvider =

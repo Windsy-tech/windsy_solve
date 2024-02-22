@@ -5,7 +5,7 @@ import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/inspection/screens/check_list/check_list_screen.dart';
-import 'package:windsy_solve/models/section_model.dart';
+import 'package:windsy_solve/models/inspection/section_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 
 class InspectionSectionList extends ConsumerStatefulWidget {

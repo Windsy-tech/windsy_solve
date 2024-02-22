@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/inspection/controller/check_list_attachments_controller.dart';
-import 'package:windsy_solve/models/attachment_model.dart';
-import 'package:windsy_solve/models/checklist_model.dart';
+import 'package:windsy_solve/models/common/attachment_model.dart';
+import 'package:windsy_solve/models/inspection/checklist_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 import 'package:windsy_solve/utils/progress_count.dart';
 

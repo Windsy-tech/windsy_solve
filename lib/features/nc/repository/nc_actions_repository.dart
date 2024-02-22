@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:windsy_solve/core/handler/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/type_defs.dart';
-import 'package:windsy_solve/models/nc_actions_model.dart';
+import 'package:windsy_solve/models/nc/nc_actions_model.dart';
 
 final ncActionsRepositoryProvider = Provider<NCActionsRepository>((ref) {
   return NCActionsRepository(firestore: ref.watch(firestoreProvider));
@@ -17,9 +17,8 @@ class NCActionsRepository {
       : _firestore = firestore;
 
   CollectionReference get _companies => _firestore.collection('companies');
-  CollectionReference get _ncActions => _firestore.collection('ncActions');
 
-  FutureVoid addActionToNC(
+  FutureEither addActionToNC(
     String companyId,
     NCActionsModel ncActionsModel,
   ) async {

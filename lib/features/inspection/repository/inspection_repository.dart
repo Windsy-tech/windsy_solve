@@ -6,9 +6,9 @@ import 'package:windsy_solve/core/handler/firebase_exceptions_handler.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/core/type_defs.dart';
-import 'package:windsy_solve/models/checklist_model.dart';
-import 'package:windsy_solve/models/inspection_model.dart';
-import 'package:windsy_solve/models/inspection_templates_model.dart';
+import 'package:windsy_solve/models/inspection/checklist_model.dart';
+import 'package:windsy_solve/models/inspection/inspection_model.dart';
+import 'package:windsy_solve/models/inspection/inspection_templates_model.dart';
 
 final inspectionRepositoryProvider = Provider<InspectionRepository>((ref) {
   return InspectionRepository(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/features/nc/repository/nc_actions_repository.dart';
-import 'package:windsy_solve/models/nc_actions_model.dart';
+import 'package:windsy_solve/models/nc/nc_actions_model.dart';
 import 'package:windsy_solve/utils/snack_bar.dart';
 
 final ncActionsControllerProvider = Provider<NCActionsController>((ref) {

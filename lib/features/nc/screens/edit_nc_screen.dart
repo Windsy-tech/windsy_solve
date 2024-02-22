@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:windsy_solve/core/common/alert_dialog.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/core/common/warning_alert.dart';
@@ -10,8 +9,8 @@ import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_attachments.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
-import 'package:windsy_solve/models/nc_model.dart';
-import 'package:windsy_solve/models/windfarm_model.dart';
+import 'package:windsy_solve/models/common/windfarm_model.dart';
+import 'package:windsy_solve/models/nc/nc_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 
 class NCEditScreen extends ConsumerStatefulWidget {
@@ -175,7 +174,7 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                             windFarm,
                             onSelected: (windFarm) {
                               setState(() {
-                                this.windFarm = windFarm;
+                                this.windFarm = windFarm as WindFarmModel;
                               });
                             },
                           ),

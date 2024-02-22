@@ -4,8 +4,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:windsy_solve/core/handler/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/type_defs.dart';
-import 'package:windsy_solve/models/attachment_model.dart';
-import 'package:windsy_solve/models/checklist_model.dart';
+import 'package:windsy_solve/models/common/attachment_model.dart';
+import 'package:windsy_solve/models/inspection/checklist_model.dart';
 
 final checkListAttachmentRepositoryProvider =
     Provider<CheckListAttachmentRepository>((ref) {

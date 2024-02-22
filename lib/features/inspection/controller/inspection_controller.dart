@@ -5,9 +5,10 @@ import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 
 import 'package:windsy_solve/features/inspection/repository/inspection_repository.dart';
-import 'package:windsy_solve/models/inspection_model.dart';
-import 'package:windsy_solve/models/inspection_templates_model.dart';
-import 'package:windsy_solve/models/section_model.dart';
+import 'package:windsy_solve/models/inspection/inspection_model.dart';
+import 'package:windsy_solve/models/inspection/inspection_templates_model.dart';
+import 'package:windsy_solve/models/inspection/section_model.dart';
+
 import 'package:windsy_solve/utils/snack_bar.dart';
 
 final inspectionControllerProvider =

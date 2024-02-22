@@ -5,8 +5,8 @@ import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_assign.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_wind_farm.dart';
-import 'package:windsy_solve/models/nc_model.dart';
-import 'package:windsy_solve/models/windfarm_model.dart';
+import 'package:windsy_solve/models/common/windfarm_model.dart';
+import 'package:windsy_solve/models/nc/nc_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 
 class ReportNCScreen extends ConsumerStatefulWidget {
@@ -126,7 +126,7 @@ class _CreateConsumerReportNCScreenState extends ConsumerState<ReportNCScreen> {
                     null,
                     onSelected: (windFarm) {
                       setState(() {
-                        this.windFarm = windFarm;
+                        this.windFarm = windFarm as WindFarmModel;
                       });
                     },
                   ),

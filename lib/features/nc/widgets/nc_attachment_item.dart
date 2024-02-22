@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/nc/controller/nc_attachments_controller.dart';
 import 'package:windsy_solve/features/nc/widgets/nc_show_attachment.dart';
-import 'package:windsy_solve/models/attachment_model.dart';
+import 'package:windsy_solve/models/common/attachment_model.dart';
 import 'package:windsy_solve/utils/text_utils.dart';
+
 
 class AttachmentItem extends ConsumerWidget {
   final String ncId;

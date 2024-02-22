@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:windsy_solve/models/inspection_model.dart';
+import 'package:windsy_solve/models/inspection/inspection_model.dart';
 
 class InspectionModelAdapter extends TypeAdapter<InspectionModel> {
   @override

@@ -7,8 +7,8 @@ import 'package:uuid/uuid.dart';
 import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/repository/check_list_attachment_repository.dart';
-import 'package:windsy_solve/models/attachment_model.dart';
-import 'package:windsy_solve/models/checklist_model.dart';
+import 'package:windsy_solve/models/common/attachment_model.dart';
+import 'package:windsy_solve/models/inspection/checklist_model.dart';
 import 'package:windsy_solve/utils/snack_bar.dart';
 
 final checkListAttachmentControllerProvider =

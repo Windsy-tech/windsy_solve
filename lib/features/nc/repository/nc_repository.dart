@@ -4,14 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:windsy_solve/core/handler/failure.dart';
-import 'package:windsy_solve/core/hive/adapters/nc_sync_task/nc_sync_task.dart';
 import 'package:windsy_solve/core/providers/connectivity_provider.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/providers/sync_task/sync_task_controller.dart';
 import 'package:windsy_solve/core/type_defs.dart';
-import 'package:windsy_solve/models/nc_model.dart';
-import 'package:windsy_solve/models/user_model.dart';
-import 'package:windsy_solve/models/windfarm_model.dart';
+import 'package:windsy_solve/models/common/user_model.dart';
+import 'package:windsy_solve/models/common/windfarm_model.dart';
+import 'package:windsy_solve/models/nc/nc_model.dart';
+
 
 final ncRepositoryProvider = Provider<NCRepository>((ref) {
   return NCRepository(
@@ -36,7 +36,6 @@ class NCRepository {
 
   CollectionReference get _ncs => _firestore.collection('ncs');
   CollectionReference get _users => _firestore.collection('users');
-  CollectionReference get _windFarms => _firestore.collection('windfarms');
   CollectionReference get _companies => _firestore.collection('companies');
 
   FutureEither<String> createNC(String companyId, NCModel ncModel) async {

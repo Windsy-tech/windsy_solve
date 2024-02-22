@@ -11,7 +11,7 @@ import 'package:windsy_solve/core/hive/adapters/inspection_sync_task/inspection_
 import 'package:windsy_solve/core/hive/adapters/nc_sync_task/nc_adapter.dart';
 import 'package:windsy_solve/core/hive/adapters/nc_sync_task/nc_sync_task.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
-import 'package:windsy_solve/models/user_model.dart';
+import 'package:windsy_solve/models/common/user_model.dart';
 import 'package:windsy_solve/router.dart';
 import 'package:windsy_solve/theme/provider/theme_provider.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;

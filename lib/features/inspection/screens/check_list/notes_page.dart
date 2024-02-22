@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/inspection/controller/check_list_controller.dart';
-import 'package:windsy_solve/models/checklist_model.dart';
+import 'package:windsy_solve/models/inspection/checklist_model.dart';
 
 // ignore: must_be_immutable
 class CheckListNotesPage extends ConsumerStatefulWidget {

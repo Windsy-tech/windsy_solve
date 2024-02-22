@@ -9,8 +9,8 @@ import 'package:windsy_solve/features/inspection/widgets/inspection_end_date.dar
 import 'package:windsy_solve/features/inspection/widgets/inspection_section.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_start_date.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_wind_farm.dart';
-import 'package:windsy_solve/models/inspection_model.dart';
-import 'package:windsy_solve/models/windfarm_model.dart';
+import 'package:windsy_solve/models/common/windfarm_model.dart';
+import 'package:windsy_solve/models/inspection/inspection_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 
 class EditInspectionScreen extends ConsumerStatefulWidget {
@@ -142,7 +142,7 @@ class _CreateConsumerEditInspectionScreenState
                             null,
                             onSelected: (windFarm) {
                               setState(() {
-                                this.windFarm = windFarm;
+                                this.windFarm = windFarm as WindFarmModel;
                               });
                             },
                           ),

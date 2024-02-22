@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:uuid/uuid.dart';
 import 'package:windsy_solve/core/handler/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/type_defs.dart';
-import 'package:windsy_solve/models/attachment_model.dart';
+import 'package:windsy_solve/models/common/attachment_model.dart';
 
 final ncAttachmentRepositoryProvider = Provider<NCAttachmentRepository>((ref) {
   return NCAttachmentRepository(firestore: ref.watch(firestoreProvider));
@@ -17,8 +16,6 @@ class NCAttachmentRepository {
   NCAttachmentRepository({required FirebaseFirestore firestore})
       : _firestore = firestore;
 
-  CollectionReference get _ncs => _firestore.collection('ncs');
-  CollectionReference get _users => _firestore.collection('users');
   CollectionReference get _companies => _firestore.collection('companies');
 
   //add Attachment

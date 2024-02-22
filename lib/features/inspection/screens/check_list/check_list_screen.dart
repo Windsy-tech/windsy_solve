@@ -13,7 +13,7 @@ import 'package:windsy_solve/features/inspection/screens/check_list/risk_page.da
 import 'package:windsy_solve/features/inspection/screens/check_list/type_page.dart';
 import 'package:windsy_solve/features/inspection/widgets/check_list/check_list_attachments.dart';
 import 'package:windsy_solve/features/inspection/widgets/check_list/check_list_listtile.dart';
-import 'package:windsy_solve/models/checklist_model.dart';
+import 'package:windsy_solve/models/inspection/checklist_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 
 class CheckListScreen extends ConsumerStatefulWidget {

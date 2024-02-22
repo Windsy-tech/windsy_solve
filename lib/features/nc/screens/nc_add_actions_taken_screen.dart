@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/nc/controller/nc_actions_controller.dart';
-import 'package:windsy_solve/models/nc_actions_model.dart';
+import 'package:windsy_solve/models/nc/nc_actions_model.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
 
 class AddNCActionTaken extends ConsumerStatefulWidget {

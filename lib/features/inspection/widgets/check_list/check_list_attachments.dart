@@ -7,7 +7,7 @@ import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/inspection/controller/check_list_attachments_controller.dart';
 import 'package:windsy_solve/features/inspection/widgets/check_list/check_list_attachment_item.dart';
-import 'package:windsy_solve/models/checklist_model.dart';
+import 'package:windsy_solve/models/inspection/checklist_model.dart';
 
 class CheckListAttachments extends ConsumerStatefulWidget {
   final CheckListModel checkList;

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:windsy_solve/features/auth/respository/auth_repository.dart';
-import 'package:windsy_solve/models/user_model.dart';
+import 'package:windsy_solve/models/common/user_model.dart';
 import 'package:windsy_solve/utils/snack_bar.dart';
 
 final userProvider = StateProvider<UserModel?>((ref) => null);

@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:windsy_solve/models/nc_model.dart';
+import 'package:windsy_solve/models/nc/nc_model.dart';
 
 class NCModelAdapter extends TypeAdapter<NCModel> {
   @override

@@ -6,9 +6,9 @@ import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/repository/nc_repository.dart';
-import 'package:windsy_solve/models/nc_model.dart';
-import 'package:windsy_solve/models/user_model.dart';
-import 'package:windsy_solve/models/windfarm_model.dart';
+import 'package:windsy_solve/models/common/user_model.dart';
+import 'package:windsy_solve/models/common/windfarm_model.dart';
+import 'package:windsy_solve/models/nc/nc_model.dart';
 import 'package:windsy_solve/utils/snack_bar.dart';
 
 final ncControllerProvider = StateNotifierProvider<NCController, bool>((ref) {

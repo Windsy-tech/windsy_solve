@@ -4,7 +4,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/models/windfarm_model.dart';
+import 'package:windsy_solve/models/common/windfarm_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
 import 'package:windsy_solve/utils/text_utils.dart';
 
