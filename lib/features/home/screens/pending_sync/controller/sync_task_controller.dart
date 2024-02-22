@@ -3,7 +3,6 @@ import 'package:hive/hive.dart';
 import 'package:windsy_solve/core/hive/adapters/inspection_sync_task/inspection_sync_task.dart';
 import 'package:windsy_solve/core/hive/adapters/nc_sync_task/nc_sync_task.dart';
 import 'package:windsy_solve/features/home/screens/pending_sync/repository/sync_task_repository.dart';
-import 'package:windsy_solve/features/nc/repository/nc_repository.dart';
 
 final syncTaskControllerProvider = Provider((ref) {
   final syncTaskRepository = ref.watch(syncTaskRepositoryProvider);
