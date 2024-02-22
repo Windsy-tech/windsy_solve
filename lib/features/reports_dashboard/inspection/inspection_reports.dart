@@ -6,8 +6,7 @@ import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/reports_dashboard/widgets/report_list_tile.dart';
-import 'package:windsy_solve/models/inspection_model.dart';
-import 'package:windsy_solve/theme/color_palette.dart';
+import 'package:windsy_solve/models/inspection/inspection_model.dart';
 
 class InspectionReports extends ConsumerWidget {
   const InspectionReports({super.key});
@@ -16,10 +15,7 @@ class InspectionReports extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final inspectionData = ref.watch(getUserInspectionProvider);
     final user = ref.read(userProvider)!;
-
-    print("ui rebuilt");
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       extendBodyBehindAppBar: false,
