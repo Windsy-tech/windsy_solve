@@ -150,4 +150,16 @@ class CheckListModel {
         modifiedAt.hashCode ^
         closed.hashCode;
   }
+
+  String getIndex(int index) {
+    switch (index) {
+      case 0:
+        return system;
+      case 1:
+        return checks;
+      case 2:
+        return notes;
+    }
+    return '';
+  }
 }
