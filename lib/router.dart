@@ -10,7 +10,9 @@ import 'package:windsy_solve/features/inspection/screens/inspection_section_list
 import 'package:windsy_solve/features/nc/screens/create_nc_screen.dart';
 import 'package:windsy_solve/features/nc/screens/edit_nc_screen.dart';
 import 'package:windsy_solve/features/nc/screens/nc_add_actions_taken_screen.dart';
+import 'package:windsy_solve/features/reports_dashboard/inspection/inspection_generate_report.dart';
 import 'package:windsy_solve/features/reports_dashboard/inspection/inspection_reports.dart';
+import 'package:windsy_solve/features/reports_dashboard/nc/nc_generate_report.dart';
 import 'package:windsy_solve/features/reports_dashboard/nc/nc_reports.dart';
 import 'package:windsy_solve/features/settings/screens/general_setting_screen.dart';
 import 'package:windsy_solve/features/settings/screens/settings_screen.dart';
@@ -80,7 +82,7 @@ final loggedInRoute = RouteMap(
           ),
         ),
     '/inspection/section/:sectionname': (routeData) {
-      return MaterialPage(
+      return FancyAnimationPage(
         child: InspectionSectionList(
           inspectionId: routeData.queryParameters['id']!,
           sectionName: routeData.pathParameters['sectionname']!,
@@ -88,7 +90,7 @@ final loggedInRoute = RouteMap(
       );
     },
     'check/:checkid': (routeData) {
-      return MaterialPage(
+      return FancyAnimationPage(
         child: CheckListScreen(
           inspectionId: routeData.queryParameters['inspectionId']!,
           checkId: routeData.pathParameters['checkid']!,
@@ -99,5 +101,34 @@ final loggedInRoute = RouteMap(
     '/reports-inspection': (_) => const MaterialPage(
           child: InspectionReports(),
         ),
+    '/generate-nc-report': (_) => const MaterialPage(
+          child: NCGenerateReport(),
+        ),
+    '/generate-inspection-report': (_) => const MaterialPage(
+          child: InspectionGenerateReport(),
+        ),
   },
 );
+
+// For custom animations, just use the existing Flutter [Page] and [Route] objects
+class FancyAnimationPage<T> extends Page<T> {
+  final Widget child;
+
+  const FancyAnimationPage({required this.child});
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return PageRouteBuilder(
+      settings: this,
+      pageBuilder: (context, animation, animation2) {
+        final tween = Tween(begin: 0.0, end: 1.0);
+        final curveTween = CurveTween(curve: Curves.fastLinearToSlowEaseIn);
+
+        return FadeTransition(
+          opacity: animation.drive(curveTween).drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+}
