@@ -6,3 +6,7 @@ String downloadProgressIndicator(ImageChunkEvent? loadingProgress) {
       ? "${((loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!) * 100).toInt().toString()} %"
       : "";
 }
+
+String downloadProgressIndicatorForFile(double totalBytes) {
+  return "${totalBytes.toInt()} %";
+}
