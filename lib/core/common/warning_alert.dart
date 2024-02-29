@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/common/alert_dialog.dart';
 
 Future showWarningExitAlert(BuildContext context) async {
@@ -8,7 +9,9 @@ Future showWarningExitAlert(BuildContext context) async {
     content: 'Are you sure you want to exit?',
     defaultActionText: 'Yes',
   );
-  if (context.mounted) Navigator.pop(context);
+  if (context.mounted) {
+    Routemaster.of(context).history.back();
+  }
 }
 
 Future showWarningSaveAlertDialog(BuildContext context) {
