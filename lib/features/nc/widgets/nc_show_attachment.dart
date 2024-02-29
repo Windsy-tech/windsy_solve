@@ -31,7 +31,6 @@ class _CreateConsumerShowAttachmentState extends ConsumerState<ShowAttachment> {
   }
 
   void updateComment(BuildContext context) {
-    print(_controller.text);
     ref.read(ncAttachmentControllerProvider.notifier).updateAttachmentComment(
           context: context,
           ncId: widget.ncId,
