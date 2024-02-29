@@ -11,6 +11,7 @@ class ReportListTile extends ConsumerWidget {
     required this.title,
     required this.windFarm,
     required this.createdAt,
+    required this.onTapGenerateReport,
     required this.onTapClose,
     required this.onTapDelete,
     required this.onTap,
@@ -21,6 +22,7 @@ class ReportListTile extends ConsumerWidget {
   final String title;
   final String windFarm;
   final DateTime createdAt;
+  final VoidCallback onTapGenerateReport;
   final VoidCallback onTapClose;
   final VoidCallback onTapDelete;
   final VoidCallback onTap;
@@ -42,6 +44,10 @@ class ReportListTile extends ConsumerWidget {
       items: [
         const PopupMenuItem(
           child: Text("Archive"),
+        ),
+        PopupMenuItem(
+          onTap: onTapGenerateReport,
+          child: const Text("Generate Report"),
         ),
         if (status == "Open") ...[
           PopupMenuItem(
