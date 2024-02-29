@@ -112,17 +112,13 @@ class _CreateConsumerInspectionSectionListState
 
     final checkLists =
         ref.watch(getChecklistsFromSectionProvider(sectionModel));
-    print('ui rebuilt');
-    print(Routemaster.of(context).currentRoute);
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(widget.sectionName),
         leading: IconButton(
-          onPressed: () {
-            Routemaster.of(context).pop();
-          },
+          onPressed: () => Routemaster.of(context).history.back(),
           icon: const Icon(Icons.arrow_back),
         ),
         backgroundColor: Colors.transparent,
