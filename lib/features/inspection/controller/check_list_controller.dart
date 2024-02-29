@@ -112,7 +112,10 @@ class CheckListController extends StateNotifier<bool> {
       String inspectionId, String section, String checkListId) {
     //final inspection = _ref.watch(inspectionControllerProvider.notifier);
     return _checkListRepository.getCheckListById(
-        inspectionId, section, checkListId);
+      inspectionId,
+      section,
+      checkListId,
+    );
   }
 
   //get components
