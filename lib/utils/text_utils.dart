@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 extension TextUtils on String {
   static String capitalizeFirstLetter(String text) {
     if (text.isEmpty) return '';
@@ -24,5 +26,24 @@ extension TextUtils on String {
     }
 
     return '${substring(0, 30)}...';
+  }
+}
+
+class NoSpaceFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Remove any spaces from the entered text
+    if (newValue.text.contains(' ')) {
+      String newText = newValue.text.replaceAll(' ', '');
+      int offset = newText.length;
+      return TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(offset: offset),
+      );
+    }
+    return newValue;
   }
 }
