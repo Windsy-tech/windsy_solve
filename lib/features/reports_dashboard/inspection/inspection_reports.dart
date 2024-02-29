@@ -53,6 +53,11 @@ class InspectionReports extends ConsumerWidget {
                 title: inspection.title,
                 windFarm: inspection.windFarm,
                 createdAt: inspection.createdAt,
+                onTapGenerateReport: () {
+                  Routemaster.of(context).push(
+                    '/generate-inspection-report',
+                  );
+                },
                 onTapClose: () {
                   ref.read(inspectionControllerProvider.notifier).closeNC(
                         context,
