@@ -150,7 +150,6 @@ class CheckListAttachmentController extends StateNotifier<bool> {
     state = true;
     final storageRes = await _storageRepository.deleteFile(
       url: attachment.fileUrl,
-      id: attachment.id,
     );
     storageRes.fold(
       (l) => showSnackBar(context, l.message),
