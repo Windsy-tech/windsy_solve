@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -142,7 +144,6 @@ class NCAttachmentController extends StateNotifier<bool> {
     state = true;
     final storageRes = await _storageRepository.deleteFile(
       url: attachment.fileUrl,
-      id: attachment.id,
     );
     storageRes.fold(
       (l) => showSnackBar(context, l.message),
@@ -154,9 +155,7 @@ class NCAttachmentController extends StateNotifier<bool> {
         );
         res.fold(
           (l) => showSnackBar(context, l.message),
-          (r) {
-            showSnackBar(context, r.toString());
-          },
+          (r) => showSnackBar(context, r.toString()),
         );
       },
     );
