@@ -14,7 +14,7 @@ class DateTimeUtils {
 
 extension DateTimeExtension on DateTime {
   String toDateString() {
-    return '$day/$month/$year';
+    return '${day.toString().padLeft(2, '0')}/${month.toString().padLeft(2, '0')}/$year';
   }
 
   String toTimeString() {
