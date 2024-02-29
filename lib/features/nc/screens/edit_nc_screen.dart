@@ -174,7 +174,7 @@ class _CreateConsumerNCEditScreenState extends ConsumerState<NCEditScreen> {
                             windFarm,
                             onSelected: (windFarm) {
                               setState(() {
-                                this.windFarm = windFarm as WindFarmModel;
+                                this.windFarm = windFarm;
                               });
                             },
                           ),
