@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:windsy_solve/core/handler/failure.dart';
 import 'package:windsy_solve/core/providers/firebase_providers.dart';
 import 'package:windsy_solve/core/type_defs.dart';
@@ -36,7 +37,6 @@ class StorageRepository {
       }
 
       final snapshot = await uploadTask;
-      print(snapshot);
       return right(await snapshot.ref.getDownloadURL());
     } catch (e) {
       return left(Failure(message: e.toString()));
@@ -45,14 +45,9 @@ class StorageRepository {
 
   FutureEither<String> deleteFile({
     required String url,
-    required String id,
   }) async {
     try {
       final filePath = _firebaseStorage.refFromURL(url);
-      print(filePath.name);
-      print(filePath.fullPath);
-      print(filePath.parent);
-      print(id);
       await _firebaseStorage.ref().child(filePath.fullPath).delete();
       return right('File deleted successfully!');
     } catch (e) {
@@ -69,6 +64,24 @@ class StorageRepository {
       String path = '$companyId/inspections/$inspectionId/$sectionName';
       await _firebaseStorage.ref().child(path).delete();
       return right(true);
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
+  FutureEither downloadFile(String url, String fileName) async {
+    final ref = _firebaseStorage.refFromURL(url);
+
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final String appDocPath = appDocDir.path;
+    final File tempFile = File('$appDocPath/$fileName');
+    try {
+      await ref.writeToFile(tempFile);
+      await tempFile.create();
+
+      //create the file and open it
+
+      return right('File downloaded successfully!');
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
