@@ -4,6 +4,7 @@ class Constants {
   //Pictures
   static const pLogoPath = 'assets/login/signin.png';
   static const pProfileAvatarDefault = 'assets/default/user_avatar.png';
+  static const pPdfLogo = 'assets/default/windsy.png';
 
   //Routes
   static const String rHome = '/';
@@ -21,4 +22,5 @@ class Constants {
   static const i8DReports = Icons.dashboard_outlined;
   static const iInspectionReports = Icons.folder_open_outlined;
   static const iSafetyReports = Icons.safety_divider_outlined;
+
 }
