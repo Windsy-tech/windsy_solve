@@ -27,6 +27,12 @@ class NCReports extends ConsumerWidget {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Routemaster.of(context).history.back();
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
         actions: [
           IconButton(
             onPressed: () => ref.refresh(getUserNCProvider),
@@ -54,6 +60,11 @@ class NCReports extends ConsumerWidget {
                 title: nc.title,
                 windFarm: nc.windFarm,
                 createdAt: nc.createdAt,
+                onTapGenerateReport: () {
+                  Routemaster.of(context).push(
+                    '/generate-nc-report',
+                  );
+                },
                 onTapClose: () {
                   ref.read(ncControllerProvider.notifier).closeNC(
                         context,
