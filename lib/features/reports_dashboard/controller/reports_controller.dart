@@ -12,8 +12,9 @@ import 'package:windsy_solve/core/type_defs.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/features/reports_dashboard/pdf/inspection/generate_inspection_pdf.dart';
-import 'package:windsy_solve/features/reports_dashboard/pdf/nc/generate_nc_pdf.dart';
+import 'package:windsy_solve/models/common/attachment_model.dart';
+import 'package:windsy_solve/services/pdf/inspection/generate_inspection_pdf.dart';
+import 'package:windsy_solve/services/pdf/nc/generate_nc_pdf.dart';
 import 'package:windsy_solve/features/reports_dashboard/repository/reports_repository.dart';
 import 'package:windsy_solve/models/inspection/checklist_model.dart';
 import 'package:windsy_solve/models/inspection/section_model.dart';
@@ -375,4 +376,5 @@ class ReportsController extends StateNotifier<bool> {
       sectionName,
     );
   }
+
 }
