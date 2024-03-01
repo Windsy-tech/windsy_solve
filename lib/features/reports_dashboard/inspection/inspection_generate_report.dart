@@ -25,9 +25,9 @@ class _InspectionGenerateReportState
     'Highly Restricted',
   ];
 
+  String _selectedFilter = 'Text Only Report';
   final String _selectedConfidentialityLevel = 'Public';
   final String _selectedLanguage = 'English';
-  bool _includeAllAttachments = true;
 
   @override
   void dispose() {
@@ -164,22 +164,30 @@ class _InspectionGenerateReportState
                           ),
 
                           const SizedBox(height: 8.0),
-
-                          //Include all attachments button
-                          CheckboxListTile.adaptive(
-                            value: _includeAllAttachments,
-                            title: Text(
-                              'Include all attachments',
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                            onChanged: (val) {
+                          //Text Only or Include all attachments
+                          RadioListTile<String>(
+                            dense: true,
+                            contentPadding: const EdgeInsets.all(0),
+                            title: const Text('Text only report'),
+                            value: 'Text only report',
+                            groupValue: _selectedFilter,
+                            onChanged: (String? value) {
                               setState(() {
-                                _includeAllAttachments = val!;
+                                _selectedFilter = value!;
                               });
                             },
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 4.0,
-                            ),
+                          ),
+                          RadioListTile<String>(
+                            dense: true,
+                            contentPadding: const EdgeInsets.all(0),
+                            title: const Text('Include all attachments'),
+                            value: 'Include all Attachments',
+                            groupValue: _selectedFilter,
+                            onChanged: (String? value) {
+                              setState(() {
+                                _selectedFilter = value!;
+                              });
+                            },
                           ),
 
                           //Generate Report Button
@@ -191,8 +199,10 @@ class _InspectionGenerateReportState
                                     id: 'test',
                                     fileName: _fileNameTextController.text,
                                     language: _selectedLanguage,
-                                    includeAllAttachments:
-                                        _includeAllAttachments,
+                                    includeAllAttachments: _selectedFilter ==
+                                            'Include all Attachments'
+                                        ? true
+                                        : false,
                                     fileType: 'pdf',
                                     confidentialityLevel:
                                         _selectedConfidentialityLevel,
