@@ -1,10 +1,9 @@
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
 
-abstract class GeneratePDF {
+abstract class PDFService {
   Widget footer() {
     return Footer(
       leading: Text(

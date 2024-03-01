@@ -5,11 +5,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
-import 'package:windsy_solve/features/reports_dashboard/pdf/generate_pdf.dart';
+import 'package:windsy_solve/services/pdf/pdf_service.dart';
 import 'package:windsy_solve/models/nc/nc_model.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
 
-class GenerateNCPDF extends GeneratePDF {
+class GenerateNCPDF extends PDFService {
   Future<File> createPDF({
     required String id,
     required NCModel nc,

@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:windsy_solve/core/constants/constants.dart';
-import 'package:windsy_solve/features/reports_dashboard/pdf/generate_pdf.dart';
-import 'package:windsy_solve/features/reports_dashboard/pdf/inspection/generate_inspection_sections.dart';
+import 'package:windsy_solve/services/pdf/pdf_service.dart';
+import 'package:windsy_solve/services/pdf/inspection/generate_inspection_sections.dart';
 import 'package:windsy_solve/models/common/user_model.dart';
 import 'package:windsy_solve/models/inspection/checklist_model.dart';
 import 'package:windsy_solve/models/inspection/inspection_model.dart';
@@ -14,7 +13,7 @@ import 'package:windsy_solve/models/inspection/section_model.dart';
 import 'package:windsy_solve/theme/pdf_palette.dart';
 import 'package:windsy_solve/utils/date_time_utils.dart';
 
-class GenerateInspectionPDF extends GeneratePDF {
+class GenerateInspectionPDF extends PDFService {
   final GenerateSections _sections = GenerateSections();
   int index = 6;
 
@@ -280,11 +279,16 @@ class GenerateInspectionPDF extends GeneratePDF {
         ),
         _criteriaContainer(
           2,
-          PdfColors.yellow,
-          'Finding or critical finding that needs to be resolved before the WTG will be used in the offshore application.',
+          PdfColors.orange,
+          'Finding or critical finding that needs to be resolved before the WTG will be used again.',
         ),
         _criteriaContainer(
           1,
+          PdfColors.yellow,
+          'Minor finding that needs to be resolved before the WTG will be used again.',
+        ),
+        _criteriaContainer(
+          0,
           PdfColors.green,
           'Positive finding',
         ),
@@ -311,17 +315,4 @@ class GenerateInspectionPDF extends GeneratePDF {
       ],
     );
   }
-
-  /*  Widget _inspectionSections(
-    Context context,
-    int index,
-    SectionModel sectionModel,
-    Ref ref,
-  ) {
-    return _sections.sectionField(
-      context,
-      index + 1,
-      sectionModel,
-    );
-  } */
 }
