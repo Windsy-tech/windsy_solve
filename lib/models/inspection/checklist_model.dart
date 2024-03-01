@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:windsy_solve/models/common/attachment_model.dart';
 
 class CheckListModel {
   String id;
