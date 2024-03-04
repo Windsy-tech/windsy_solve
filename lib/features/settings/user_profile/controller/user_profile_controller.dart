@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,7 +56,7 @@ class UserProfileController extends StateNotifier<bool> {
         webFile: profileWebFile,
       );
       res.fold(
-        (l) => showSnackBar(context, l.message),
+        (l) => showSnackBar(context, l.message, SnackBarType.error),
         (r) => user = user.copyWith(photoUrl: r),
       );
     }
@@ -70,7 +69,7 @@ class UserProfileController extends StateNotifier<bool> {
     state = false;
 
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
         _ref.read(userProvider.notifier).update((state) => user);
         Routemaster.of(context).push('/user-profile/${user.uid}');
