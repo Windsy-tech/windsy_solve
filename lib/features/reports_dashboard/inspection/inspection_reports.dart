@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
-import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/reports_dashboard/widgets/report_list_tile.dart';
 import 'package:windsy_solve/models/inspection/inspection_model.dart';
@@ -14,7 +13,6 @@ class InspectionReports extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final inspectionData = ref.watch(getUserInspectionProvider);
-    final user = ref.read(userProvider)!;
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -59,16 +57,18 @@ class InspectionReports extends ConsumerWidget {
                   );
                 },
                 onTapClose: () {
-                  ref.read(inspectionControllerProvider.notifier).closeNC(
+                  ref
+                      .read(inspectionControllerProvider.notifier)
+                      .closeInspection(
                         context,
-                        user.companyId,
                         inspection.id,
                       );
                 },
                 onTapDelete: () {
-                  ref.read(inspectionControllerProvider.notifier).deleteNC(
+                  ref
+                      .read(inspectionControllerProvider.notifier)
+                      .deleteInspection(
                         context,
-                        user.companyId,
                         inspection.id,
                       );
                 },
