@@ -78,11 +78,11 @@ class CheckListAttachmentController extends StateNotifier<bool> {
         webFile: null,
       );
       res.fold(
-        (l) => showSnackBar(context, l.message),
+        (l) => showSnackBar(context, l.message, SnackBarType.error),
         (r) => attachment = attachment.copyWith(fileUrl: r),
       );
     } else {
-      showSnackBar(context, 'Please select a file/image');
+      showSnackBar(context, 'Please select a file/image', SnackBarType.warning);
     }
 
     final res = await _checkListAttachmentRepository.addAttachment(
@@ -92,10 +92,8 @@ class CheckListAttachmentController extends StateNotifier<bool> {
     );
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        showSnackBar(context, r);
-      },
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) => showSnackBar(context, r, SnackBarType.success),
     );
   }
 
@@ -134,9 +132,10 @@ class CheckListAttachmentController extends StateNotifier<bool> {
     );
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
-        showSnackBar(context, 'NC-$r created successfully!');
+        showSnackBar(
+            context, 'NC-$r created successfully!', SnackBarType.success);
       },
     );
   }
@@ -152,7 +151,7 @@ class CheckListAttachmentController extends StateNotifier<bool> {
       url: attachment.fileUrl,
     );
     storageRes.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) async {
         final res = await _checkListAttachmentRepository.deleteAttachmentById(
           _ref.read(userProvider)!.companyId,
@@ -160,10 +159,8 @@ class CheckListAttachmentController extends StateNotifier<bool> {
           attachment.id,
         );
         res.fold(
-          (l) => showSnackBar(context, l.message),
-          (r) {
-            showSnackBar(context, r.toString());
-          },
+          (l) => showSnackBar(context, l.message, SnackBarType.error),
+          (r) => showSnackBar(context, r, SnackBarType.success),
         );
       },
     );
@@ -196,10 +193,8 @@ class CheckListAttachmentController extends StateNotifier<bool> {
     state = false;
 
     res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        showSnackBar(context, r.toString());
-      },
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) => showSnackBar(context, r, SnackBarType.success),
     );
   }
 }

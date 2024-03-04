@@ -67,11 +67,8 @@ class CheckListController extends StateNotifier<bool> {
       checkList,
     );
     res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        showSnackBar(context, r.toString());
-        //Routemaster.of(context).pop();
-      },
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) => showSnackBar(context, r, SnackBarType.success),
     );
   }
 
@@ -83,11 +80,8 @@ class CheckListController extends StateNotifier<bool> {
       component,
     );
     res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        showSnackBar(context, r.toString());
-        //Routemaster.of(context).pop();
-      },
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) => showSnackBar(context, r, SnackBarType.success),
     );
   }
 
@@ -99,11 +93,8 @@ class CheckListController extends StateNotifier<bool> {
       check,
     );
     res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        showSnackBar(context, r.toString());
-        //Routemaster.of(context).pop();
-      },
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) => showSnackBar(context, r, SnackBarType.success),
     );
   }
 
