@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: theme.colorScheme.surface,
-        selectedItemColor: theme.colorScheme.primary,
+        selectedItemColor: theme.colorScheme.onSecondary,
         unselectedItemColor: theme.colorScheme.secondaryContainer,
         selectedLabelStyle: theme.textTheme.labelSmall,
         unselectedLabelStyle: theme.textTheme.labelSmall,
