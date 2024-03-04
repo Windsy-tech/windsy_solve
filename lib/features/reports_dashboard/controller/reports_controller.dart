@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:pdf/src/widgets/document.dart';
+import 'package:pdf/widgets.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:uuid/uuid.dart';
 import 'package:windsy_solve/core/handler/failure.dart';
@@ -12,7 +12,6 @@ import 'package:windsy_solve/core/type_defs.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/nc/controller/nc_controller.dart';
-import 'package:windsy_solve/models/common/attachment_model.dart';
 import 'package:windsy_solve/services/pdf/inspection/generate_inspection_pdf.dart';
 import 'package:windsy_solve/services/pdf/nc/generate_nc_pdf.dart';
 import 'package:windsy_solve/features/reports_dashboard/repository/reports_repository.dart';
@@ -93,9 +92,9 @@ class ReportsController extends StateNotifier<bool> {
         file: ncPDf,
       );
       res.fold(
-        (l) => showSnackBar(context, l.message),
+        (l) => showSnackBar(context, l.message, SnackBarType.error),
         (r) {
-          showSnackBar(context, 'NC-$r report saved!');
+          showSnackBar(context, 'NC-$r report saved!', SnackBarType.success);
           Routemaster.of(context).pop();
         },
       );
@@ -233,9 +232,10 @@ class ReportsController extends StateNotifier<bool> {
         file: inspectionPDF,
       );
       res.fold(
-        (l) => showSnackBar(context, l.message),
+        (l) => showSnackBar(context, l.message, SnackBarType.error),
         (r) {
-          showSnackBar(context, 'Inspection-$r report saved!');
+          showSnackBar(
+              context, 'Inspection-$r report saved!', SnackBarType.success);
           Routemaster.of(context).pop();
         },
       );
@@ -317,8 +317,8 @@ class ReportsController extends StateNotifier<bool> {
     state = true;
     final res = await _storageRepository.downloadFile(url, fileName);
     res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) => showSnackBar(context, r),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) => showSnackBar(context, r, SnackBarType.success),
     );
     state = false;
   }
@@ -334,7 +334,7 @@ class ReportsController extends StateNotifier<bool> {
 
     final res = await _storageRepository.deleteFile(url: url);
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) async {
         final res = await _reportsRepository.deleteReport(
           user.companyId,
@@ -342,8 +342,8 @@ class ReportsController extends StateNotifier<bool> {
           fileType,
         );
         res.fold(
-          (l) => showSnackBar(context, l.message),
-          (r) => showSnackBar(context, r),
+          (l) => showSnackBar(context, l.message, SnackBarType.error),
+          (r) => showSnackBar(context, r, SnackBarType.success),
         );
       },
     );
@@ -376,5 +376,4 @@ class ReportsController extends StateNotifier<bool> {
       sectionName,
     );
   }
-
 }
