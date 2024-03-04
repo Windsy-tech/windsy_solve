@@ -4,6 +4,7 @@ import 'package:windsy_solve/core/common/error_text.dart';
 import 'package:windsy_solve/core/common/loader.dart';
 import 'package:windsy_solve/core/common/warning_alert.dart';
 import 'package:windsy_solve/core/common/widgets/label_widget.dart';
+import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/inspection/controller/inspection_controller.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_end_date.dart';
 import 'package:windsy_solve/features/inspection/widgets/inspection_section.dart';
@@ -25,10 +26,14 @@ class _CreateConsumerEditInspectionScreenState
     extends ConsumerState<EditInspectionScreen> {
   final titleController = TextEditingController();
   final problemDescriptionController = TextEditingController();
+  final externalAuditorController = TextEditingController();
+  final supplierController = TextEditingController();
+  final customerController = TextEditingController();
   List<String> severities = ['Low', 'Medium', 'High'];
   List<String> statuses = ['Open', 'Closed'];
   String severity = '';
   String status = '';
+  List<String> sections = [];
   List<String> assignedTo = [];
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
@@ -60,7 +65,46 @@ class _CreateConsumerEditInspectionScreenState
     turbineNo: '',
   );
 
-  void updateInspection() async {}
+  void updateInspection() async {
+    final user = ref.read(userProvider)!;
+    ref.read(inspectionControllerProvider.notifier).updateInspection(
+          context,
+          InspectionModel(
+            id: inspectionModel.id,
+            title: titleController.text,
+            problemDescription: problemDescriptionController.text,
+            externalAuditor: externalAuditorController.text,
+            supplier: supplierController.text,
+            customer: customerController.text,
+            category: '',
+            status: status,
+            severity: severities.indexOf(severity),
+            windFarm: windFarm.windFarm!,
+            turbineNo: windFarm.turbineNo!,
+            platform: windFarm.platform!,
+            oem: windFarm.oem!,
+            members: [],
+            assignedTo: assignedTo,
+            createdBy: user.uid,
+            createdAt: DateTime.now(),
+            updatedBy: user.uid,
+            updatedAt: DateTime.now(),
+            closedAt: DateTime.now(),
+            closedBy: '',
+            closedReason: '',
+          ),
+        );
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    problemDescriptionController.dispose();
+    externalAuditorController.dispose();
+    supplierController.dispose();
+    customerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +114,6 @@ class _CreateConsumerEditInspectionScreenState
           data: (inspection) {
             if (inspectionModel.id == "") {
               inspectionModel = inspection;
-              print(inspectionModel.toString());
               titleController.text = inspection.title;
               problemDescriptionController.text = inspection.problemDescription;
               status = inspection.status;
@@ -129,6 +172,7 @@ class _CreateConsumerEditInspectionScreenState
                           const SizedBox(height: 8),
                           InspectionStartDate(
                             startDate: startDate,
+                            endDate: endDate,
                             onChanged: (date) {
                               setState(() {
                                 startDate = date!;
@@ -136,13 +180,21 @@ class _CreateConsumerEditInspectionScreenState
                             },
                           ),
                           const SizedBox(height: 8),
-                          InspectionEndDate(endDate: endDate),
+                          InspectionEndDate(
+                            startDate: startDate,
+                            endDate: endDate,
+                            onChanged: (date) {
+                              setState(() {
+                                endDate = date!;
+                              });
+                            },
+                          ),
                           const SizedBox(height: 8),
                           InspectionWindFarm(
-                            null,
+                            windFarm,
                             onSelected: (windFarm) {
                               setState(() {
-                                this.windFarm = windFarm as WindFarmModel;
+                                this.windFarm = windFarm;
                               });
                             },
                           ),
