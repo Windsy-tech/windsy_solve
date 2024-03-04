@@ -27,7 +27,7 @@ class NCActionsController {
       BuildContext context, String ncId, NCActionsModel ncActionsModel) async {
     final res = await _ncActionsRepository.addActionToNC(ncId, ncActionsModel);
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) => Routemaster.of(context).pop(),
     );
   }

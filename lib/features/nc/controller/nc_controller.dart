@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
 import 'package:windsy_solve/features/nc/repository/nc_repository.dart';
 import 'package:windsy_solve/models/common/user_model.dart';
@@ -13,11 +12,9 @@ import 'package:windsy_solve/utils/snack_bar.dart';
 
 final ncControllerProvider = StateNotifierProvider<NCController, bool>((ref) {
   final ncRepository = ref.watch(ncRepositoryProvider);
-  final storageRepository = ref.watch(storageRepositoryProvider);
   return NCController(
     ref: ref,
     ncRepository: ncRepository,
-    storageRepository: storageRepository,
   );
 });
 
@@ -42,15 +39,12 @@ final getWindFarmsProvider = StreamProvider.family((ref, String query) {
 class NCController extends StateNotifier<bool> {
   final NCRepository _ncRepository;
   final Ref _ref;
-  final StorageRepository _storageRepository;
 
   NCController({
     required NCRepository ncRepository,
     required Ref ref,
-    required StorageRepository storageRepository,
   })  : _ncRepository = ncRepository,
         _ref = ref,
-        _storageRepository = storageRepository,
         super(false);
 
   //create new nc
@@ -59,9 +53,10 @@ class NCController extends StateNotifier<bool> {
     final res = await _ncRepository.createNC(companyId, ncModel);
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
-        showSnackBar(context, 'NC-$r created successfully!');
+        showSnackBar(
+            context, 'NC-$r created successfully!', SnackBarType.success);
         Routemaster.of(context).pop();
       },
     );
@@ -73,9 +68,9 @@ class NCController extends StateNotifier<bool> {
     final res = await _ncRepository.deleteNC(companyId, ncId);
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
-        showSnackBar(context, r);
+        showSnackBar(context, r, SnackBarType.success);
         Routemaster.of(context).pop();
       },
     );
@@ -88,10 +83,8 @@ class NCController extends StateNotifier<bool> {
     final res = await _ncRepository.closeNC(companyId, user.uid, ncId);
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        showSnackBar(context, r);
-      },
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) => showSnackBar(context, r, SnackBarType.success),
     );
   }
 
@@ -102,9 +95,9 @@ class NCController extends StateNotifier<bool> {
     final res = await _ncRepository.updateNC(user.companyId, user.uid, nc);
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
-        showSnackBar(context, r);
+        showSnackBar(context, r, SnackBarType.success);
         Routemaster.of(context).pop();
       },
     );
@@ -139,7 +132,7 @@ class NCController extends StateNotifier<bool> {
   void addMembers(String ncId, List<String> uids, BuildContext context) async {
     final res = await _ncRepository.addMembers(ncId, uids);
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) => Routemaster.of(context).pop(),
     );
   }
