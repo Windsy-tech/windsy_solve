@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 
-void showSnackBar(BuildContext context, String message) {
+enum SnackBarType {
+  success,
+  error,
+  warning,
+}
+
+void showSnackBar(BuildContext context, String message, SnackBarType type) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar(reason: SnackBarClosedReason.timeout)
     ..showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: type == SnackBarType.success
+            ? Colors.green
+            : type == SnackBarType.error
+                ? Colors.red
+                : Colors.orange,
+        duration: const Duration(seconds: 3),
+        showCloseIcon: true,
       ),
     );
 }
