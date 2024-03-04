@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:windsy_solve/core/providers/storage_repository_provider.dart';
 import 'package:windsy_solve/features/auth/controller/auth_controller.dart';
-
 import 'package:windsy_solve/features/inspection/repository/inspection_repository.dart';
 import 'package:windsy_solve/models/inspection/inspection_model.dart';
 import 'package:windsy_solve/models/inspection/inspection_templates_model.dart';
@@ -14,11 +12,9 @@ import 'package:windsy_solve/utils/snack_bar.dart';
 final inspectionControllerProvider =
     StateNotifierProvider<InspectionController, bool>((ref) {
   final inspectionRepository = ref.watch(inspectionRepositoryProvider);
-  final storageRepository = ref.watch(storageRepositoryProvider);
   return InspectionController(
     ref: ref,
     inspectionRepository: inspectionRepository,
-    storageRepository: storageRepository,
   );
 });
 
@@ -87,67 +83,97 @@ final getChecklistsFromSectionProvider =
 class InspectionController extends StateNotifier<bool> {
   final InspectionRepository _inspectionRepository;
   final Ref _ref;
-  final StorageRepository _storageRepository;
 
   InspectionController({
     required InspectionRepository inspectionRepository,
     required Ref ref,
-    required StorageRepository storageRepository,
   })  : _inspectionRepository = inspectionRepository,
         _ref = ref,
-        _storageRepository = storageRepository,
         super(false);
 
   //create new inspection
-  void createNC(BuildContext context, String companyId,
-      InspectionModel inspection) async {
+  void createNC(
+    BuildContext context,
+    String companyId,
+    InspectionModel inspection,
+  ) async {
     state = true;
-    final res =
-        await _inspectionRepository.createInspection(companyId, inspection);
+    final res = await _inspectionRepository.createInspection(
+      companyId,
+      inspection,
+    );
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
-        showSnackBar(context, 'Inspection - $r created successfully!');
-        //Routemaster.of(context).pop();
+        showSnackBar(
+          context,
+          'Inspection - $r created successfully!',
+          SnackBarType.success,
+        );
+        Routemaster.of(context).pop();
+      },
+    );
+  }
+
+  void updateInspection(
+    BuildContext context,
+    InspectionModel inspection,
+  ) async {
+    state = true;
+    final user = _ref.watch(userProvider)!;
+    final res = await _inspectionRepository.updateInspection(
+      user.companyId,
+      inspection,
+    );
+    state = false;
+    res.fold(
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) {
+        showSnackBar(context, 'Inspection: $r updated successfully',
+            SnackBarType.success);
+        Routemaster.of(context).pop();
       },
     );
   }
 
   //close inspection
-  void closeNC(
-      BuildContext context, String companyId, String inspectionId) async {
+  void closeInspection(
+    BuildContext context,
+    String inspectionId,
+  ) async {
     state = true;
     final user = _ref.watch(userProvider)!;
     final res = await _inspectionRepository.closeInspection(
-      companyId,
+      user.companyId,
       user.uid,
       inspectionId,
     );
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
-        showSnackBar(context, r.toString());
+        showSnackBar(context, r, SnackBarType.success);
         Routemaster.of(context).pop();
       },
     );
   }
 
   //delete inspection
-  void deleteNC(
-      BuildContext context, String companyId, String inspectionId) async {
+  void deleteInspection(
+    BuildContext context,
+    String inspectionId,
+  ) async {
     state = true;
+    final user = _ref.watch(userProvider)!;
     final res = await _inspectionRepository.deleteInspection(
-      companyId,
+      user.companyId,
       inspectionId,
     );
     state = false;
     res.fold(
-      (l) => showSnackBar(context, l.message),
-      (r) {
-        showSnackBar(context, r.toString());
-      },
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
+      (r) => showSnackBar(context, r, SnackBarType.success),
     );
   }
 
@@ -164,10 +190,13 @@ class InspectionController extends StateNotifier<bool> {
       sectionName,
     );
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
-        //addSection(context, inspectionId, sectionName);
-        showSnackBar(context, r.toString());
+        showSnackBar(
+          context,
+          "Section: $sectionName added",
+          SnackBarType.success,
+        );
         Routemaster.of(context).pop();
       },
     );
@@ -189,7 +218,8 @@ class InspectionController extends StateNotifier<bool> {
         .then(
       (isExists) async {
         if (isExists) {
-          showSnackBar(context, "Section id already exists");
+          showSnackBar(
+              context, "Section id already exists", SnackBarType.warning);
           Routemaster.of(context).pop();
         } else {
           final res = await _inspectionRepository.addSection(
@@ -199,9 +229,9 @@ class InspectionController extends StateNotifier<bool> {
             sectionName,
           );
           res.fold(
-            (l) => showSnackBar(context, l.message),
+            (l) => showSnackBar(context, l.message, SnackBarType.error),
             (r) {
-              showSnackBar(context, r.toString());
+              showSnackBar(context, r.toString(), SnackBarType.success);
               Routemaster.of(context).pop();
             },
           );
@@ -221,9 +251,9 @@ class InspectionController extends StateNotifier<bool> {
     );
 
     res.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) => showSnackBar(context, l.message, SnackBarType.error),
       (r) {
-        showSnackBar(context, r.toString());
+        showSnackBar(context, r.toString(), SnackBarType.success);
         Routemaster.of(context).pop();
       },
     );
@@ -246,7 +276,8 @@ class InspectionController extends StateNotifier<bool> {
     )
         .then((isExists) async {
       if (isExists) {
-        showSnackBar(context, "Check list id already exists");
+        showSnackBar(
+            context, "Check list id already exists", SnackBarType.warning);
         Routemaster.of(context).pop();
       } else {
         final res = await _inspectionRepository.addChecklist(
@@ -256,9 +287,9 @@ class InspectionController extends StateNotifier<bool> {
           checkName,
         );
         res.fold(
-          (l) => showSnackBar(context, l.message),
+          (l) => showSnackBar(context, l.message, SnackBarType.error),
           (r) {
-            showSnackBar(context, r.toString());
+            showSnackBar(context, r.toString(), SnackBarType.success);
             Routemaster.of(context).pop();
           },
         );

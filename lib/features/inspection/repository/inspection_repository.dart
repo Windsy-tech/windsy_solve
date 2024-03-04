@@ -53,6 +53,24 @@ class InspectionRepository {
     }
   }
 
+  FutureEither<String> updateInspection(
+    String companyId,
+    InspectionModel inspection,
+  ) async {
+    try {
+      await _companies
+          .doc(companyId)
+          .collection('inspections')
+          .doc(inspection.id)
+          .update(inspection.toMap());
+      return right(inspection.id);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
+
   //check if the inspection id exists as future
   Future<bool> _checkIfInspectionIdExists(
     String companyId,
