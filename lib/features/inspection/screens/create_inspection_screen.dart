@@ -11,6 +11,7 @@ import 'package:windsy_solve/features/inspection/widgets/inspection_wind_farm.da
 import 'package:windsy_solve/models/common/windfarm_model.dart';
 import 'package:windsy_solve/models/inspection/inspection_model.dart';
 import 'package:windsy_solve/theme/color_palette.dart';
+import 'package:windsy_solve/utils/snack_bar.dart';
 
 class PerformInspectionScreen extends ConsumerStatefulWidget {
   final String title;
@@ -44,7 +45,23 @@ class _CreateConsumerPerformInspectionScreenState
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
 
-  void createInspection() {
+  bool validator(BuildContext test) {
+    if (titleController.text.isEmpty || windFarm.windFarm == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  void createInspection(BuildContext context) {
+    if (!validator(context)) {
+      showSnackBar(
+        context,
+        'Title & Wind Farm cannot be empty',
+        SnackBarType.error,
+      );
+      return;
+    }
     final user = ref.read(userProvider)!;
     ref.read(inspectionControllerProvider.notifier).createNC(
           context,
@@ -101,14 +118,13 @@ class _CreateConsumerPerformInspectionScreenState
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          onPressed: () =>
-            Routemaster.of(context).history.back(),
+          onPressed: () => Routemaster.of(context).history.back(),
           icon: const Icon(Icons.arrow_back),
         ),
         actions: [
           IconButton(
             onPressed: () {
-              createInspection();
+              createInspection(context);
             },
             icon: const Icon(Icons.save),
           ),
@@ -130,16 +146,23 @@ class _CreateConsumerPerformInspectionScreenState
                 children: [
                   const LabelWidget('Title'),
                   const SizedBox(height: 6),
-                  TextField(
+                  TextFormField(
                     controller: titleController,
                     maxLength: 50,
                     decoration: const InputDecoration(
                       hintText: 'Enter Title',
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter a title';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 8),
                   InspectionStartDate(
                     startDate: startDate,
+                    endDate: endDate,
                     onChanged: (date) {
                       setState(() {
                         startDate = date!;
@@ -147,7 +170,15 @@ class _CreateConsumerPerformInspectionScreenState
                     },
                   ),
                   const SizedBox(height: 8),
-                  InspectionEndDate(endDate: endDate),
+                  InspectionEndDate(
+                    startDate: startDate,
+                    endDate: endDate,
+                    onChanged: (date) {
+                      setState(() {
+                        endDate = date!;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 8),
                   InspectionWindFarm(
                     null,
